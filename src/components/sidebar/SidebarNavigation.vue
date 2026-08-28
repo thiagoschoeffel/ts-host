@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ScrollArea } from 'ts-components'
+import { ScrollArea } from '@thiagoschoeffel/ts-components'
 import { navigationSections } from './navigation'
 
 defineProps<{ collapsed?: boolean }>()

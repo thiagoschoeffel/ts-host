@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Avatar, LogOutIcon, MenuIcon } from 'ts-components'
+import { Avatar, LogOutIcon, MenuIcon } from '@thiagoschoeffel/ts-components'
 
 defineProps<{
   currentDateLabel: string

@@ -14,7 +14,7 @@ import {
   TruckIcon,
   UserRoundCogIcon,
   UsersIcon
-} from 'ts-components'
+} from '@thiagoschoeffel/ts-components'
 
 export interface NavigationItem {
   label: string
