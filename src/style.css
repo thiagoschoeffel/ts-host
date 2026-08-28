@@ -1,0 +1,37 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+  }
+
+  a,
+  button {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    font: inherit;
+  }
+
+  a:focus,
+  a:focus-visible,
+  a:hover,
+  a:active,
+  button:focus,
+  button:focus-visible,
+  button:hover,
+  button:active {
+    box-shadow: none;
+    outline: none;
+  }
+}

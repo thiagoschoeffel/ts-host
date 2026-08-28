@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Build output and module federation types
+dist/
+@mf-types/
+*.tsbuildinfo
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Logs and reports
+*.log
+coverage/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json

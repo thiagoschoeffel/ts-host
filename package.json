@@ -1,0 +1,24 @@
+{
+  "name": "ts-host",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 4173",
+    "build": "vue-tsc --noEmit && vite build"
+  },
+  "dependencies": {
+    "ts-components": "file:../ts-components",
+    "vue": "^3.5.42",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@module-federation/vite": "^1.21.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3",
+    "vite": "^8.2.2",
+    "vue-tsc": "^3.1.5"
+  }
+}
