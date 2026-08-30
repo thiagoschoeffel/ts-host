@@ -23,7 +23,7 @@ defineEmits<{
         <MenuIcon :size="20" />
       </button>
       <button
-        class="hidden rounded p-2 lg:block"
+        class="desktop-sidebar-toggle hidden rounded p-2 lg:block"
         aria-label="Alternar barra lateral"
         @click="$emit('toggleDesktopSidebar')">
         <MenuIcon :size="20" />
@@ -47,3 +47,11 @@ defineEmits<{
     </div>
   </header>
 </template>
+
+<style scoped>
+@media (width >= 64rem) {
+  .desktop-sidebar-toggle {
+    display: block;
+  }
+}
+</style>

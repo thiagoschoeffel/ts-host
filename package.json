@@ -8,7 +8,7 @@
     "build": "vue-tsc --noEmit && vite build"
   },
   "dependencies": {
-    "@thiagoschoeffel/ts-components": "^0.3.21",
+    "@thiagoschoeffel/ts-components": "^0.5.0",
     "vue": "^3.5.42",
     "vue-router": "^4.6.4"
   },
