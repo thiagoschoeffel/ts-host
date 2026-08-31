@@ -43,7 +43,7 @@ export const navigationSections: NavigationSection[] = [
     label: 'Comercial',
     items: [
       { label: 'Cardápios', icon: BookOpenIcon },
-      { label: 'Clientes', icon: UsersIcon },
+      { label: 'Clientes', icon: UsersIcon, to: '/clientes' },
       { label: 'Planos e Créditos', icon: BadgeDollarSignIcon },
       { label: 'Financeiro', icon: CircleDollarSignIcon }
     ]

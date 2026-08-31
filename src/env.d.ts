@@ -5,3 +5,9 @@ declare module 'moduleOperation/OperationPage' {
   const component: DefineComponent
   export default component
 }
+
+declare module 'moduleCommercial/CommercialPage' {
+  import type { DefineComponent } from 'vue'
+  const component: DefineComponent
+  export default component
+}

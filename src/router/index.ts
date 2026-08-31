@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 const OperationPage = () => import('moduleOperation/OperationPage')
+const CommercialPage = () => import('moduleCommercial/CommercialPage')
 
 const operationRoutes: RouteRecordRaw[] = [
   { path: 'hoje', component: OperationPage, props: { section: 'hoje' }, meta: { label: 'Hoje' } },
@@ -63,6 +64,39 @@ export const router = createRouter({
       redirect: '/operacoes/hoje',
       children: operationRoutes,
       meta: { sectionLabel: 'Operações' }
+    },
+    {
+      path: '/clientes',
+      component: CommercialPage,
+      props: { section: 'clientes', customerPage: 'list' },
+      meta: { sectionLabel: 'Comercial', label: 'Clientes' }
+    },
+    {
+      path: '/clientes/novo',
+      component: CommercialPage,
+      props: { section: 'clientes', customerPage: 'new' },
+      meta: {
+        sectionLabel: 'Comercial',
+        label: 'Novo cliente', parentLabel: 'Clientes', parentHref: '/clientes'
+      }
+    },
+    {
+      path: '/clientes/:id/editar',
+      component: CommercialPage,
+      props: route => ({ section: 'clientes', customerPage: 'edit', customerId: String(route.params.id) }),
+      meta: {
+        sectionLabel: 'Comercial',
+        label: 'Editar cliente', parentLabel: 'Clientes', parentHref: '/clientes'
+      }
+    },
+    {
+      path: '/clientes/:id',
+      component: CommercialPage,
+      props: route => ({ section: 'clientes', customerPage: 'detail', customerId: String(route.params.id) }),
+      meta: {
+        sectionLabel: 'Comercial',
+        label: 'Detalhe', parentLabel: 'Clientes', parentHref: '/clientes'
+      }
     },
     { path: '/:pathMatch(.*)*', redirect: '/operacoes/hoje' }
   ]

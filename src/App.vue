@@ -25,13 +25,19 @@ const breadcrumbs = computed(() => {
     && /^\/operacoes\/pedidos(?:\?.*)?$/.test(route.query.retorno)
     ? route.query.retorno
     : undefined
+  const returnToCustomers = typeof route.query.retorno === 'string'
+    && /^\/clientes(?:\?.*)?$/.test(route.query.retorno)
+    ? route.query.retorno
+    : undefined
 
   if (typeof parentLabel === 'string') {
     items.push({
       label: parentLabel,
       href: parentHref === '/operacoes/pedidos' && returnToOrders
         ? returnToOrders
-        : typeof parentHref === 'string' ? parentHref : undefined
+        : parentHref === '/clientes' && returnToCustomers
+          ? returnToCustomers
+          : typeof parentHref === 'string' ? parentHref : undefined
     })
   }
 
