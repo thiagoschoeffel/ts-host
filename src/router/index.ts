@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 const OperationPage = () => import('moduleOperation/OperationPage')
 const CommercialPage = () => import('moduleCommercial/CommercialPage')
+const ManagementPage = () => import('moduleManagement/ManagementPage')
 
 const operationRoutes: RouteRecordRaw[] = [
   { path: 'hoje', component: OperationPage, props: { section: 'hoje' }, meta: { label: 'Hoje' } },
@@ -96,6 +97,44 @@ export const router = createRouter({
       meta: {
         sectionLabel: 'Comercial',
         label: 'Detalhe', parentLabel: 'Clientes', parentHref: '/clientes'
+      }
+    },
+    {
+      path: '/produziveis',
+      component: ManagementPage,
+      props: { section: 'produziveis', produciblePage: 'list' },
+      meta: { sectionLabel: 'Gestão', label: 'Produzíveis' }
+    },
+    {
+      path: '/produziveis/novo',
+      component: ManagementPage,
+      props: { section: 'produziveis', produciblePage: 'new' },
+      meta: {
+        sectionLabel: 'Gestão', label: 'Novo item', parentLabel: 'Produzíveis', parentHref: '/produziveis'
+      }
+    },
+    {
+      path: '/produziveis/:id/editar',
+      component: ManagementPage,
+      props: route => ({ section: 'produziveis', produciblePage: 'edit', producibleId: String(route.params.id) }),
+      meta: {
+        sectionLabel: 'Gestão', label: 'Editar item', parentLabel: 'Produzíveis', parentHref: '/produziveis'
+      }
+    },
+    {
+      path: '/produziveis/:id/composicao/nova',
+      component: ManagementPage,
+      props: route => ({ section: 'produziveis', produciblePage: 'new-composition-version', producibleId: String(route.params.id) }),
+      meta: {
+        sectionLabel: 'Gestão', label: 'Nova composição', parentLabel: 'Produzíveis', parentHref: '/produziveis'
+      }
+    },
+    {
+      path: '/produziveis/:id',
+      component: ManagementPage,
+      props: route => ({ section: 'produziveis', produciblePage: 'detail', producibleId: String(route.params.id) }),
+      meta: {
+        sectionLabel: 'Gestão', label: 'Item produzível', parentLabel: 'Produzíveis', parentHref: '/produziveis'
       }
     },
     { path: '/:pathMatch(.*)*', redirect: '/operacoes/hoje' }

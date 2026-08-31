@@ -24,6 +24,12 @@ export default defineConfig({
           name: 'moduleCommercial',
           entry: 'http://localhost:4175/remoteEntry.js',
           shareScope: 'default'
+        },
+        moduleManagement: {
+          type: 'module',
+          name: 'moduleManagement',
+          entry: 'http://localhost:4176/remoteEntry.js',
+          shareScope: 'default'
         }
       },
       // The host already declares the remote module in src/env.d.ts.

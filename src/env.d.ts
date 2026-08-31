@@ -11,3 +11,9 @@ declare module 'moduleCommercial/CommercialPage' {
   const component: DefineComponent
   export default component
 }
+
+declare module 'moduleManagement/ManagementPage' {
+  import type { DefineComponent } from 'vue'
+  const component: DefineComponent
+  export default component
+}
