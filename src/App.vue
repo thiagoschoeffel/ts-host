@@ -21,15 +21,25 @@ const breadcrumbs = computed(() => {
   ]
   const parentLabel = route.meta.parentLabel
   const parentHref = route.meta.parentHref
+  const returnToOrders = typeof route.query.retorno === 'string'
+    && /^\/operacoes\/pedidos(?:\?.*)?$/.test(route.query.retorno)
+    ? route.query.retorno
+    : undefined
 
   if (typeof parentLabel === 'string') {
     items.push({
       label: parentLabel,
-      href: typeof parentHref === 'string' ? parentHref : undefined
+      href: parentHref === '/operacoes/pedidos' && returnToOrders
+        ? returnToOrders
+        : typeof parentHref === 'string' ? parentHref : undefined
     })
   }
 
-  items.push({ label: String(route.meta.label ?? '') })
+  const currentLabel = typeof route.params.id === 'string'
+    && (route.meta.label === 'Pedido' || route.meta.label === 'Editar pedido')
+    ? `${String(route.meta.label)} #${route.params.id}`
+    : String(route.meta.label ?? '')
+  items.push({ label: currentLabel })
   return items
 })
 

@@ -22,6 +22,20 @@ const operationRoutes: RouteRecordRaw[] = [
     }
   },
   {
+    path: 'pedidos/:id/editar',
+    component: OperationPage,
+    props: (route) => ({
+      section: 'pedidos',
+      orderPage: 'edit',
+      orderId: String(route.params.id)
+    }),
+    meta: {
+      label: 'Editar pedido',
+      parentLabel: 'Pedidos',
+      parentHref: '/operacoes/pedidos'
+    }
+  },
+  {
     path: 'pedidos/:id',
     component: OperationPage,
     props: (route) => ({

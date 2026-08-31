@@ -9,6 +9,9 @@ export default defineConfig({
     vue(),
     federation({
       name: 'host',
+      dev: {
+        remoteHmr: true
+      },
       remotes: {
         moduleOperation: {
           type: 'module',
