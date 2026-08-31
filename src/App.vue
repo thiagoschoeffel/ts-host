@@ -33,6 +33,10 @@ const breadcrumbs = computed(() => {
     && /^\/produziveis(?:\?.*)?$/.test(route.query.retorno)
     ? route.query.retorno
     : undefined
+  const returnToCatalog = typeof route.query.retorno === 'string'
+    && /^\/catalogo(?:\?.*)?$/.test(route.query.retorno)
+    ? route.query.retorno
+    : undefined
 
   if (typeof parentLabel === 'string') {
     items.push({
@@ -43,12 +47,14 @@ const breadcrumbs = computed(() => {
           ? returnToCustomers
           : parentHref === '/produziveis' && returnToProducibles
             ? returnToProducibles
+            : parentHref === '/catalogo' && returnToCatalog
+              ? returnToCatalog
           : typeof parentHref === 'string' ? parentHref : undefined
     })
   }
 
   const currentLabel = typeof route.params.id === 'string'
-    && ['Pedido', 'Editar pedido', 'Item produzível', 'Editar item', 'Nova composição'].includes(String(route.meta.label))
+    && ['Pedido', 'Editar pedido', 'Item produzível', 'Editar item', 'Nova composição', 'Oferta', 'Editar oferta'].includes(String(route.meta.label))
     ? `${String(route.meta.label)} #${route.params.id}`
     : String(route.meta.label ?? '')
   items.push({ label: currentLabel })

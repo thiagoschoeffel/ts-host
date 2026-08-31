@@ -100,6 +100,30 @@ export const router = createRouter({
       }
     },
     {
+      path: '/catalogo',
+      component: ManagementPage,
+      props: { section: 'catalogo', catalogPage: 'list' },
+      meta: { sectionLabel: 'Gestão', label: 'Catálogo' }
+    },
+    {
+      path: '/catalogo/novo',
+      component: ManagementPage,
+      props: { section: 'catalogo', catalogPage: 'new' },
+      meta: { sectionLabel: 'Gestão', label: 'Nova oferta', parentLabel: 'Catálogo', parentHref: '/catalogo' }
+    },
+    {
+      path: '/catalogo/:id/editar',
+      component: ManagementPage,
+      props: route => ({ section: 'catalogo', catalogPage: 'edit', offerId: String(route.params.id) }),
+      meta: { sectionLabel: 'Gestão', label: 'Editar oferta', parentLabel: 'Catálogo', parentHref: '/catalogo' }
+    },
+    {
+      path: '/catalogo/:id',
+      component: ManagementPage,
+      props: route => ({ section: 'catalogo', catalogPage: 'detail', offerId: String(route.params.id) }),
+      meta: { sectionLabel: 'Gestão', label: 'Oferta', parentLabel: 'Catálogo', parentHref: '/catalogo' }
+    },
+    {
       path: '/produziveis',
       component: ManagementPage,
       props: { section: 'produziveis', produciblePage: 'list' },

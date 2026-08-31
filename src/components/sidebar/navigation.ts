@@ -51,7 +51,7 @@ export const navigationSections: NavigationSection[] = [
   {
     label: 'Gestão',
     items: [
-      { label: 'Catálogo', icon: BoxesIcon },
+      { label: 'Catálogo', icon: BoxesIcon, to: '/catalogo' },
       { label: 'Produzíveis', icon: FactoryIcon, to: '/produziveis' },
       { label: 'Entregadores', icon: BikeIcon },
       { label: 'Usuários', icon: UserRoundCogIcon }
