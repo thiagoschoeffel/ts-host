@@ -3,6 +3,22 @@
 An independent application responsible for the layout and navigation. It loads
 the remote module from the URL configured in `vite.config.ts`.
 
+## GitHub Packages authentication
+
+The `@thiagoschoeffel/ts-components` dependency is hosted on GitHub Packages.
+Before installing dependencies on a new computer, create a GitHub personal
+access token (classic) with the `read:packages` scope and authenticate npm:
+
+```bash
+npm login --scope=@thiagoschoeffel --auth-type=legacy --registry=https://npm.pkg.github.com
+```
+
+Use your GitHub username, the token as the password, and the email address from
+your GitHub account. The credential is stored in the user-level `~/.npmrc`; do
+not add the token to this repository.
+
+Then install and start the application:
+
 ```bash
 npm install
 npm run dev
