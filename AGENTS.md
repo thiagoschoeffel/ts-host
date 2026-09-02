@@ -3,6 +3,7 @@
 ## Antes de alterar
 
 - Leia primeiro `ESTUDO DE CASO.md`; regras do negócio prevalecem sobre conveniência visual ou técnica.
+- Consulte `GUIA UI.md` como o guia completo e a referência principal para toda implementação de frontend.
 - Use Pedidos como fonte da macrodiagramação e Clientes como adaptação validada para cadastros:
   - `../ts-module-operation/src/pages/OrderListPage.vue`, `OrderDetailPage.vue` e `NewOrderPage.vue`;
   - `../ts-module-commercial/src/pages/CustomerListPage.vue`, `CustomerDetailPage.vue` e `CustomerFormPage.vue`.
