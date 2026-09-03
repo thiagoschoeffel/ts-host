@@ -44,7 +44,7 @@ export const navigationSections: NavigationSection[] = [
     items: [
       { label: 'Cardápios', icon: BookOpenIcon, to: '/cardapios' },
       { label: 'Clientes', icon: UsersIcon, to: '/clientes' },
-      { label: 'Planos e Créditos', icon: BadgeDollarSignIcon },
+      { label: 'Planos e Créditos', icon: BadgeDollarSignIcon, to: '/planos' },
       { label: 'Financeiro', icon: CircleDollarSignIcon }
     ]
   },
@@ -53,8 +53,8 @@ export const navigationSections: NavigationSection[] = [
     items: [
       { label: 'Catálogo', icon: BoxesIcon, to: '/catalogo' },
       { label: 'Produzíveis', icon: FactoryIcon, to: '/produziveis' },
-      { label: 'Entregadores', icon: BikeIcon },
-      { label: 'Usuários', icon: UserRoundCogIcon }
+      { label: 'Entregadores', icon: BikeIcon, to: '/entregadores' },
+      { label: 'Usuários', icon: UserRoundCogIcon, to: '/usuarios' }
     ]
   }
 ]

@@ -122,6 +122,36 @@ export const router = createRouter({
       }
     },
     {
+      path: '/planos',
+      component: CommercialPage,
+      props: { section: 'planos', planPage: 'list' },
+      meta: { sectionLabel: 'Comercial', label: 'Planos e Créditos' }
+    },
+    {
+      path: '/planos/novo',
+      component: CommercialPage,
+      props: { section: 'planos', planPage: 'new' },
+      meta: { sectionLabel: 'Comercial', label: 'Novo plano', parentLabel: 'Planos e Créditos', parentHref: '/planos' }
+    },
+    {
+      path: '/planos/aquisicoes/nova',
+      component: CommercialPage,
+      props: { section: 'planos', planPage: 'new-acquisition' },
+      meta: { sectionLabel: 'Comercial', label: 'Nova aquisição', parentLabel: 'Planos e Créditos', parentHref: '/planos' }
+    },
+    {
+      path: '/planos/movimentacoes/nova',
+      component: CommercialPage,
+      props: { section: 'planos', planPage: 'new-movement' },
+      meta: { sectionLabel: 'Comercial', label: 'Nova movimentação', parentLabel: 'Planos e Créditos', parentHref: '/planos' }
+    },
+    {
+      path: '/planos/:id/editar',
+      component: CommercialPage,
+      props: route => ({ section: 'planos', planPage: 'edit', planId: String(route.params.id) }),
+      meta: { sectionLabel: 'Comercial', label: 'Editar plano', parentLabel: 'Planos e Créditos', parentHref: '/planos' }
+    },
+    {
       path: '/catalogo',
       component: ManagementPage,
       props: { section: 'catalogo', catalogPage: 'list' },
@@ -182,6 +212,42 @@ export const router = createRouter({
       meta: {
         sectionLabel: 'Gestão', label: 'Item produzível', parentLabel: 'Produzíveis', parentHref: '/produziveis'
       }
+    },
+    {
+      path: '/entregadores',
+      component: ManagementPage,
+      props: { section: 'entregadores', deliveryDriverPage: 'list' },
+      meta: { sectionLabel: 'Gestão', label: 'Entregadores' }
+    },
+    {
+      path: '/entregadores/novo',
+      component: ManagementPage,
+      props: { section: 'entregadores', deliveryDriverPage: 'new' },
+      meta: { sectionLabel: 'Gestão', label: 'Novo entregador', parentLabel: 'Entregadores', parentHref: '/entregadores' }
+    },
+    {
+      path: '/entregadores/:id/editar',
+      component: ManagementPage,
+      props: route => ({ section: 'entregadores', deliveryDriverPage: 'edit', deliveryDriverId: String(route.params.id) }),
+      meta: { sectionLabel: 'Gestão', label: 'Editar entregador', parentLabel: 'Entregadores', parentHref: '/entregadores' }
+    },
+    {
+      path: '/usuarios',
+      component: ManagementPage,
+      props: { section: 'usuarios', userPage: 'list' },
+      meta: { sectionLabel: 'Gestão', label: 'Usuários' }
+    },
+    {
+      path: '/usuarios/novo',
+      component: ManagementPage,
+      props: { section: 'usuarios', userPage: 'new' },
+      meta: { sectionLabel: 'Gestão', label: 'Novo usuário', parentLabel: 'Usuários', parentHref: '/usuarios' }
+    },
+    {
+      path: '/usuarios/:id/editar',
+      component: ManagementPage,
+      props: route => ({ section: 'usuarios', userPage: 'edit', userId: String(route.params.id) }),
+      meta: { sectionLabel: 'Gestão', label: 'Editar usuário', parentLabel: 'Usuários', parentHref: '/usuarios' }
     },
     { path: '/:pathMatch(.*)*', redirect: '/operacoes/hoje' }
   ]

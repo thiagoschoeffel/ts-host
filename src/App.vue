@@ -37,6 +37,18 @@ const breadcrumbs = computed(() => {
     && /^\/catalogo(?:\?.*)?$/.test(route.query.retorno)
     ? route.query.retorno
     : undefined
+  const returnToDeliveryDrivers = typeof route.query.retorno === 'string'
+    && /^\/entregadores(?:\?.*)?$/.test(route.query.retorno)
+    ? route.query.retorno
+    : undefined
+  const returnToUsers = typeof route.query.retorno === 'string'
+    && /^\/usuarios(?:\?.*)?$/.test(route.query.retorno)
+    ? route.query.retorno
+    : undefined
+  const returnToPlans = typeof route.query.retorno === 'string'
+    && /^\/planos(?:\?.*)?$/.test(route.query.retorno)
+    ? route.query.retorno
+    : undefined
 
   if (typeof parentLabel === 'string') {
     items.push({
@@ -49,12 +61,18 @@ const breadcrumbs = computed(() => {
             ? returnToProducibles
             : parentHref === '/catalogo' && returnToCatalog
               ? returnToCatalog
+              : parentHref === '/entregadores' && returnToDeliveryDrivers
+                ? returnToDeliveryDrivers
+                : parentHref === '/usuarios' && returnToUsers
+                  ? returnToUsers
+                  : parentHref === '/planos' && returnToPlans
+                    ? returnToPlans
           : typeof parentHref === 'string' ? parentHref : undefined
     })
   }
 
   const currentLabel = typeof route.params.id === 'string'
-    && ['Pedido', 'Editar pedido', 'Item produzível', 'Editar item', 'Nova composição', 'Oferta', 'Editar oferta'].includes(String(route.meta.label))
+    && ['Pedido', 'Editar pedido', 'Item produzível', 'Editar item', 'Nova composição', 'Oferta', 'Editar oferta', 'Editar entregador', 'Editar usuário', 'Editar plano'].includes(String(route.meta.label))
     ? `${String(route.meta.label)} #${route.params.id}`
     : String(route.meta.label ?? '')
   items.push({ label: currentLabel })
