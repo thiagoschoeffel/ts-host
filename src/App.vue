@@ -67,14 +67,14 @@ watch(isSidebarCollapsed, (collapsed) => {
 </script>
 
 <template>
-  <div class="min-h-screen">
+  <div class="flex h-dvh flex-col overflow-hidden">
     <AppHeader
       :current-date-label="currentDateLabel"
       :mobile-sidebar-open="isMobileSidebarOpen"
       @toggle-desktop-sidebar="isSidebarCollapsed = !isSidebarCollapsed"
       @toggle-mobile-sidebar="isMobileSidebarOpen = !isMobileSidebarOpen" />
     <AppSidebarDrawer :open="isMobileSidebarOpen" @close="isMobileSidebarOpen = false" />
-    <div class="flex">
+    <div class="flex min-h-0 flex-1 overflow-hidden">
       <AppSidebar :collapsed="isSidebarCollapsed" />
       <ModuleContent>
         <RouterView />

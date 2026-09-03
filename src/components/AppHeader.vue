@@ -12,7 +12,7 @@ defineEmits<{
 </script>
 
 <template>
-  <header class="sticky top-0 z-10 flex h-16 items-center gap-4 bg-white px-4 shadow-xs">
+  <header class="z-10 flex h-16 shrink-0 items-center gap-4 bg-white px-4 shadow-xs">
     <div class="flex items-center gap-4">
       <button
         class="rounded p-2 lg:hidden"

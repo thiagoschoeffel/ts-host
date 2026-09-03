@@ -6,16 +6,18 @@ defineProps<{ collapsed: boolean }>()
 
 <template>
   <aside
-    class="app-sidebar sticky top-16 hidden h-[calc(100vh-4rem)] shrink-0 flex-col bg-slate-800 text-slate-100 transition-[width] duration-200 lg:flex"
+    class="app-sidebar hidden h-full shrink-0 bg-slate-800 text-slate-100 transition-[width] duration-200 lg:block"
     :class="collapsed ? 'w-[4.5rem]' : 'w-64'">
-    <SidebarNavigation :collapsed="collapsed" />
+    <div class="flex h-full flex-col">
+      <SidebarNavigation :collapsed="collapsed" />
+    </div>
   </aside>
 </template>
 
 <style scoped>
 @media (width >= 64rem) {
   .app-sidebar {
-    display: flex;
+    display: block;
   }
 }
 </style>
