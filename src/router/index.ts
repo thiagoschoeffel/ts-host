@@ -152,6 +152,24 @@ export const router = createRouter({
       meta: { sectionLabel: 'Comercial', label: 'Editar plano', parentLabel: 'Planos e Créditos', parentHref: '/planos' }
     },
     {
+      path: '/financeiro',
+      component: CommercialPage,
+      props: { section: 'financeiro', financialPage: 'list' },
+      meta: { sectionLabel: 'Comercial', label: 'Financeiro' }
+    },
+    {
+      path: '/financeiro/pagamentos/novo',
+      component: CommercialPage,
+      props: { section: 'financeiro', financialPage: 'new-payment' },
+      meta: { sectionLabel: 'Comercial', label: 'Registrar pagamento', parentLabel: 'Financeiro', parentHref: '/financeiro' }
+    },
+    {
+      path: '/financeiro/cobrancas/:id',
+      component: CommercialPage,
+      props: route => ({ section: 'financeiro', financialPage: 'charge-detail', chargeId: String(route.params.id) }),
+      meta: { sectionLabel: 'Comercial', label: 'Cobrança', parentLabel: 'Financeiro', parentHref: '/financeiro' }
+    },
+    {
       path: '/catalogo',
       component: ManagementPage,
       props: { section: 'catalogo', catalogPage: 'list' },
