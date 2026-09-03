@@ -67,6 +67,28 @@ export const router = createRouter({
       meta: { sectionLabel: 'Operações' }
     },
     {
+      path: '/cardapios',
+      component: CommercialPage,
+      props: { section: 'cardapios', menuPage: 'list' },
+      meta: { sectionLabel: 'Comercial', label: 'Cardápios' }
+    },
+    {
+      path: '/cardapios/novo',
+      component: CommercialPage,
+      props: { section: 'cardapios', menuPage: 'new' },
+      meta: {
+        sectionLabel: 'Comercial', label: 'Novo cardápio', parentLabel: 'Cardápios', parentHref: '/cardapios'
+      }
+    },
+    {
+      path: '/cardapios/:date',
+      component: CommercialPage,
+      props: route => ({ section: 'cardapios', menuPage: 'edit', menuDate: String(route.params.date) }),
+      meta: {
+        sectionLabel: 'Comercial', label: 'Cardápio do dia', parentLabel: 'Cardápios', parentHref: '/cardapios'
+      }
+    },
+    {
       path: '/clientes',
       component: CommercialPage,
       props: { section: 'clientes', customerPage: 'list' },
