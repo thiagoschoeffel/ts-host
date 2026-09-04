@@ -44,7 +44,7 @@ declare module 'moduleCommercial/CommercialPage' {
     section?: 'clientes' | 'cardapios' | 'planos' | 'financeiro'
     customerPage?: 'list' | 'new' | 'detail' | 'edit'
     customerId?: string
-    menuPage?: 'list' | 'new' | 'edit'
+    menuPage?: 'list' | 'planning' | 'new' | 'edit'
     menuDate?: string
     planPage?: 'list' | 'new' | 'edit' | 'new-acquisition' | 'new-movement'
     planId?: string

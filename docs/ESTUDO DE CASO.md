@@ -1833,13 +1833,66 @@ No modo humano:
 - automação deixa de modificar;
 - operador conduz.
 
-## 21.20. Concorrência otimista
+## 21.20. Franquia mensal e controle de custo
+
+A partir da política anunciada pela Meta para **1º de outubro de 2026**, cada número comercial possui franquia mensal de **1.000 mensagens de serviço entregues**. A política externa, sua vigência, a quantidade gratuita e as categorias cobradas devem permanecer configuráveis e ser reconfirmadas antes da integração entrar em produção.
+
+Não tratar como “1.000 mensagens trocadas”:
+
+```text
+cliente → empresa
+não consome a franquia de mensagens de serviço
+
+empresa → cliente
+mensagem de serviço entregue
+consome a franquia
+```
+
+Templates e outras categorias possuem regras próprias e não devem ser misturados nesse contador.
+
+O controle é mensal e por número comercial. Cada período deve ser preservado como histórico; não zerar nem reescrever o registro do mês anterior.
+
+## 21.21. Margem operacional e concorrência
+
+Para evitar ultrapassagem concorrente, o bloqueio considera:
+
+```text
+uso operacional = entregues + reservadas para envios em andamento
+```
+
+Ao atingir **970 mensagens (97%)**:
+
+- pausar novos envios automáticos de mensagens de serviço;
+- transferir atendimentos automatizados para Humano;
+- continuar recebendo webhooks e mensagens do cliente;
+- continuar persistindo histórico e estados de processamento;
+- manter o atendimento humano disponível.
+
+As 30 mensagens restantes formam uma margem para atendimento humano e conciliação de envios em andamento. Ao esgotar as 1.000 mensagens, qualquer novo envio de serviço pela API deve ser bloqueado até a renovação mensal, salvo se uma política de custo paga tiver sido explicitamente habilitada.
+
+Reserva confirmada como entregue troca `Reservada` por `Entregue`. Falha definitiva libera a reserva. A API deve fazer essa transição de forma atômica.
+
+## 21.22. Visibilidade no Atendimento
+
+A tela de Atendimento deve mostrar, sem depender apenas de cor:
+
+- período e número comercial;
+- mensagens de serviço entregues e percentual da franquia;
+- reservas em processamento;
+- quantidade restante até a pausa automática;
+- quantidade gratuita ainda disponível;
+- data da renovação;
+- estado normal, atenção, alerta, crítico ou automação pausada.
+
+O frontend apresenta a situação. Contagem, reserva, bloqueio e renovação são decisões autoritativas da API.
+
+## 21.23. Concorrência otimista
 
 Alterações concorrentes não devem sobrescrever silenciosamente o trabalho de outro ator.
 
 A arquitetura deve possuir controle equivalente a versão do pedido.
 
-## 21.21. Congelados no atendimento
+## 21.24. Congelados no atendimento
 
 A automação pode informar e vender congelados, mas somente com base em disponibilidade real de estoque.
 

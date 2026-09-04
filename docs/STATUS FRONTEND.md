@@ -1,6 +1,6 @@
 # Status frontend — Sabor Santè
 
-Atualizado em 4 de setembro de 2026 após o fechamento das decisões operacionais de Congelados, a consolidação de sua origem obrigatória em Produzíveis e o cruzamento de `ESTUDO DE CASO.md`, `GUIA UI.md`, `ARQUITETURA FRONTEND.md` e das branches `main` dos cinco repositórios do frontend.
+Atualizado em 4 de setembro de 2026 após a consolidação demonstrativa de Congelados e da primeira jornada funcional de Atendimento / WhatsApp, com o cruzamento de `ESTUDO DE CASO.md`, `GUIA UI.md`, `ARQUITETURA FRONTEND.md` e das branches `main` dos cinco repositórios do frontend.
 
 Este arquivo registra o estado verificado, as lacunas e a sequência recomendada de evolução. As regras permanentes continuam pertencendo aos três documentos de referência.
 
@@ -60,7 +60,7 @@ ts-host
 | Área | Estado | O que existe hoje | O que falta para a V1 |
 | --- | --- | --- | --- |
 | Hoje | Protótipo funcional | Dashboard operacional e estado demonstrativo de sincronização | Dados reais e consolidação pela API |
-| Atendimento / WhatsApp | Pendente | Entrada na navegação e placeholder | Canal, histórico, handoff humano, idempotência, ordem, retentativa e montagem de Pedido aberto |
+| Atendimento / WhatsApp | Protótipo funcional | Caixa de entrada responsiva, skeletons estruturais, histórico sanitizado, alternância Automação/Humano, envio manual, falha com retentativa idempotente, entrada no Pedido aberto e acompanhamento demonstrativo da franquia mensal | Integração oficial, webhook, persistência e controle autoritativos da franquia, processamento sequencial e sincronização com o aplicativo WhatsApp |
 | Pedidos | Protótipo funcional | Lista, criação, edição, detalhe, confirmação, cancelamento e reagendamento simulados | `ConfirmarPedido` autoritativo, capacidade, estoque congelado, créditos e financeiro em uma transação |
 | Capacidade | Pendente | Consequências são apenas descritas/simuladas no Pedido | Reserva e liberação concorrentes na API |
 | Produção diária | Protótipo funcional | Consulta agregada a partir de pedidos demonstrativos | API baseada apenas em pedidos confirmados; manter congelados fora dessa apuração |
@@ -70,7 +70,7 @@ ts-host
 | Catálogo / Ofertas | Protótipo funcional | Ofertas, componentes, escolhas, adicionais e tipos de componente | API, contratos definitivos e vínculo real com cardápio/pedido |
 | Produzíveis / Composições | Protótipo funcional | Cadastro, detalhe e versões de composição | Persistência autoritativa e uso histórico integrado na confirmação |
 | Cardápio diário | Protótipo funcional | Calendário, criação/edição, publicação, disponibilidade e importação por planilha demonstrativa | API e integração autoritativa com catálogo e Pedido |
-| Planejamento semanal | Pendente | A visualização por semana do calendário não implementa a entidade/processo de planejamento semanal | Planejar semana, derivar dias e preservar revisão/publicação diária |
+| Planejamento semanal | Protótipo funcional | Grade compacta com autocomplete para selecionar dias e resolver as três categorias, escolha e ordenação de ofertas, salvamento da intenção e derivação de novos cardápios diários em rascunho sem substituir dias existentes | Persistência autoritativa, comunicação externa do plano e integração com preparação/compra |
 | Planos e Créditos | Protótipo funcional | Planos, aquisições, saldos, movimentações e estorno demonstrativos | FIFO e consumo/estorno autoritativos na confirmação/cancelamento do Pedido |
 | Financeiro | Protótipo funcional | Cobranças, pagamentos, alocações, saldos e crédito financeiro demonstrativos | Origem na confirmação, efeitos de cancelamento e transação na API |
 | Entregadores | Protótipo funcional | Lista e cadastro demonstrativos | Fonte única para preferência, atribuição e tentativa real |
@@ -152,8 +152,8 @@ A Embalagem agora representa o conjunto físico completo de etiquetas por meio d
 
 ### 4. Fechar as demais lacunas funcionais do frontend V1
 
-- Atendimento / WhatsApp;
-- planejamento semanal do Cardápio;
+- Atendimento / WhatsApp — primeira jornada demonstrativa concluída, incluindo skeletons estruturais da lista e da conversa; integração oficial e efeitos autoritativos permanecem para a API;
+- planejamento semanal do Cardápio — jornada demonstrativa concluída, preservando a independência de revisão e publicação de cada dia;
 - experiência completa de capacidade;
 - jornadas completas de Financeiro, Planos/Créditos e cancelamento;
 - unificação de Clientes e Entregadores entre os módulos.
@@ -187,10 +187,10 @@ A Embalagem agora representa o conjunto físico completo de etiquetas por meio d
 
 ## Prioridade consolidada
 
-1. Consolidar Congelados em Gestão, incluindo estoque por lote e etiqueta de produto.
-2. Consolidar congelados no Pedido e a Embalagem, incluindo etiquetas individuais da produção do dia e etiqueta externa do pacote kraft.
-3. Completar Atendimento / WhatsApp, planejamento semanal e as demais jornadas da V1.
-4. Consolidar Financeiro, Planos/Créditos, Capacidade, Clientes e Entregadores no frontend.
+1. Congelados em Gestão, incluindo estoque por lote e etiqueta de produto — concluído no escopo demonstrativo.
+2. Congelados no Pedido e na Embalagem, incluindo etiquetas individuais e externa — concluído no escopo demonstrativo.
+3. Atendimento / WhatsApp — primeira jornada concluída no escopo demonstrativo.
+4. Planejamento semanal — concluído no escopo demonstrativo; consolidar Financeiro, Planos/Créditos, Capacidade, Clientes e Entregadores no frontend.
 5. Fechar navegação, contratos federados, estados, responsividade, testes e CI do frontend.
 6. Declarar formalmente o frontend consolidado.
 7. Somente então retomar a API e realizar a integração autoritativa.

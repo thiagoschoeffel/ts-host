@@ -151,7 +151,7 @@ Estado atual relevante:
 - Produção possui consulta operacional;
 - Embalagem possui experiência própria;
 - Entregas possui experiência própria;
-- Atendimento ainda utiliza placeholder.
+- Atendimento possui caixa de entrada e jornada demonstrativa com histórico, handoff humano, retentativa e entrada no Pedido aberto; integração oficial e persistência permanecem pendentes.
 
 ---
 
@@ -167,6 +167,8 @@ Financeiro
 ```
 
 Também concentra atualmente stores/mocks demonstrativos dessas áreas.
+
+Estado atual relevante: Cardápios possui calendário diário e planejamento semanal demonstrativo separado. O planejamento registra intenção e pode derivar novos dias em rascunho sem sobrescrever cardápios diários existentes; revisão, publicação e alterações posteriores permanecem próprias de cada dia.
 
 ---
 
@@ -881,6 +883,21 @@ backend
 ```
 
 O frontend pode antecipar cálculo para UX, mas deve aceitar resposta autoritativa do servidor.
+
+## 29.1. Franquia do WhatsApp
+
+Enquanto o backend está congelado, Atendimento usa um snapshot demonstrativo substituível para validar a apresentação da franquia mensal. O contrato de interface distingue mensagens de serviço entregues das reservadas para envios em andamento e inclui limite gratuito, margem de pausa, período, renovação, número comercial e estado autoritativo.
+
+Na integração final:
+
+```text
+webhook de entrega / falha
+→ API concilia reserva e consumo mensal em transação
+→ QuotaGuard autoriza ou bloqueia antes do envio
+→ frontend apenas apresenta o snapshot retornado
+```
+
+O frontend não pode usar seu contador local como proteção financeira. Aos 97%, a API pausa a automação sem desligar recebimento, histórico ou atendimento humano; ao esgotar a franquia, bloqueia o envio de serviço pela API enquanto não houver autorização explícita para custo pago.
 
 ---
 

@@ -84,6 +84,14 @@ export const router = createRouter({
       }
     },
     {
+      path: '/cardapios/planejamento',
+      component: CommercialPage,
+      props: { section: 'cardapios', menuPage: 'planning' },
+      meta: {
+        sectionLabel: 'Comercial', label: 'Planejamento semanal', parentLabel: 'Cardápios', parentHref: '/cardapios'
+      }
+    },
+    {
       path: '/cardapios/:date',
       component: CommercialPage,
       props: route => ({ section: 'cardapios', menuPage: 'edit', menuDate: String(route.params.date) }),
