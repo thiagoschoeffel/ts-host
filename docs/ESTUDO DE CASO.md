@@ -123,7 +123,7 @@ Exemplos:
 - desconto aplicado;
 - entregador efetivo;
 - opção escolhida do cardápio;
-- produto/oferta do Catálogo efetivamente atendido por estoque congelado;
+- Configuração de Congelado efetivamente escolhida e seu preço;
 - lote de congelado utilizado;
 - data de fabricação;
 - data de validade;
@@ -156,7 +156,7 @@ Pedido → personalização efetivamente aplicada
 ```
 
 ```text
-Produto/oferta do Catálogo → configuração de congelado atual
+Item Produzível → configuração de congelado atual
 Lote → fabricação, validade e apresentação efetivamente usadas
 ```
 
@@ -204,7 +204,8 @@ Congelados
 → etiqueta do produto
 
 Embalagem / Pedido
-→ etiqueta externa de entrega
+→ etiqueta individual dos itens da produção do dia
+→ etiqueta externa do pacote kraft
 ```
 
 Não é necessário criar um domínio isolado de “Etiquetas”.
@@ -398,34 +399,34 @@ Nem todo adicional deve estar disponível para toda oferta.
 
 A oferta deve definir quais adicionais fazem sentido para ela.
 
-## 5.8. Congelado sempre nasce de produto existente no Catálogo
+## 5.8. Congelado sempre nasce de Item Produzível
 
-Congelado não é um produto comercial independente.
+Congelado não exige uma Oferta individual que repita a identidade de cada preparação.
 
-Toda refeição congelada deve obrigatoriamente corresponder a algo que a empresa já vende e já produz:
+Toda refeição congelada deve obrigatoriamente corresponder a algo que a empresa já produz:
 
 ```text
-Oferta existente no Catálogo
-→ identidade comercial, nome, preço e regras de venda
-
 Item Produzível existente
 → preparação e composição versionada
 
 Configuração de Congelado
-→ vincula obrigatoriamente a Oferta e o Item Produzível existentes
-→ acrescenta apenas apresentação e comportamento de estoque/validade
+→ vincula obrigatoriamente o Item Produzível
+→ acrescenta apresentação, preço de venda e comportamento de estoque/validade
 
 Lote Congelado
 → produção física concreta com fabricação, validade e quantidade
+
+Oferta genérica de Congelados
+→ organiza a venda no Pedido sem duplicar uma Oferta para cada preparação
 ```
 
-A área de Congelados não pode criar uma segunda identidade comercial, um segundo nome, um segundo preço ou uma segunda composição para o mesmo produto.
+A área de Congelados não pode criar um segundo nome ou uma segunda composição para o mesmo produto. O preço variável pertence à Configuração de Congelado e é congelado no Pedido quando a apresentação é escolhida.
 
 Regra:
 
-> se não existe no Catálogo e não corresponde a um Item Produzível existente, não pode ser cadastrado nem produzido como congelado.
+> se não corresponde a um Item Produzível existente, não pode ser cadastrado nem produzido como congelado.
 
-Quando uma mesma Oferta puder possuir mais de uma apresentação congelada válida, essas apresentações podem possuir configurações de estoque distintas, mas continuam dependentes da mesma identidade comercial e da produção já modelada no sistema.
+Quando um mesmo Item Produzível possuir mais de uma apresentação congelada válida, essas apresentações possuem configurações e preços distintos sem duplicar a preparação.
 
 Alterar ou inativar a configuração de congelado não deve apagar o histórico de lotes, pedidos ou etiquetas já gerados.
 
@@ -459,18 +460,16 @@ Composição → como é produzido
 Para congelados:
 
 ```text
-Oferta existente
-+
 ItemProduzível existente
         ↓
 ConfiguraçãoCongelado
-→ habilita uma apresentação para controle por lote/estoque
+→ habilita apresentação e preço para controle por lote/estoque e venda
         ↓
 LoteCongelado
 → produção física concreta
 ```
 
-`ConfiguraçãoCongelado` não é uma nova entidade comercial. Ela apenas habilita estoque congelado para um produto que já existe no Catálogo e para uma preparação que já existe em Produzíveis.
+`ConfiguraçãoCongelado` não duplica uma Oferta por preparação. Ela habilita estoque e preço para um Item Produzível existente; no Pedido, a Oferta genérica de Congelados organiza a venda e a configuração identifica o produto efetivamente escolhido.
 
 ## 6.3. Composição versionada
 
@@ -590,17 +589,19 @@ O sistema pode sugerir esgotamento, mas não deve tomar decisões comerciais irr
 
 ## 7.9. Congelados e cardápio
 
-Congelados não formam um catálogo paralelo.
+Congelados não formam um catálogo paralelo de Ofertas por preparação.
 
-A oferta apresentada ao cliente continua sendo a mesma Oferta existente no Catálogo. Quando essa Oferta possuir configuração de congelado, sua modalidade atendida por estoque só pode ser oferecida quando existir estoque elegível.
+Uma Oferta genérica de Congelados organiza essa modalidade no Pedido. As opções apresentadas ao cliente são Configurações de Congelado ativas com estoque elegível, cada uma com seu próprio preço.
 
 ```text
-Oferta existente no Catálogo
-├── atendimento pela operação diária → disponibilidade operacional do cardápio
-└── atendimento por congelado        → disponibilidade condicionada ao estoque elegível
+Oferta genérica de Congelados
+└── Configuração de Congelado escolhida
+    ├── Item Produzível e apresentação
+    ├── preço vigente
+    └── disponibilidade condicionada ao estoque elegível
 ```
 
-O sistema não deve criar uma Oferta nova apenas para espelhar o mesmo produto no estoque de congelados.
+O sistema não deve criar uma Oferta nova para cada Item Produzível congelado.
 
 A arquitetura também não deve obrigar a produção de congelados a entrar no cálculo da produção diária.
 
@@ -695,13 +696,14 @@ A operação deve ser atômica no nível conceitual.
 
 `PedidoItem` representa a oferta comprada.
 
-Quando for um item atendido por estoque congelado, o `PedidoItem` continua referenciando a Oferta do Catálogo e deve haver informação suficiente para explicar:
+Quando for um item atendido por estoque congelado, o `PedidoItem` referencia a Oferta genérica de Congelados e deve haver informação suficiente para explicar:
 
-- qual configuração de congelado atendeu a Oferta;
+- qual configuração de congelado foi escolhida;
+- qual preço unitário dessa configuração foi congelado no Pedido;
 - quantas unidades foram atendidas por estoque;
 - de quais lotes vieram as unidades, quando necessário.
 
-O Pedido não deve trocar a identidade da Oferta por uma identidade paralela de “produto congelado”.
+O Pedido não deve criar uma Oferta individual para espelhar cada Item Produzível congelado.
 
 ## 8.6. PedidoItemComponente
 
@@ -1066,20 +1068,18 @@ Esse estoque agora faz parte da primeira versão do sistema.
 
 ## 16.2. Configuração de Congelado
 
-`ConfiguraçãoCongelado` representa a habilitação de estoque congelado para um produto que **já existe** no sistema.
+`ConfiguraçãoCongelado` representa a habilitação de estoque congelado para um Item Produzível que **já existe** no sistema.
 
 Ela não é um novo produto.
 
-Cada configuração deve obrigatoriamente referenciar:
-
-- uma Oferta existente no Catálogo;
-- um Item Produzível existente que represente aquilo que é efetivamente preparado.
+Cada configuração deve obrigatoriamente referenciar um Item Produzível existente que represente aquilo que é efetivamente preparado.
 
 Pode acrescentar somente informações próprias do armazenamento/venda congelada, como:
 
 - apresentação;
 - quantidade por unidade;
 - unidade de medida;
+- preço unitário de venda;
 - categoria de organização, quando útil;
 - ativo/inativo.
 
@@ -1092,16 +1092,14 @@ Exemplos de apresentação:
 
 Não duplicar dentro de Congelados:
 
-- nome comercial;
-- descrição comercial;
-- preço;
+- nome da preparação;
 - composição;
 - adicionais;
 - grupos de escolha.
 
-Esses dados continuam pertencendo ao Catálogo e a Produzíveis.
+Nome e composição continuam pertencendo a Produzíveis. Regras comuns de venda pertencem à Oferta genérica de Congelados; o preço variável da apresentação pertence à Configuração de Congelado.
 
-Se a Oferta ou o Item Produzível estiverem inativos, a configuração continua resolvendo referências históricas, mas não deve permitir nova produção/venda sem uma regra explícita que a reabilite.
+Se o Item Produzível ou a configuração estiverem inativos, as referências históricas continuam resolvidas, mas não se permite nova produção/venda sem reabilitação explícita.
 
 A configuração pode possuir identidade técnica própria para rastrear lotes e histórico, mas essa identidade não representa um produto comercial independente.
 
@@ -1111,7 +1109,7 @@ Cada produção relevante de congelados deve gerar um lote.
 
 O lote preserva:
 
-- configuração de congelado, que por sua vez referencia Oferta e Item Produzível;
+- configuração de congelado, que por sua vez referencia o Item Produzível e preserva apresentação e preço vigentes;
 - data de fabricação;
 - data de validade;
 - quantidade produzida;
@@ -1183,8 +1181,8 @@ Cada movimentação deve preservar:
 Fluxo mínimo:
 
 ```text
-operador escolhe produto do Catálogo previamente habilitado para estoque congelado
-→ sistema resolve sua ConfiguraçãoCongelado e o Item Produzível correspondente
+operador escolhe uma ConfiguraçãoCongelado ativa
+→ sistema resolve o Item Produzível correspondente
 → informa data de fabricação
 → informa quantidade produzida
 → sistema determina a validade conforme política
@@ -1276,19 +1274,26 @@ Reembolso financeiro e estorno de estoque são decisões distintas. O sistema de
 
 # 17. Etiquetas
 
-## 17.1. Dois tipos diferentes
+## 17.1. Três aplicações de etiqueta
 
-Existem duas necessidades distintas:
+Existem três aplicações distintas:
 
 ```text
 Etiqueta de produto congelado
 → colada no recipiente do alimento
+→ gerada na produção para estoque
 
-Etiqueta de entrega
-→ colada no lado de fora do pacote/saco do pedido
+Etiqueta de item da produção do dia
+→ uma para cada unidade física do Pedido
+→ colada no recipiente antes de entrar no pacote
+
+Etiqueta externa do Pedido
+→ uma para o pacote/saco kraft do Pedido
 ```
 
-Não misturar as duas.
+Todo item deve chegar ao cliente com sua etiqueta individual. O pacote kraft recebe ainda sua própria etiqueta externa.
+
+Não misturar a identificação do alimento com a identificação externa do pacote.
 
 ## 17.2. Formato físico atual
 
@@ -1310,11 +1315,11 @@ A arquitetura do domínio não deve depender do modelo específico da impressora
 
 ## 17.3. Etiqueta do produto congelado
 
-A etiqueta do produto deve ser gerada a partir da ConfiguraçãoCongelado e do LoteCongelado, usando o nome comercial da Oferta existente no Catálogo.
+A etiqueta do produto deve ser gerada a partir da ConfiguraçãoCongelado e do LoteCongelado, usando o nome do Item Produzível existente.
 
 Conteúdo operacional confirmado para a V1:
 
-- nome do produto proveniente do Catálogo;
+- nome do produto proveniente de Produzíveis;
 - apresentação/porção quando aplicável;
 - data de fabricação;
 - data de validade;
@@ -1369,37 +1374,55 @@ produção
 
 O software deve registrar o lote antes da impressão para evitar perda de dados em caso de falha da impressora.
 
-## 17.6. Etiqueta externa de entrega
+## 17.6. Etiqueta do item da produção do dia
 
-A etiqueta externa identifica o pacote do cliente.
+Cada unidade física produzida para o Pedido deve receber uma etiqueta individual antes de ser colocada no pacote kraft.
+
+A quantidade de etiquetas deriva das quantidades dos itens confirmados, não apenas da quantidade de linhas do Pedido.
+
+O conteúdo deve ser gerado a partir do snapshot do PedidoItem e destacar as informações necessárias para identificar e montar corretamente a unidade, incluindo:
+
+- nome do produto;
+- apresentação/porção, quando aplicável;
+- personalizações, adicionais, restrições e observações relevantes para aquela unidade;
+- identificação do Pedido ou do cliente quando necessária para evitar trocas durante a montagem.
+
+O conteúdo final e sua hierarquia visual devem ser validados no protótipo sem transformar a etiqueta em um checklist operacional.
+
+O congelado já etiquetado durante sua produção para estoque satisfaz a exigência de etiqueta individual. Na Embalagem do Pedido, o operador apenas confere essa etiqueta e não imprime uma duplicata sem necessidade.
+
+## 17.7. Etiqueta externa do Pedido
+
+A etiqueta externa identifica o pacote kraft do cliente.
 
 Conteúdo mínimo solicitado:
 
 - nome do cliente;
 - identificação do Pedido;
 - resumo do Pedido, quando couber;
-- endereço de entrega;
-- telefone;
+- endereço de entrega e telefone, quando houver entrega;
 - logomarca Sabor Santè.
 
 Deve utilizar snapshots do Pedido.
 
-Não deve buscar o endereço atual do cadastro na hora da reimpressão.
+Não deve buscar o endereço atual do cadastro na hora da reimpressão. Em retirada/balcão, a etiqueta externa continua identificando cliente e Pedido, omitindo os campos exclusivos de entrega.
 
-## 17.7. Momento da etiqueta de entrega
+## 17.8. Momento das etiquetas na Embalagem
 
-A etiqueta de entrega pertence ao fluxo de Embalagem/Expedição.
+As etiquetas dos itens da produção do dia e a etiqueta externa pertencem ao fluxo de Embalagem/Expedição.
 
 ```text
 operador confere Pedido
-→ imprime etiqueta de entrega
-→ cola no lado externo do pacote/saco
-→ marca Pedido como Embalado
+→ clica em “Embalado”
+→ sistema prepara uma etiqueta para cada unidade da produção do dia ainda sem etiqueta
+→ sistema prepara uma etiqueta externa para o pacote kraft
+→ operador cola as etiquetas individuais nos recipientes
+→ operador coloca os itens no pacote e cola a etiqueta externa
 ```
 
-A impressão pode ocorrer antes ou depois do clique “Embalado”, mas não deve criar um status adicional de domínio.
+O mesmo gesto operacional inicia a marcação do Pedido como Embalado e o trabalho de impressão necessário, mas são efeitos tecnicamente independentes. A impressão não cria status adicional de domínio, e uma falha da impressora não desfaz estoque nem exige desmarcar o Pedido.
 
-## 17.8. Reimpressão
+## 17.9. Reimpressão
 
 Reimpressão deve ser simples.
 
@@ -1412,23 +1435,23 @@ Não exigir:
 
 A reimpressão deve reutilizar os dados históricos já registrados.
 
-## 17.9. Custo das etiquetas
+## 17.10. Custo das etiquetas
 
-Como etiquetas têm custo operacional relevante, o sistema não deve imprimir automaticamente em massa sem ação explícita.
+Como etiquetas têm custo operacional relevante, o sistema não deve imprimir na confirmação do Pedido nem em massa sem ação explícita.
 
 Preferir:
 
 ```text
-ação do operador
-→ visualização/quantidade
+ação explícita “Embalado”
+→ gerar o conjunto de etiquetas daquele Pedido
 → imprimir
 ```
 
 Congelados podem imprimir várias etiquetas de uma vez porque representam um lote produzido.
 
-Etiquetas de entrega devem ser impressas conforme necessidade operacional de embalagem.
+Na Embalagem, imprimir somente as etiquetas individuais ainda necessárias e uma etiqueta externa por pacote kraft. Reimpressões permanecem explícitas e selecionáveis para evitar duplicações.
 
-## 17.10. Limite de escopo regulatório
+## 17.11. Limite de escopo regulatório
 
 As etiquetas descritas neste documento são requisitos operacionais informados pela Sabor Santè.
 
@@ -1447,8 +1470,8 @@ A embalagem deve continuar extremamente simples.
 ```text
 operador abre pedido
 → confere visualmente
-→ imprime etiqueta de entrega quando necessário
 → clica em "Embalado"
+→ imprime etiquetas individuais ainda necessárias e a etiqueta externa do pacote
 ```
 
 Registrar apenas:
@@ -1473,19 +1496,19 @@ A tela pode exibir:
 
 A função dessa visualização é ajudar a conferência, não criar um processo de confirmação linha a linha.
 
-## 18.3. Etiqueta de entrega
+## 18.3. Etiquetas da Embalagem
 
-A impressão da etiqueta externa deve estar disponível diretamente no contexto do Pedido em embalagem.
+A impressão das etiquetas individuais da produção do dia e da etiqueta externa deve acontecer diretamente no contexto do Pedido em embalagem ao clicar em “Embalado”.
 
-Não obrigar o operador a navegar para outra área apenas para imprimir.
+Não obrigar o operador a navegar para outra área apenas para imprimir ou reimprimir.
 
 ## 18.4. Congelados na embalagem do pedido
 
-O congelado já deve chegar ao fluxo de Pedido com etiqueta do produto aplicada durante sua produção/entrada em estoque.
+O congelado já deve chegar ao fluxo de Pedido com etiqueta individual aplicada durante sua produção/entrada em estoque.
 
 Na embalagem do pedido, o operador não precisa recriar a etiqueta interna do congelado.
 
-A ação principal de impressão nessa etapa é a etiqueta externa do pacote.
+A ação “Embalado” imprime as etiquetas das unidades da produção do dia ainda sem identificação e a etiqueta externa do pacote kraft. O operador confere visualmente as etiquetas já presentes nos congelados.
 
 ---
 
@@ -1965,13 +1988,14 @@ Implementar somente o necessário:
 - falhas e reagendamentos;
 - atendimento WhatsApp;
 - auditoria seletiva;
-- configurações de congelado vinculadas obrigatoriamente a Ofertas e Itens Produzíveis existentes;
+- configurações de congelado vinculadas obrigatoriamente a Itens Produzíveis existentes, com apresentação e preço próprios;
 - lotes de congelados;
 - estoque de congelados;
 - movimentos de estoque de congelados;
 - conferência de vencimentos;
 - etiqueta de produto congelado;
-- etiqueta externa de entrega;
+- etiqueta individual dos itens da produção do dia;
+- etiqueta externa do pacote kraft;
 - reimpressão.
 
 ## 25.2. Preparar para evolução
@@ -2052,9 +2076,10 @@ Implementar somente o necessário:
 
 ## Congelados
 
-- não existe produto congelado independente do Catálogo;
-- toda ConfiguraçãoCongelado deve referenciar uma Oferta existente e um Item Produzível existente;
-- Congelados não duplica nome, preço, composição ou identidade comercial;
+- não existe uma Oferta duplicada para cada produto congelado;
+- toda ConfiguraçãoCongelado deve referenciar um Item Produzível existente;
+- a ConfiguraçãoCongelado define apresentação e preço variável sem duplicar nome ou composição;
+- o Pedido usa a Oferta genérica de Congelados e preserva a configuração escolhida e o preço efetivo;
 - saldo deve ser explicado por movimentos;
 - lote deve preservar fabricação e validade;
 - item vencido não pode ser vendido;
@@ -2069,7 +2094,11 @@ Implementar somente o necessário:
 
 - conferência deve permanecer simples;
 - não exigir checklist detalhado como regra de negócio;
-- etiqueta externa deve usar snapshot do Pedido;
+- cada unidade física do Pedido deve possuir etiqueta individual;
+- itens da produção do dia recebem sua etiqueta na Embalagem;
+- congelados usam a etiqueta aplicada na produção para estoque, sem duplicação automática na Embalagem;
+- etiqueta externa do pacote kraft deve usar snapshot do Pedido;
+- clicar em “Embalado” dispara o conjunto de etiquetas necessário para o Pedido;
 - imprimir ou reimprimir não altera status do Pedido.
 
 ## Logística
@@ -2123,9 +2152,9 @@ Embalagem
 ↓
 Conferência visual
 ↓
-Impressão de etiqueta externa
+Ação “Embalado”
 ↓
-OK rápido do embalador
+Impressão das etiquetas individuais necessárias + etiqueta externa do pacote kraft
 ↓
 Pedido apto para logística
 ↓
@@ -2145,7 +2174,7 @@ Falha → reagendamento/cancelamento
 # 28. Fluxo macro dos congelados
 
 ```text
-Produção para estoque congelado de produto já existente no Catálogo
+Produção para estoque congelado de Item Produzível existente
 ↓
 Responsável informa produto habilitado + quantidade + data de fabricação
 ↓
@@ -2169,9 +2198,7 @@ Sistema valida e baixa estoque
 ↓
 Congelado é separado
 ↓
-Pedido é embalado
-↓
-Etiqueta externa do cliente é impressa
+Ação “Embalado” imprime as etiquetas ainda necessárias e a etiqueta externa do pacote
 ↓
 Entrega
 ```

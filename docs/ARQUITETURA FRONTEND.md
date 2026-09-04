@@ -481,9 +481,9 @@ Evolução planejada:
 /congelados/lotes/:id
 ```
 
-`/congelados` administra estoque e habilitação de produtos já existentes; não representa um segundo catálogo de produtos.
+`/congelados` administra estoque e habilitação de Itens Produzíveis existentes; não representa um segundo catálogo de produtos.
 
-A tabela final de rotas deve seguir o padrão consolidado quando Congelados for implementado.
+`/congelados/entrada` registra uma produção realizada e cria lote e movimentação de entrada no mesmo caso de uso.
 
 ---
 
@@ -752,7 +752,7 @@ Após atualizar:
 
 # 24. Estado demonstrativo
 
-O frontend ainda não possui API autoritativa conectada para o domínio completo.
+O frontend ainda não possui API autoritativa conectada para o domínio completo. Por regra de sequência do projeto, a API só será retomada depois que o frontend estiver formalmente consolidado.
 
 São usados:
 
@@ -785,7 +785,7 @@ aggregate root
 contrato de API
 ```
 
-A API .NET deve ser modelada a partir do estudo de caso.
+A API .NET deve ser modelada, em sua etapa futura, a partir do estudo de caso e dos fluxos consolidados no frontend.
 
 ---
 
@@ -854,13 +854,15 @@ vs
 Pedido
 ```
 
-Não criar uma infraestrutura excessiva de sincronização entre `localStorage` se a API real substituirá essa etapa em seguida.
+Não criar uma infraestrutura excessiva de sincronização entre `localStorage`. Durante a consolidação do frontend, preferir adapters e fixtures locais simples e explicitamente demonstrativos.
 
 A solução final deve convergir para backend autoritativo.
 
 ---
 
 # 29. Estado remoto futuro
+
+A implementação desse estado ocorre somente depois da consolidação formal do frontend. Antes disso, os adapters podem existir com implementações locais para estabilizar contratos de interface, estados e jornadas, sem executar trabalho no `ts-api`.
 
 Ao conectar a API:
 
@@ -900,6 +902,8 @@ sem validação.
 
 Conteúdo HTML originado de entrada de usuário ou fonte externa deve ser tratado como não confiável.
 
+Nos aplicativos, todo `Textarea` representa conteúdo rich-text e deve emitir HTML sanitizado. O consumidor deve preservar esse formato no estado e nos snapshots; não deve alternar silenciosamente o mesmo campo entre HTML e texto simples.
+
 Quando renderizado:
 
 ```text
@@ -908,7 +912,9 @@ sanitizar HTML
 
 Não usar `v-html` diretamente em conteúdo não confiável sem camada de sanitização.
 
-O `GUIA UI.md` define quando rich-text é apropriado visualmente.
+Ao exibir o valor, sanitizar novamente e renderizar os elementos suportados com estilos coerentes. Conversão para texto simples fica restrita a busca, validação, indexação e outros usos não visuais explicitamente justificados.
+
+O `GUIA UI.md` define a apresentação visual do conteúdo formatado.
 
 ---
 
@@ -1269,11 +1275,11 @@ Decisão recomendada:
 
 ```text
 ts-module-management
-→ configurações de congelado vinculadas ao Catálogo/Produzíveis, estoque, lotes, vencimentos e etiqueta do produto
+→ configurações de congelado vinculadas a Produzíveis, preço por apresentação, estoque, lotes, vencimentos e etiqueta do produto
 
 ts-module-operation
 → Pedido e Embalagem
-→ etiqueta externa de entrega
+→ etiqueta individual dos itens da produção do dia e etiqueta externa do pacote
 ```
 
 Não criar:
@@ -1285,37 +1291,36 @@ ts-module-labels
 
 sem motivo real de autonomia.
 
-## 48.1. Congelado não possui catálogo próprio
+## 48.1. Congelado não duplica Ofertas por preparação
 
-A identidade comercial continua pertencendo ao Catálogo e a preparação continua pertencendo a Produzíveis.
+A preparação continua pertencendo a Produzíveis. Uma única Oferta genérica de Congelados organiza a modalidade comercial no Pedido, sem espelhar cada Item Produzível no Catálogo.
 
-Dentro de `ts-module-management`, Congelados deve reutilizar as fontes já existentes desses dois conceitos, sem copiar produtos para uma nova massa independente.
+Dentro de `ts-module-management`, Congelados deve reutilizar a fonte existente de Itens Produzíveis e acrescentar somente apresentação, preço e comportamento de estoque.
 
 Modelo de fronteira esperado:
 
 ```text
-Oferta existente (obrigatória)
-+
 Item Produzível existente (obrigatório)
         ↓
 ConfiguraçãoCongelado
+→ apresentação + preço
         ↓
 Lotes / estoque / validade / etiquetas
+
+Pedido
+→ Oferta genérica de Congelados + ConfiguraçãoCongelado escolhida
 ```
 
-`ConfiguraçãoCongelado` pode possuir ID técnico próprio, mas não pode possuir identidade comercial independente.
+`ConfiguraçãoCongelado` possui ID próprio para identificar uma apresentação vendável e rastrear lotes, sem duplicar o nome nem a composição do Item Produzível.
 
 Não duplicar como fonte de verdade em Congelados:
 
 ```text
 nome
-preço
 composição
 adicionais
 grupos de escolha
 ```
-
-Se o código local já consegue resolver a relação Oferta → Item Produzível, a UI não deve exigir uma segunda seleção redundante.
 
 ---
 
@@ -1372,6 +1377,17 @@ A página não deve conhecer detalhes de:
 
 Esses detalhes pertencem ao adapter.
 
+Para a estação de Embalagem, a integração planejada usa Zebra Browser Print
+com a impressora USB padrão e envia ZPL diretamente, sem acionar a janela de
+impressão do navegador. O adapter aceita perfis de 203 e 300 dpi para etiquetas
+de 100 × 50 mm; o dpi definitivo é configuração da estação e será confirmado
+quando o modelo físico for conhecido. O modo de impressão pelo navegador
+permanece apenas como fallback demonstrativo.
+
+No modo Zebra, o clique em “Embalado” envia o trabalho diretamente. O preview
+continua disponível na reimpressão; em ambientes sem o agente/hardware, também
+serve para validar visualmente os templates sem simular uma Zebra existente.
+
 ---
 
 # 51. Templates de etiqueta
@@ -1380,7 +1396,8 @@ V1 possui templates controlados:
 
 ```text
 Produto congelado
-Entrega
+Item da produção do dia
+Pacote externo do Pedido
 ```
 
 Não criar designer gráfico genérico.
@@ -1389,10 +1406,15 @@ Dados do template vêm de modelos históricos:
 
 ```text
 Lote
+PedidoItem
 Pedido
 ```
 
 Reimpressão deve produzir o mesmo conteúdo histórico quando aplicável.
+
+Na Embalagem, o clique em “Embalado” solicita um trabalho composto por uma etiqueta para cada unidade da produção do dia ainda sem etiqueta e uma etiqueta externa para o pacote kraft. Itens congelados reutilizam a etiqueta aplicada na produção para estoque.
+
+O comando de Embalagem e o trabalho de impressão podem compartilhar o mesmo gesto na interface, mas permanecem efeitos independentes. Falha ou reimpressão não altera o status do Pedido, estoque ou lote.
 
 ---
 
@@ -1433,15 +1455,15 @@ Não tentar resolver concorrência de estoque apenas no navegador.
 Políticas confirmadas que pertencem à API/domínio:
 
 ```text
-origem comercial = Oferta existente no Catálogo
-origem produtiva = Item Produzível existente
+origem comercial = Oferta genérica de Congelados + preço da configuração escolhida
+origem produtiva = Item Produzível referenciado pela configuração
 validade = data de fabricação + 90 dias corridos
 alocação = FEFO entre lotes elegíveis
 ```
 
-A API não deve aceitar criação de um “produto congelado” independente. O cadastro de congelados deve ser uma configuração de estoque que referencia obrigatoriamente os identificadores de Oferta e Item Produzível existentes.
+A API não deve exigir uma Oferta individual para cada produto congelado. O cadastro referencia obrigatoriamente um Item Produzível e define apresentação e preço de venda.
 
-Nome e preço vêm do Catálogo; composição vem de Produzíveis. O contrato de Congelados não deve se tornar uma segunda fonte de verdade desses dados.
+Nome e composição vêm de Produzíveis. O preço variável vem da ConfiguraçãoCongelado e deve ser preservado como snapshot no Pedido; regras comuns de venda vêm da Oferta genérica de Congelados.
 
 Em empate de validade, priorizar fabricação mais antiga e depois um critério determinístico estável.
 
@@ -1487,7 +1509,7 @@ Avaliar geração quando a API federada crescer.
 
 Clientes/Planos/Financeiro e Pedidos ainda podem possuir fontes demonstrativas diferentes.
 
-Resolver definitivamente na API, evitando criar infraestrutura temporária excessiva.
+Durante a consolidação do frontend, manter adapters e fixtures locais simples. Resolver definitivamente na API apenas na etapa final, depois que os fluxos estiverem consolidados.
 
 ## 55.4. Testes
 

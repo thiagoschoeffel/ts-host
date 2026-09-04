@@ -11,6 +11,7 @@ import {
   FactoryIcon,
   MessagesSquareIcon,
   PackageCheckIcon,
+  SnowflakeIcon,
   TruckIcon,
   UserRoundCogIcon,
   UsersIcon
@@ -53,6 +54,7 @@ export const navigationSections: NavigationSection[] = [
     items: [
       { label: 'Catálogo', icon: BoxesIcon, to: '/catalogo' },
       { label: 'Produzíveis', icon: FactoryIcon, to: '/produziveis' },
+      { label: 'Congelados', icon: SnowflakeIcon, to: '/congelados' },
       { label: 'Entregadores', icon: BikeIcon, to: '/entregadores' },
       { label: 'Usuários', icon: UserRoundCogIcon, to: '/usuarios' }
     ]

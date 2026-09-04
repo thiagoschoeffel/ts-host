@@ -235,6 +235,28 @@ export const router = createRouter({
       }
     },
     {
+      path: '/congelados',
+      component: ManagementPage,
+      props: { section: 'congelados', frozenPage: 'list' },
+      meta: { sectionLabel: 'Gestão', label: 'Congelados' }
+    },
+    {
+      path: '/congelados/entrada',
+      component: ManagementPage,
+      props: { section: 'congelados', frozenPage: 'entry' },
+      meta: {
+        sectionLabel: 'Gestão', label: 'Registrar entrada', parentLabel: 'Congelados', parentHref: '/congelados'
+      }
+    },
+    {
+      path: '/congelados/lotes/:id',
+      component: ManagementPage,
+      props: route => ({ section: 'congelados', frozenPage: 'lot', frozenLotId: String(route.params.id) }),
+      meta: {
+        sectionLabel: 'Gestão', label: 'Lote de congelado', parentLabel: 'Congelados', parentHref: '/congelados'
+      }
+    },
+    {
       path: '/entregadores',
       component: ManagementPage,
       props: { section: 'entregadores', deliveryDriverPage: 'list' },

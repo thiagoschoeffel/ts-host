@@ -37,11 +37,13 @@ declare module 'moduleCommercial/CommercialPage' {
 declare module 'moduleManagement/ManagementPage' {
   import type { DefineComponent } from 'vue'
   const component: DefineComponent<{
-    section?: 'produziveis' | 'catalogo' | 'entregadores' | 'usuarios'
+    section?: 'produziveis' | 'catalogo' | 'congelados' | 'entregadores' | 'usuarios'
     produciblePage?: 'list' | 'new' | 'detail' | 'edit' | 'new-composition-version'
     producibleId?: string
     catalogPage?: 'list' | 'new' | 'detail' | 'edit'
     offerId?: string
+    frozenPage?: 'list' | 'entry' | 'lot'
+    frozenLotId?: string
     deliveryDriverPage?: 'list' | 'new' | 'edit'
     deliveryDriverId?: string
     userPage?: 'list' | 'new' | 'edit'

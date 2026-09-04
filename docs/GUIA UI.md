@@ -286,7 +286,9 @@ O card superior concentra:
 
 Não repetir a quantidade total de registros se a paginação já comunica o total.
 
-Contagens em Tabs só devem existir quando ajudam a diferenciar estados ou listas.
+Tabs globais, que alternam subseções da página, não exibem contagens.
+
+Quando houver tabs de filtro dentro de uma subseção, elas ficam no card de busca/filtros, acima do campo de busca. Nesse contexto, badges com contagens podem ser usados quando ajudam a comparar os conjuntos filtrados.
 
 ---
 
@@ -295,6 +297,14 @@ Contagens em Tabs só devem existir quando ajudam a diferenciar estados ou lista
 Tabs que representam subseções ficam acima do cabeçalho específico da subseção.
 
 A opção ativa usa a variante visual consolidada.
+
+Essas tabs são navegação global da página:
+
+- não ficam entre o cabeçalho e o card de busca;
+- não exibem badges ou quantidades;
+- alteram o título, subtítulo e a ação do cabeçalho contextual.
+
+Tabs que representam filtros são diferentes: pertencem ao card de busca/filtros, aparecem acima do campo de busca e podem exibir badges com quantidades.
 
 Exemplo:
 
@@ -336,7 +346,15 @@ estrutura complexa
 observações
 ```
 
-Toda listagem deve possuir ordenação inicial previsível.
+Toda `DataTable` deve nascer com uma ordenação ativa, visualmente indicada, e permitir ao usuário ordenar as colunas cujos valores aparecem na tabela, exceto ações ou conteúdo sem critério útil.
+
+A ordenação inicial deve ser previsível e coerente com a operação. Exemplos:
+
+```text
+cadastros → nome ascendente
+históricos → data mais recente
+vencimentos → validade mais próxima
+```
 
 ---
 
@@ -399,7 +417,7 @@ Quando não há nenhuma entidade:
 
 ```text
 Nenhum cliente cadastrado.
-Nenhum produto do catálogo habilitado para congelamento.
+Nenhum item produzível habilitado para congelamento.
 Nenhuma oferta cadastrada.
 ```
 
@@ -622,6 +640,14 @@ Quantidade e unidade permanecem separadas quando o domínio exige.
 
 ---
 
+## 12.6. Estado ativo em cadastros
+
+Quando ativar ou inativar faz parte do ciclo de vida de um cadastro, o estado deve ser editado no próprio formulário, normalmente com `Checkbox`, e confirmado junto com **Salvar**.
+
+A listagem continua exibindo o status com `Badge`, mas não repete **Ativar**, **Inativar** ou **Reativar** como botões independentes na coluna de ações. Essa coluna conduz à edição do cadastro.
+
+---
+
 # 13. Drawers e fluxos auxiliares
 
 ## 13.1. Quando usar Drawer
@@ -753,6 +779,10 @@ Exemplo:
 
 O ícone `+` fica reservado prioritariamente à criação principal.
 
+Botões com rótulo textual claro não recebem ícone decorativo por padrão. Use ícone quando ele acrescentar reconhecimento operacional relevante, como imprimir, representar navegação conhecida ou viabilizar uma ação somente por ícone com nome acessível. Em colunas de ações e listas, botões **Abrir** e **Ver** que navegam para outra tela usam `ArrowRightIcon` no slot `trailingIcon`.
+
+Cor, texto e confirmação já comunicam ações como editar, ajustar, inativar e descartar; não repetir essa semântica com ícones em todas elas.
+
 ---
 
 ## 16.2. Ações secundárias
@@ -859,12 +889,24 @@ Em resumos, `medium` é a referência atual quando precisa de maior destaque.
 
 ---
 
-# 20. Observações formatadas
+# 20. Textos longos e observações formatadas
 
-Quando a feature suporta conteúdo formatado:
+Todo campo de texto multilinha nos aplicativos deve usar `Textarea` com `rich-text`. Isso inclui descrições, observações, motivos, detalhes de ocorrência e referências livres.
 
-- usar `Textarea rich-text` do padrão atual;
-- preservar consistência de edição e leitura.
+O mesmo valor deve ser tratado como rich-text em todo o seu ciclo:
+
+```text
+edição com Textarea rich-text
+→ persistência do HTML sanitizado
+→ leitura com a formatação preservada
+```
+
+Na exibição:
+
+- preservar parágrafos, ênfase, listas, links, citações, alinhamento, cor e tamanho suportados pelo editor;
+- aplicar estilos de leitura consistentes com a densidade do contexto;
+- converter para texto simples apenas em usos estritamente não visuais, como busca, validação e atributos acessíveis;
+- não achatar a formatação em detalhes, históricos, cards, tabelas, impressos ou previews.
 
 A sanitização do HTML é requisito técnico e de segurança documentado no `ARQUITETURA FRONTEND.md`.
 
@@ -978,22 +1020,20 @@ Vencimentos
 
 Não criar um “ERP de estoque”.
 
-## 25.1. Origem obrigatória no Catálogo
+## 25.1. Origem obrigatória em Produzíveis
 
-A área de Congelados **não cadastra produtos comerciais novos**.
+A área de Congelados **não duplica uma Oferta para cada preparação**.
 
 Toda configuração de congelado deve partir de:
 
 ```text
-Oferta existente no Catálogo
-+
 Item Produzível existente
 ```
 
 A ação deve ser apresentada como:
 
 ```text
-[Habilitar produto do catálogo]
+[Habilitar item produzível]
 ```
 
 e não como:
@@ -1002,21 +1042,18 @@ e não como:
 [Novo congelado]
 ```
 
-A configuração adiciona somente dados próprios do congelamento/estoque, como apresentação e vínculo operacional.
+A configuração adiciona somente dados próprios do congelamento/estoque e da venda dessa apresentação, como quantidade por unidade, unidade de medida e preço.
 
 Não permitir editar em Congelados:
 
-- nome comercial;
-- preço;
+- nome da preparação;
 - composição;
 - adicionais;
 - grupos de escolha.
 
-Esses dados devem ser alterados em Catálogo ou Produzíveis.
+Nome e composição devem ser alterados em Produzíveis. Regras comuns de venda permanecem na Oferta genérica de Congelados.
 
-Quando a relação entre a Oferta e o Item Produzível puder ser resolvida de forma inequívoca pelo sistema, não pedir ao operador para selecionar novamente o que o sistema já sabe.
-
-Se houver mais de uma apresentação congelada válida para o mesmo produto, exibir configurações distintas sem duplicar a identidade comercial.
+Se houver mais de uma apresentação congelada válida para o mesmo Item Produzível, exibir configurações distintas com seus respectivos preços sem duplicar nome ou composição.
 
 ---
 
@@ -1025,16 +1062,21 @@ Se houver mais de uma apresentação congelada válida para o mesmo produto, exi
 Estrutura sugerida:
 
 ```text
-PageHeader                         [Nova entrada]
-
 Tabs
 [Estoque] [Produtos habilitados] [Vencimentos]
+
+Congelados → {subseção}            [Ação contextual]
+Descrição da subseção
 
 Card de busca/filtros
 
 Card de dados
 Produto | Apresentação | Disponível | Lotes | Próximo vencimento | Status
 ```
+
+As tabs acima são globais, ficam acima do cabeçalho contextual e não exibem números. Se uma subseção precisar filtrar estados, as tabs de filtro ficam dentro do card de busca/filtros, acima da busca, e podem usar badges de contagem.
+
+Todas as tabelas dessas três subseções devem possuir ordenação ativa e controles de ordenação. Em Vencimentos, o default é validade mais próxima.
 
 No mobile, preservar:
 
@@ -1052,14 +1094,14 @@ No mobile, preservar:
 Formulário mínimo:
 
 ```text
-Produto do catálogo habilitado
+Configuração de congelado habilitada
 Apresentação, quando houver mais de uma
 Data de fabricação
 Quantidade produzida
 Validade calculada
 ```
 
-O seletor deve listar somente configurações de congelado já vinculadas a produtos existentes no Catálogo e a Itens Produzíveis existentes.
+O seletor deve listar somente configurações de congelado ativas vinculadas a Itens Produzíveis existentes.
 
 Não permitir criar um produto novo a partir desta tela.
 
@@ -1074,7 +1116,7 @@ A validade deve vir do domínio como a data de fabricação acrescida de 90 dias
 Detalhe do lote deve apresentar:
 
 ```text
-Produto do catálogo
+Item produzível
 Apresentação
 Fabricação
 Validade
@@ -1193,9 +1235,17 @@ Não marcar estoque ou pedido como alterado por falha da impressora.
 
 ---
 
-# 33. Etiqueta externa de entrega
+# 33. Etiquetas da Embalagem
 
-A etiqueta externa pertence à Embalagem.
+A Embalagem possui dois resultados físicos de impressão:
+
+```text
+uma etiqueta para cada unidade da produção do dia ainda sem etiqueta
++
+uma etiqueta externa para o pacote kraft
+```
+
+Congelados já chegam com a etiqueta individual aplicada na produção para estoque e não recebem duplicata automática.
 
 Formato inicial:
 
@@ -1203,7 +1253,19 @@ Formato inicial:
 100 mm × 50 mm
 ```
 
-Conteúdo prioritário:
+Conteúdo prioritário da etiqueta individual:
+
+```text
+NOME DO PRODUTO
+Apresentação/porção
+Personalizações, adicionais e restrições relevantes
+Pedido ou cliente, quando necessário para evitar trocas
+[logo]
+```
+
+A quantidade deriva das unidades físicas dos itens confirmados.
+
+Conteúdo prioritário da etiqueta externa:
 
 ```text
 NOME DO CLIENTE
@@ -1214,14 +1276,14 @@ Resumo curto quando couber
 [logo]
 ```
 
-Quando não couber tudo, preservar:
+Quando o conteúdo externo não couber, preservar:
 
 1. identificação do cliente;
 2. endereço;
 3. Pedido;
 4. telefone.
 
-Não reduzir a fonte até ficar ilegível apenas para manter um resumo completo.
+Não reduzir a fonte até ficar ilegível apenas para manter um resumo completo. Para retirada/balcão, manter cliente e Pedido e omitir endereço e telefone de entrega quando não se aplicarem.
 
 ---
 
@@ -1239,27 +1301,29 @@ Pedido
 ├── congelados
 └── observações
 
-[Imprimir etiqueta de entrega]
 [Embalado]
+[Reimprimir etiquetas]
 ```
 
 A conferência é visual.
+
+Ao clicar em “Embalado”, iniciar o trabalho com as etiquetas individuais ainda necessárias e uma etiqueta externa do pacote kraft. O clique continua sendo a única confirmação operacional; não criar checklist item a item.
 
 Não exigir checklist item a item como regra de negócio.
 
 Não criar status “Etiqueta impressa”.
 
-Reimpressão não altera status.
+Falha ou reimpressão não altera status nem estoque. A interface deve permitir escolher se a reimpressão abrange uma etiqueta individual específica ou a etiqueta externa, evitando duplicar todo o conjunto.
 
 ---
 
 # 35. Pedido sem entrega
 
-Quando o Pedido for retirada/balcão, a etiqueta externa pode ser dispensada.
+Quando o Pedido for retirada/balcão, o pacote kraft ainda recebe etiqueta externa para identificar cliente e Pedido.
 
-Não imprimir automaticamente.
+Endereço e telefone de entrega são omitidos quando não se aplicam.
 
-A impressão é contextual.
+A impressão continua vinculada à ação “Embalado”.
 
 ---
 
@@ -1269,6 +1333,7 @@ Como a etiqueta possui custo operacional:
 
 - não imprimir automaticamente na confirmação do Pedido;
 - não imprimir automaticamente lote sem ação do operador;
+- imprimir o conjunto do Pedido somente pela ação explícita “Embalado”;
 - permitir impressão em lote quando há ganho operacional;
 - reimpressão deve ser explícita.
 
