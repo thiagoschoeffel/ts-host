@@ -42,6 +42,8 @@ Decisão confirmada: a validade de congelados é de **90 dias corridos após a f
 
 Decisão confirmada: cada ConfiguraçãoCongelado referencia diretamente um Item Produzível e define apresentação e preço variável. Não criar uma Oferta por preparação; o Pedido usa uma Oferta genérica de Congelados e preserva a configuração e o preço escolhidos.
 
+Decisão confirmada: o sistema evolui como SaaS multiempresa e a Sabor Santè é a primeira Organização. Toda entidade de negócio pertence a uma Organização; o tenant é resolvido pela identidade/sessão no servidor, nunca por `OrganizationId` arbitrário do frontend. Unicidades, idempotência, relações e auditoria devem respeitar essa fronteira.
+
 Marco confirmado em 4 de setembro de 2026: o frontend demonstrativo foi consolidado como linha de base funcional e a implementação da API está autorizada. O frontend pode continuar evoluindo depois desse marco, sem bloquear o backend; preserve as jornadas consolidadas e mantenha mocks/adapters desacoplados dos DTOs autoritativos.
 
 ---

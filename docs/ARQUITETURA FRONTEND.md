@@ -954,6 +954,20 @@ Antes de dados reais:
 - API deve validar autorização por ação/recurso;
 - ocultar botão não é autorização.
 
+## 32.1. Organização ativa
+
+No produto SaaS, a sessão autenticada também precisa resolver a Organização ativa. Um usuário pode possuir associações com mais de uma Organização, mas toda operação de negócio ocorre sob uma única Organização por vez.
+
+O frontend:
+
+- pode apresentar a Organização ativa retornada pela sessão;
+- pode solicitar uma troca de Organização quando esse fluxo for realmente implementado;
+- deve atualizar ou invalidar estado, caches e dados carregados após uma troca confirmada;
+- não pode usar `OrganizationId` de formulário, query string, `localStorage` ou estado de componente como autoridade de isolamento;
+- não deve adicionar `OrganizationId` arbitrário aos DTOs de negócio para tentar controlar o escopo da API.
+
+A API determina o tenant a partir da identidade autenticada e da Organização ativa validada no servidor. O seletor, a URL ou o subdomínio de Organização permanecem decisões futuras de experiência e não devem ser antecipados enquanto houver apenas uma Organização operacional.
+
 ---
 
 # 33. Auditoria

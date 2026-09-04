@@ -10,7 +10,7 @@
 
 # 1. Objetivo do sistema
 
-O sistema da Sabor Santè deve apoiar uma operação pequena, familiar, dinâmica e com dois ciclos operacionais distintos:
+O sistema deve apoiar inicialmente a Sabor Santè, uma operação pequena, familiar, dinâmica e com dois ciclos operacionais distintos:
 
 1. a **operação diária de refeições**, orientada ao cardápio e aos pedidos do dia;
 2. a **operação de congelados**, produzida separadamente, armazenada em estoque e vendida posteriormente.
@@ -30,7 +30,7 @@ A arquitetura deve priorizar:
 - impressão rápida e confiável de etiquetas sem duplicar digitação;
 - controle de validade e estoque apenas onde isso representa uma necessidade real do negócio.
 
-O sistema não deve ser concebido como um ERP genérico. Deve ser um sistema operacional especializado na realidade da Sabor Santè.
+O sistema não deve ser concebido como um ERP genérico. Deve ser um sistema operacional especializado na realidade da Sabor Santè, com possibilidade de atender outras cozinhas e restaurantes que compartilhem esse perfil de operação.
 
 ---
 
@@ -173,6 +173,28 @@ Falha de impressão, reimpressão ou troca de impressora não deve:
 - alterar status operacional.
 
 A etiqueta representa dados do domínio; ela não é a fonte desses dados.
+
+## 2.7. A Sabor Santè é a primeira organização do produto
+
+O sistema deve poder evoluir como produto SaaS multiempresa sem transformar a operação atual em um caso especial descartável.
+
+Cada empresa atendida é uma **Organização** e constitui uma fronteira obrigatória de dados e operação. A Sabor Santè é a primeira Organização.
+
+Entidades que representam o negócio de uma Organização, como clientes, ofertas, itens produzíveis, cardápios, pedidos, lotes, movimentos, cobranças, pagamentos, conversas e rotas, pertencem inequivocamente a uma única Organização.
+
+Regras obrigatórias:
+
+- nenhuma consulta operacional pode misturar dados de Organizações diferentes;
+- nenhuma relação pode ligar acidentalmente entidades de Organizações diferentes;
+- unicidades de negócio, como nomes, telefones quando únicos, códigos e chaves de idempotência, são avaliadas dentro da Organização;
+- a Organização ativa é determinada pela identidade e pela sessão validadas no servidor;
+- identificadores de Organização arbitrários enviados por uma interface não são fonte confiável de escopo;
+- importações, automações, webhooks e tarefas em segundo plano também precisam executar sob uma Organização explicitamente resolvida;
+- auditoria deve preservar a Organização, o ator e o instante da ação.
+
+Usuário de plataforma e cliente são conceitos diferentes. Um usuário pode participar de mais de uma Organização por meio de associações explícitas, enquanto um cliente representa quem é atendido por uma Organização.
+
+O isolamento lógico deve permanecer válido independentemente de os dados estarem fisicamente em estrutura compartilhada ou, no futuro, em armazenamento dedicado para alguma Organização. A topologia de persistência é uma decisão técnica e não altera as regras do domínio.
 
 ---
 
@@ -1917,13 +1939,17 @@ A origem serve para contexto e análise, sem tornar o núcleo dependente de um c
 
 ## 23.1. Usuários
 
-Cadastro simples, com perfis iniciais possíveis como:
+Usuário representa uma identidade da plataforma. Seu acesso a uma empresa ocorre por uma associação explícita com a Organização, permitindo que a mesma identidade participe futuramente de mais de uma empresa sem duplicar o usuário.
+
+Cadastro simples, com papéis iniciais possíveis dentro de cada Organização, como:
 
 - Administrador;
 - Operador;
 - Entregador.
 
 Não criar sistema complexo de permissões sem necessidade concreta.
+
+A associação deve indicar se o acesso está ativo e qual papel o usuário exerce naquela Organização. Estar cadastrado na plataforma não concede acesso automático a nenhuma Organização.
 
 ## 23.2. Auditoria seletiva
 

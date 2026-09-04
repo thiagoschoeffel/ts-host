@@ -1,6 +1,6 @@
 # Status frontend — Sabor Santè
 
-Atualizado em 4 de setembro de 2026 após a consolidação demonstrativa das jornadas V1, a regressão integrada desktop/mobile e a decisão de adotar o frontend atual como linha de base funcional para retomar a API.
+Atualizado em 4 de setembro de 2026 após a consolidação demonstrativa das jornadas V1, a regressão integrada desktop/mobile, a retomada da API e a implementação de sua fundação SaaS multi-tenant.
 
 Este arquivo registra o estado verificado, as lacunas e a sequência recomendada de evolução. As regras permanentes continuam pertencendo aos três documentos de referência.
 
@@ -10,9 +10,9 @@ O frontend já é um **protótipo funcional amplo**: shell, três remotes, desig
 
 **Marco formal:** esta linha de base está consolidada para orientar os casos de uso autoritativos da API. Melhorias posteriores de bundle, CI, testes, contratos federados, navegação e refinamentos de UX continuam planejadas, mas não bloqueiam mais o backend nem transformam interfaces de mock em DTOs.
 
-Ele ainda **não está pronto para operar com dados reais**. A maior parte do comportamento de negócio usa mocks, stores locais, `localStorage` e atrasos simulados. Não há API autoritativa integrada para o domínio completo, autenticação, autorização, transações, concorrência, cobertura automatizada suficiente, observabilidade ou CI nos aplicativos.
+Ele ainda **não está pronto para operar com dados reais**. A maior parte do comportamento de negócio usa mocks, stores locais, `localStorage` e atrasos simulados. A API já possui a primeira fatia autoritativa de congelados e a fundação multi-tenant, mas ainda não está integrada aos remotes e não cobre o domínio completo. Autenticação real, autorização, transações dos demais fluxos, concorrência, observabilidade e CI nos aplicativos permanecem incompletos.
 
-A principal ampliação de escopo é **Congelados**. O frontend já possui consulta, entrada de produção, detalhe e movimentações do lote, ajuste/descarte e impressão/reimpressão de etiquetas de produto pelo navegador no módulo de Gestão. Em Operação, o Pedido aceita itens mistos, confere saldo vendável, prevê e registra alocação FEFO, representa o estorno conforme o estágio, mantém congelados fora da Produção diária e conclui a Embalagem com etiquetas individuais da produção do dia e etiqueta externa do pacote kraft. A persistência autoritativa e a integração Zebra/ZPL continuam pendentes. A topologia atual comporta a mudança sem criar outro remote nem um catálogo comercial paralelo:
+A principal ampliação de escopo é **Congelados**. O frontend já possui consulta, entrada de produção, detalhe e movimentações do lote, ajuste/descarte e impressão/reimpressão de etiquetas de produto pelo navegador no módulo de Gestão. Em Operação, o Pedido aceita itens mistos, confere saldo vendável, prevê e registra alocação FEFO, representa o estorno conforme o estágio, mantém congelados fora da Produção diária e conclui a Embalagem com etiquetas individuais da produção do dia e etiqueta externa do pacote kraft. A integração do frontend com a persistência autoritativa e a integração Zebra/ZPL continuam pendentes. A topologia atual comporta a mudança sem criar outro remote nem um catálogo comercial paralelo:
 
 ```text
 ts-module-management
@@ -47,8 +47,8 @@ ts-host
 | Contratos federados | Parcial | Fachadas pequenas e declarações manuais no host; geração de tipos permanece desabilitada (`dts: false`) |
 | Design system | Implementado | `ts-components` 0.7.4 está alinhado nos quatro consumidores e possui componentes, ícones e Storybook |
 | Padrões do Guia UI | Parcial | Páginas recentes seguem os padrões principais; cenários determinísticos e estados completos ainda não são uniformes em toda tela antiga |
-| API de negócio | Pendente | Não existe integração autoritativa para o domínio completo |
-| Autenticação e autorização | Pendente | Cadastro demonstrativo de usuários não representa sessão nem permissão real |
+| API de negócio | Parcial | A API possui PostgreSQL, primeira fatia autoritativa de congelados e fundação SaaS multi-tenant; os remotes ainda não estão integrados e o domínio completo permanece pendente |
+| Autenticação e autorização | Pendente | A API resolve o tenant por claim autenticada e bloqueia contexto ausente fora de desenvolvimento, mas o provedor de identidade, a sessão real e as políticas por ação/recurso ainda não existem |
 | Testes automatizados | Parcial | Management possui testes da validade civil de congelados; ainda faltam suítes de componente, contrato, integração e E2E nos fluxos críticos |
 | CI dos aplicativos | Pendente | Apenas `ts-components` possui workflow, voltado à publicação; falta pipeline de qualidade dos aplicativos |
 | Observabilidade | Pendente | Sem captura central de erro, telemetria de API/remote ou correlação de requests |
@@ -105,10 +105,11 @@ A frente foi iniciada em `/congelados`, dentro de Gestão, e já alcança o cicl
 3. **Cancelamento com congelado:** há retorno automático ao mesmo lote somente antes da separação física, sob estoque controlado. Depois da separação, exige conferência humana registrada. Após expedição/entrega ou quando a cadeia fria for duvidosa, a unidade não volta ao estoque vendável e segue para quarentena/descarte.
 4. **Rotulagem:** toda unidade física possui etiqueta individual e todo pacote kraft possui etiqueta externa. Congelados são etiquetados na produção para estoque; itens da produção do dia e o pacote externo são etiquetados ao clicar em “Embalado”, sem substituir eventual validação sanitária/regulatória.
 5. **Zebra:** Zebra com driver ZPL é o destino confirmado. A página e o domínio permanecem independentes de ZPL; agente local, rede ou spooler será escolhido como detalhe do adapter no ambiente real.
+6. **Arquitetura SaaS:** a Sabor Santè é a primeira Organização. Dados de negócio são isolados por Organização; usuários acessam empresas por associações explícitas e o frontend nunca determina o tenant por um `OrganizationId` arbitrário.
 
 ## Sequência obrigatória do que vem a seguir
 
-Regra de projeto: **a API é a última etapa e só volta a ser modificada depois da consolidação formal do frontend**. O scaffold já existente em `ts-api` fica congelado até esse marco. Durante a consolidação, mocks, fixtures e adapters locais sustentam a validação das jornadas sem definir DTOs ou persistência futuros.
+Regra de projeto aplicada: a API só seria retomada depois da consolidação formal do frontend. Esse marco foi concluído em 4 de setembro de 2026 e a implementação autoritativa já está em andamento. Os mocks, fixtures e adapters locais continuam servindo como referência de experiência, sem se tornarem automaticamente DTOs ou modelos de persistência.
 
 ### 0. Decisões operacionais — concluído
 
@@ -181,7 +182,8 @@ A Embalagem agora representa o conjunto físico completo de etiquetas por meio d
 
 - revisar o scaffold existente antes de aproveitá-lo;
 - modelar contratos por caso de uso a partir do estudo de caso e das jornadas consolidadas;
-- implementar persistência, migrations, idempotência, autenticação, autorização e auditoria;
+- fundação SaaS multi-tenant concluída na API, com Organização, associação de usuários, isolamento automático de leitura e escrita, restrições compostas e migration dos dados existentes para o tenant Sabor Santè;
+- persistência PostgreSQL, migrations e idempotência da primeira fatia de congelados concluídas; autenticação real, autorização e auditoria permanecem pendentes;
 - implementar `ConfirmarPedido` como operação atômica para capacidade, créditos, financeiro e estoque congelado;
 - implementar FEFO, validade e movimentos como regras autoritativas do domínio;
 - substituir gradualmente os adapters locais dos remotes pela comunicação com a API;
