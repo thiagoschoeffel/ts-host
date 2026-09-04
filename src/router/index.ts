@@ -1,4 +1,7 @@
+import { shallowRef } from 'vue'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+
+export const remoteLoadError = shallowRef<Error>()
 
 const OperationPage = () => import('moduleOperation/OperationPage')
 const CommercialPage = () => import('moduleCommercial/CommercialPage')
@@ -143,7 +146,7 @@ export const router = createRouter({
       path: '/planos/movimentacoes/nova',
       component: CommercialPage,
       props: { section: 'planos', planPage: 'new-movement' },
-      meta: { sectionLabel: 'Comercial', label: 'Nova movimentação', parentLabel: 'Planos e Créditos', parentHref: '/planos' }
+      meta: { sectionLabel: 'Comercial', label: 'Estornar consumo', parentLabel: 'Planos e Créditos', parentHref: '/planos' }
     },
     {
       path: '/planos/:id/editar',
@@ -269,4 +272,12 @@ export const router = createRouter({
     },
     { path: '/:pathMatch(.*)*', redirect: '/operacoes/hoje' }
   ]
+})
+
+router.beforeEach(() => {
+  remoteLoadError.value = undefined
+})
+
+router.onError((error) => {
+  remoteLoadError.value = error instanceof Error ? error : new Error(String(error))
 })

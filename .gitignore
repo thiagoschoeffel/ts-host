@@ -23,6 +23,4 @@ Thumbs.db
 !.vscode/extensions.json
 !.vscode/settings.json
 
-# Local case study
-ESTUDO DE CASO.md
-GUIA UI.md
+docs/
