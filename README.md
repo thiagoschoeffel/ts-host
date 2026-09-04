@@ -26,4 +26,18 @@ npm run dev
 
 The application runs at http://localhost:4173.
 
+## Label printing
+
+The host centralizes the printer configuration used by Packing and Frozen
+Stock. For direct printing, make Zebra Browser Print available and configure:
+
+```dotenv
+VITE_LABEL_PRINT_MODE=zebra
+VITE_ZEBRA_BROWSER_PRINT_SCRIPT=/vendor/BrowserPrint.min.js
+VITE_ZEBRA_DPI=203
+```
+
+`browser` always opens the browser print dialog. `auto` uses Zebra when it is
+available and falls back to the browser otherwise.
+
 For production, change the `entry` property to the published module URL.

@@ -4,6 +4,26 @@ interface ImportMetaEnv {
   readonly VITE_OPERATION_REMOTE_URL?: string
   readonly VITE_COMMERCIAL_REMOTE_URL?: string
   readonly VITE_MANAGEMENT_REMOTE_URL?: string
+  readonly VITE_LABEL_PRINT_MODE?: 'auto' | 'browser' | 'zebra'
+  readonly VITE_ZEBRA_BROWSER_PRINT_SCRIPT?: string
+  readonly VITE_ZEBRA_DPI?: '203' | '300'
+}
+
+interface ZebraBrowserPrintDevice {
+  send(data: string, success: () => void, error: (reason: unknown) => void): void
+}
+
+interface ZebraBrowserPrintApi {
+  getDefaultDevice(type: 'printer', success: (device?: ZebraBrowserPrintDevice) => void, error: (reason: unknown) => void): void
+}
+
+interface Window {
+  BrowserPrint?: ZebraBrowserPrintApi
+  tsLabelPrinter?: {
+    mode: 'auto' | 'browser' | 'zebra'
+    dpi: 203 | 300
+    loadBrowserPrint(): Promise<void>
+  }
 }
 
 declare module 'moduleOperation/OperationPage' {
