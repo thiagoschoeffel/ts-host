@@ -32,7 +32,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 
 - [x] **E01 — Consolidar o frontend demonstrativo V1**
 - [x] **E02 — Estabelecer a API, o SaaS multi-tenant e Congelados autoritativos**
-- [ ] **E03 — Concluir e publicar a primeira confirmação autoritativa de Pedido** — em andamento
+- [x] **E03 — Concluir e publicar a primeira confirmação autoritativa de Pedido**
 - [ ] **E04 — Criar Pedido aberto e configurar capacidade diária**
 - [ ] **E05 — Completar a transação de confirmação do Pedido**
 - [ ] **E06 — Implementar cancelamento, reagendamento e reversões**
@@ -70,7 +70,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 
 ### E03 — Concluir e publicar a primeira confirmação autoritativa de Pedido
 
-**Estado:** em andamento. A implementação existe no worktree de `ts-api`, mas ainda precisa ser tratada como entrega publicada do épico.
+**Estado:** concluído em 4 de setembro de 2026.
 
 **Resultado esperado:** confirmar um Pedido aberto já persistido de forma atômica, concorrente e repetível com segurança.
 
