@@ -42,7 +42,7 @@ Decisão confirmada: a validade de congelados é de **90 dias corridos após a f
 
 Decisão confirmada: cada ConfiguraçãoCongelado referencia diretamente um Item Produzível e define apresentação e preço variável. Não criar uma Oferta por preparação; o Pedido usa uma Oferta genérica de Congelados e preserva a configuração e o preço escolhidos.
 
-Regra de sequência confirmada: a API só volta a ser implementada depois que o frontend estiver consolidado. Até lá, conclua fluxos, estados, contratos de interface e validações com mocks e adapters locais; não antecipe endpoints, persistência ou casos de uso no `ts-api`. O backend existente permanece congelado como scaffold e não define o ritmo nem os contratos finais do frontend.
+Marco confirmado em 4 de setembro de 2026: o frontend demonstrativo foi consolidado como linha de base funcional e a implementação da API está autorizada. O frontend pode continuar evoluindo depois desse marco, sem bloquear o backend; preserve as jornadas consolidadas e mantenha mocks/adapters desacoplados dos DTOs autoritativos.
 
 ---
 

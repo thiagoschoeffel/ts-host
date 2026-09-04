@@ -1,12 +1,14 @@
 # Status frontend — Sabor Santè
 
-Atualizado em 4 de setembro de 2026 após a consolidação demonstrativa de Congelados, da primeira jornada funcional de Atendimento / WhatsApp e da experiência de capacidade simples no Pedido, com o cruzamento de `ESTUDO DE CASO.md`, `GUIA UI.md`, `ARQUITETURA FRONTEND.md` e das branches `main` dos cinco repositórios do frontend.
+Atualizado em 4 de setembro de 2026 após a consolidação demonstrativa das jornadas V1, a regressão integrada desktop/mobile e a decisão de adotar o frontend atual como linha de base funcional para retomar a API.
 
 Este arquivo registra o estado verificado, as lacunas e a sequência recomendada de evolução. As regras permanentes continuam pertencendo aos três documentos de referência.
 
 ## Leitura executiva
 
 O frontend já é um **protótipo funcional amplo**: shell, três remotes, design system e as principais experiências anteriores ao novo estudo de caso estão implementados e navegáveis. Isso permite validar fluxos, conteúdo, responsividade e direção visual.
+
+**Marco formal:** esta linha de base está consolidada para orientar os casos de uso autoritativos da API. Melhorias posteriores de bundle, CI, testes, contratos federados, navegação e refinamentos de UX continuam planejadas, mas não bloqueiam mais o backend nem transformam interfaces de mock em DTOs.
 
 Ele ainda **não está pronto para operar com dados reais**. A maior parte do comportamento de negócio usa mocks, stores locais, `localStorage` e atrasos simulados. Não há API autoritativa integrada para o domínio completo, autenticação, autorização, transações, concorrência, cobertura automatizada suficiente, observabilidade ou CI nos aplicativos.
 
@@ -150,15 +152,15 @@ A Embalagem agora representa o conjunto físico completo de etiquetas por meio d
 - permitir reimpressão seletiva das etiquetas individuais e externa a partir de snapshots históricos;
 - manter impressão independente do status de Pedido e do estoque.
 
-### 4. Fechar as demais lacunas funcionais do frontend V1
+### 4. Fechar as demais lacunas funcionais do frontend V1 — consolidado como linha de base demonstrativa
 
 - Atendimento / WhatsApp — primeira jornada demonstrativa concluída, incluindo skeletons estruturais da lista e da conversa; integração oficial e efeitos autoritativos permanecem para a API;
 - planejamento semanal do Cardápio — jornada demonstrativa concluída, preservando a independência de revisão e publicação de cada dia;
 - experiência completa de capacidade — concluída no escopo demonstrativo, incluindo projeção no Pedido aberto, reserva na confirmação, liberação antes da produção e cenários de esgotamento/conflito;
-- jornadas completas de Financeiro, Planos/Créditos e cancelamento;
-- unificação de Clientes e Entregadores entre os módulos.
+- jornadas demonstrativas de Financeiro, Planos/Créditos e cancelamento consolidadas como referência funcional; efeitos autoritativos pertencem à API;
+- Clientes e Entregadores possuem interfaces consolidadas; a fonte única será introduzida pela integração com a API.
 
-### 5. Consolidar tecnicamente o frontend
+### 5. Evoluir tecnicamente o frontend — trabalho posterior não bloqueante
 
 - consolidar navegação SPA e contratos federados tipados;
 - adicionar testes unitários, de componente, contrato e E2E nos fluxos críticos;
@@ -168,14 +170,14 @@ A Embalagem agora representa o conjunto físico completo de etiquetas por meio d
 - dividir carregamento de páginas pesadas e estabelecer orçamento de bundle, especialmente em Operation e Commercial;
 - executar matriz integrada desktop/mobile e regressão de ordem de CSS entre remotes.
 
-### 6. Declarar o frontend consolidado
+### 6. Declarar o frontend consolidado — concluído em 4 de setembro de 2026
 
 - revisar todas as jornadas da V1 contra o estudo de caso e o Guia UI;
 - fechar contratos de interface e limites dos adapters sem convertê-los automaticamente em DTOs;
 - eliminar lacunas visuais, estados inacessíveis e fontes demonstrativas conflitantes que prejudiquem a validação;
 - registrar formalmente que a consolidação terminou antes de autorizar qualquer nova alteração em `ts-api`.
 
-### 7. Retomar a API e integrar o frontend
+### 7. Retomar a API e integrar o frontend — em andamento
 
 - revisar o scaffold existente antes de aproveitá-lo;
 - modelar contratos por caso de uso a partir do estudo de caso e das jornadas consolidadas;
@@ -190,10 +192,9 @@ A Embalagem agora representa o conjunto físico completo de etiquetas por meio d
 1. Congelados em Gestão, incluindo estoque por lote e etiqueta de produto — concluído no escopo demonstrativo.
 2. Congelados no Pedido e na Embalagem, incluindo etiquetas individuais e externa — concluído no escopo demonstrativo.
 3. Atendimento / WhatsApp — primeira jornada concluída no escopo demonstrativo.
-4. Planejamento semanal e Capacidade — concluídos no escopo demonstrativo; consolidar Financeiro, Planos/Créditos, Clientes e Entregadores no frontend.
-5. Fechar navegação, contratos federados, estados, responsividade, testes e CI do frontend.
-6. Declarar formalmente o frontend consolidado.
-7. Somente então retomar a API e realizar a integração autoritativa.
+4. Planejamento semanal, Capacidade, Financeiro, Planos/Créditos, Clientes e Entregadores — consolidados como linha de base demonstrativa.
+5. Frontend formalmente consolidado em 4 de setembro de 2026; evoluções técnicas seguem como trabalho posterior não bloqueante.
+6. Retomar a API e realizar a integração autoritativa — em andamento.
 
 ## Não promover a arquitetura definitiva
 
