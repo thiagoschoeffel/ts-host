@@ -1,46 +1,568 @@
-# Padrão de páginas — Sabor Santè
+# AGENTS.md — Sabor Santè Frontend
 
-## Antes de alterar
+> Instruções operacionais para agentes de código.  
+> Não replique aqui os documentos canônicos; use este arquivo como roteador de decisões.
 
-- Leia primeiro `ESTUDO DE CASO.md`; regras do negócio prevalecem sobre conveniência visual ou técnica.
-- Consulte `GUIA UI.md` como o guia completo e a referência principal para toda implementação de frontend.
-- Use Pedidos como fonte da macrodiagramação e Clientes como adaptação validada para cadastros:
-  - `../ts-module-operation/src/pages/OrderListPage.vue`, `OrderDetailPage.vue` e `NewOrderPage.vue`;
-  - `../ts-module-commercial/src/pages/CustomerListPage.vue`, `CustomerDetailPage.vue` e `CustomerFormPage.vue`.
-- Reutilize `@thiagoschoeffel/ts-components`; não recrie componentes disponíveis na biblioteca.
+## 1. Fontes de verdade
 
-## Diagramação
+Antes de alterar código, leia:
 
-- Cabeçalho: `PageHeader` à esquerda e ação principal ou “Voltar para {entidade}” à direita. Páginas internas preservam o parâmetro `retorno`; a listagem não exibe voltar.
-- Separe cabeçalho e conteúdo com `mt-6`. Use `gap-4`/`space-y-4` entre blocos relacionados e `gap-6` entre colunas principais.
-- Listagens desktop ocupam a altura útil (`md:h-[calc(100dvh-11rem)]`) e organizam filtros e tabela em cards separados.
-- Formulários usam conteúdo principal e resumo lateral: `lg:grid-cols-[minmax(0,1fr)_20rem]`; o resumo pode ser `sticky top-20`.
-- Detalhes usam cards com títulos, alinhamentos e espaçamentos equivalentes aos de Pedidos. No mobile, empilhe conteúdo e mantenha ações acessíveis.
+1. `ESTUDO DE CASO.md` — domínio, invariantes e escopo;
+2. `ARQUITETURA FRONTEND.md` — fronteiras, Module Federation, rotas, contratos, estado e validação;
+3. `GUIA UI.md` — padrões visuais, páginas, responsividade e acessibilidade.
 
-## Listagens
+Os documentos ficam no `ts-host`.
 
-- Tabs que navegam entre subseções da entidade ficam acima do cabeçalho da seção e usam variante `primary` na opção ativa. O cabeçalho pode indicar hierarquia como “Catálogo → Ofertas”, com a seta como ícone, e o subtítulo muda conforme a tab.
-- Card superior: busca e filtros. Card inferior: `DataTable`, estados e paginação no rodapé. Não repita contagens quando a paginação já informa o total.
-- Toda coluna significativa deve informar ordenação; defina uma ordenação inicial previsível e preserve busca, tab, ordenação e página na URL.
-- Forneça loading, erro e `EmptyState`; dentro de cards, prefira empty state sem borda artificial (`bordered=false`).
-- Listagens devem aceitar cenários previsíveis por URL para revisão visual: `mock=padrao`, ausência total da entidade, `sem-resultados` e `erro`. O estado sem dados oferece a ação principal; sem resultados limpa filtros; erro permite tentar novamente.
-- Mantenha equivalência funcional no mobile, mesmo quando a tabela virar cards.
+```text
+em ts-host:
+./docs/ESTUDO DE CASO.md
+./docs/ARQUITETURA FRONTEND.md
+./docs/GUIA UI.md
 
-## Formulários e detalhes
+em um remote:
+../ts-host/docs/ESTUDO DE CASO.md
+../ts-host/docs/ARQUITETURA FRONTEND.md
+../ts-host/docs/GUIA UI.md
+```
 
-- Valores de domínio fechados usam `Select`/`MultiSelect`, nunca texto livre. Valores repetíveis removíveis usam `Chips`.
-- Formulários auxiliares abrem em `Drawer size="large"`, com título e descrição claros, campos explicados e ações no rodapé em cantos opostos: cancelar à esquerda e confirmar à direita.
-- Fluxos auxiliares com subcadastros mudam o conteúdo do mesmo drawer, como a personalização de itens em Pedidos; exibem navegação de volta e ações próprias para cada etapa.
-- Listagens dentro ou fora de drawers usam `Card` branco do design system, nunca um bloco customizado com fundo cinza. Em detalhes, listas tabulares usam cabeçalho e linhas no desktop e uma versão compacta equivalente no mobile.
-- Ações destrutivas de itens repetíveis exigem confirmação inline no próprio card (“Remover?”, “Cancelar”, “Sim”); botões descrevem a ação e não usam apenas “x”. Reserve dialogs para decisões que tiram o usuário do contexto, como abandonar um formulário.
-- Observações formatadas usam `Textarea rich-text` e são exibidas com HTML sanitizado.
-- Use `Alert` com ícone: `info` para contexto/snapshot, `warning` para atenção operacional e `danger` para falha ou risco destrutivo.
-- Badges comunicam semântica: `neutral` para contagens/endereço, `info` para preferências, `warning` para restrições, `success` para ativo/positivo e `danger` para inativo. Em resumos, use `medium`, alinhado ao fim e centralizado verticalmente.
-- Ícone de “+” fica reservado à criação principal da página; ações secundárias “Adicionar” usam texto, salvo necessidade visual comprovada.
-- Em páginas de visualização de dados, `EmptyState` internos não exibem botões; a ação de edição permanece no cabeçalho. Essa exceção não se aplica a listagens nem a erros de página inteira.
+Precedência:
 
-## Validação
+```text
+ESTUDO DE CASO
+→ ARQUITETURA FRONTEND
+→ GUIA UI
+→ código atual
+→ conveniência
+```
 
-- Confira desktop e mobile após mudanças visuais.
-- Execute `npm run build` no projeto alterado e corrija também falhas de tipagem e `git diff --check` antes de concluir.
-- Em problemas que surgem depois de alternar módulos, reproduza a sequência pelo menu e volte à tela original; Module Federation pode mudar a ordem dos estilos. Host e módulos devem usar a mesma versão de `@thiagoschoeffel/ts-components`, com `package-lock.json` atualizado.
+Se a resposta estiver no workspace, não peça confirmação.  
+Se houver ambiguidade real de negócio, não invente regra.
+
+Pendência conhecida: validade de congelados foi descrita como **90 dias**, mas etiquetas existentes sugerem **3 meses de calendário**. Não hardcode até confirmação.
+
+---
+
+## 2. Inspeção obrigatória
+
+Antes de codificar:
+
+- abra a página equivalente existente;
+- leia tipos, store/mock e utilitários da feature;
+- confira a fachada federada do remote;
+- confira a rota correspondente no host;
+- consulte a API pública de `@thiagoschoeffel/ts-components`.
+
+Referências visuais principais:
+
+```text
+Pedidos     → macrodiagramação
+Clientes    → cadastros
+Produzíveis → Gestão
+Catálogo    → tabs e cadastros auxiliares
+```
+
+Não introduza um padrão novo sem verificar primeiro o que já existe.
+
+---
+
+## 3. Responsabilidades
+
+```text
+ts-components
+→ design system, componentes genéricos, CSS, ícones e Storybook
+
+ts-host
+→ shell, Vue Router, URLs, sidebar, breadcrumbs e composição dos remotes
+
+ts-module-operation
+→ Hoje, Atendimento, Pedidos, Produção, Embalagem e Entregas
+
+ts-module-commercial
+→ Cardápios, Clientes, Planos e Créditos e Financeiro
+
+ts-module-management
+→ Catálogo, Produzíveis, Congelados, Entregadores e Usuários
+```
+
+Congelados pertencem a `ts-module-management`.
+
+Etiquetas são contextuais:
+
+```text
+produto congelado → Congelados / lote
+entrega            → Embalagem / Pedido
+```
+
+Não crie remote separado para tela/entidade isolada sem justificativa concreta.
+
+---
+
+## 4. Fronteiras obrigatórias
+
+### Host
+
+- é o único proprietário do Vue Router;
+- define rotas públicas;
+- define sidebar e breadcrumbs;
+- traduz URL em props do remote.
+
+### Remotes
+
+- não instalam Vue Router;
+- não manipulam estado interno do shell;
+- não importam source de repositórios irmãos;
+- mantêm composição e estado de apresentação da própria área.
+
+### Design system
+
+- reutilize `@thiagoschoeffel/ts-components`;
+- não importe `@lucide/vue` diretamente em host/remotes;
+- não importe `ts-components/src/...`;
+- não recrie componente já disponível.
+
+Se o problema é genérico, corrija em `ts-components`.  
+Se é regra/composição de negócio, mantenha no remote.
+
+---
+
+## 5. Navegação
+
+Nos remotes, use o utilitário existente:
+
+```text
+src/utils/navigation.ts
+```
+
+Ele usa o evento:
+
+```text
+ts:navigate
+```
+
+com fallback.
+
+Não adicione `window.location.assign(...)` diretamente em páginas quando o utilitário resolve o caso.
+
+Ao criar rota nova:
+
+1. atualizar `ts-host/src/router/index.ts`;
+2. atualizar sidebar se for seção principal;
+3. atualizar metadados/breadcrumb;
+4. atualizar contrato federado do host se houver nova prop;
+5. atualizar tipos/config/fachada do remote;
+6. validar host + remote juntos.
+
+---
+
+## 6. URL e `retorno`
+
+Quando relevante, preserve na URL:
+
+```text
+tab
+busca
+filtros
+ordenar
+direcao
+pagina
+```
+
+Fluxo esperado:
+
+```text
+lista filtrada
+→ detalhe/edição
+→ voltar
+→ mesmo contexto
+```
+
+Use `retorno` quando o padrão da feature já fizer isso.
+
+Todo valor vindo da URL deve ser validado.  
+`retorno` só aceita destinos internos conhecidos. Nunca crie open redirect.
+
+---
+
+## 7. UI
+
+Detalhes completos ficam no `GUIA UI.md`.
+
+Regras mínimas:
+
+- use `PageHeader` e componentes do design system;
+- preserve linguagem visual e densidade atuais;
+- listagens tratam loading, empty, sem resultados e erro;
+- mobile mantém equivalência funcional;
+- valores estruturados usam controles estruturados;
+- foco permanece visível;
+- status não depende apenas de cor;
+- ações destrutivas usam confirmação proporcional ao impacto;
+- não crie cards decorativos ou design paralelo.
+
+Colunas só são ordenáveis quando a ordenação tem utilidade real.
+
+Drawers são adequados para auxiliares compatíveis; fluxos extensos podem usar página dedicada.
+
+---
+
+## 8. Mocks e estado demonstrativo
+
+Mocks, stores locais, `setTimeout` e `localStorage` validam UX. Não são arquitetura final.
+
+Não transforme automaticamente em contrato de API:
+
+```text
+interfaces de mock
+IDs do navegador
+chaves de localStorage
+nomes atuais de propriedades
+```
+
+Ao usar `localStorage`:
+
+- tolere JSON inválido;
+- não assuma concorrência;
+- não assuma autoria confiável;
+- não armazene segredos.
+
+Não crie sincronização complexa entre remotes só para unir mocks se a API real substituirá isso.
+
+---
+
+## 9. Não antecipar backend fictício
+
+Se a tarefa é frontend demonstrativo, não introduza sem necessidade explícita:
+
+```text
+fetch
+Axios
+cliente HTTP fictício
+DTO definitivo
+Repository HTTP fictício
+Pinia por preferência
+fila/WebSocket
+```
+
+Não mova regra autoritativa crítica para Vue porque o backend ainda não existe.
+
+---
+
+## 10. Guardrails de domínio
+
+### Pedido
+
+`Confirmar Pedido` é operação crítica, não simples troca de status.
+
+No sistema real consolida, quando aplicável:
+
+```text
+capacidade
+restrições
+componentes efetivos
+créditos
+crédito financeiro
+estoque congelado
+preços
+desconto
+taxa
+cobrança
+auditoria
+```
+
+### Planos
+
+Consumo normal de crédito ocorre **somente na confirmação do Pedido**.  
+Ajuste manual é outro conceito.
+
+### Produção
+
+Produção diária deriva de pedidos confirmados e componentes efetivos estruturados.  
+Não use texto de apresentação como fonte definitiva de cálculo.
+
+### Embalagem
+
+Fluxo desejado:
+
+```text
+conferir visualmente
+→ imprimir etiqueta externa quando necessário
+→ Embalado
+```
+
+Não exigir checklist item a item como regra de negócio.
+
+### Congelados
+
+```text
+produção diária → capacidade do dia
+congelados      → lote e estoque
+```
+
+Venda de congelado consome estoque, não capacidade diária.
+
+Saldo deve ser explicado por movimentações.  
+Produto vencido não pode ser vendido.
+
+### Etiquetas
+
+Impressão/reimpressão não altera:
+
+- estoque;
+- lote;
+- Pedido;
+- validade;
+- status.
+
+Não criar designer genérico de etiquetas na V1.
+
+---
+
+## 11. Limite do estoque de congelados
+
+A nova necessidade não autoriza criar estoque genérico.
+
+Não expandir automaticamente para:
+
+```text
+ingredientes
+embalagens
+compras
+fornecedores
+WMS
+MRP
+múltiplos depósitos
+RFID
+código de barras
+```
+
+Implemente apenas o escopo descrito no estudo de caso.
+
+---
+
+## 12. Componentes compartilhados
+
+Antes de alterar `ts-components`, confirme reuso real.
+
+Ao alterar API/comportamento compartilhado:
+
+- Vue 3 + TypeScript estrito;
+- API tipada;
+- Reka UI quando apropriado;
+- preservar `small`, `medium`, `large` quando aplicável;
+- exportar por `src/index.ts`;
+- ícones por `src/icons.ts`;
+- criar/atualizar Storybook;
+- validar em consumidor real.
+
+Não espalhe overrides por vários remotes para corrigir bug da biblioteca.
+
+---
+
+## 13. Module Federation e CSS
+
+Problemas de estilo podem aparecer somente depois da alternância de remotes.
+
+Para mudanças em CSS compartilhado ou `ts-components`, teste:
+
+```text
+módulo A
+→ módulo B
+→ voltar ao módulo A
+```
+
+Host e remotes devem usar versões deliberadamente coordenadas de `@thiagoschoeffel/ts-components`.
+
+Enquanto não houver estratégia formal de compatibilidade, mantenha a mesma versão nos consumidores.
+
+Atualize `package-lock.json` quando alterar dependências.
+
+---
+
+## 14. Segurança e acessibilidade
+
+Preserve:
+
+- teclado e `focus-visible`;
+- labels e erros associados;
+- nome acessível em botões só com ícone;
+- foco previsível em Drawer/Dialog;
+- contraste e texto além da cor.
+
+Também:
+
+- valide query strings e `retorno`;
+- sanitize rich-text antes de renderizar;
+- não exponha tokens/dados pessoais em logs;
+- não trate botão oculto como autorização.
+
+Autorização real pertence ao backend.
+
+---
+
+## 15. Dependências e escopo
+
+Não adicione dependência se o workspace já resolve o problema.
+
+Não altere incidentalmente versões de:
+
+```text
+Vue
+Vite
+Module Federation
+ts-components
+```
+
+Faça a menor mudança coerente que resolve a tarefa.
+
+Evite:
+
+- reescrever módulo inteiro;
+- reorganizar pastas por preferência;
+- renomear código não relacionado;
+- alterar design validado sem necessidade;
+- implementar feature futura não solicitada.
+
+---
+
+## 16. Validação
+
+No projeto alterado, execute obrigatoriamente:
+
+```bash
+git diff --check
+npm run build
+```
+
+Nos projetos atuais, `npm run build` já inclui `vue-tsc --noEmit`.
+
+Quando útil e disponível:
+
+```bash
+npm run typecheck
+```
+
+### `ts-components`
+
+Se alterar API pública:
+
+```bash
+npm run typecheck
+npm run build
+```
+
+Se alterar stories/apresentação:
+
+```bash
+npm run build-storybook
+```
+
+---
+
+## 17. Validação integrada
+
+Além do build local:
+
+### rota/contrato
+
+```text
+host + remote afetado
+```
+
+### visual
+
+```text
+desktop + mobile + estados relevantes
+```
+
+### componente compartilhado
+
+```text
+Storybook + consumidor real + alternância entre módulos
+```
+
+### fluxo transversal
+
+Valide o caminho relevante, por exemplo:
+
+```text
+Catálogo → Cardápio → Pedido
+Pedido → Embalagem → Entregas
+Congelados → Pedido → Embalagem
+```
+
+---
+
+## 18. Não inventar resultado de validação
+
+Ao concluir:
+
+- informe comandos realmente executados;
+- informe sucesso/falha real;
+- não diga que testou navegador se não testou;
+- não diga que build passou se não executou;
+- registre limitações do ambiente.
+
+---
+
+## 19. Git
+
+Não faça sem solicitação explícita:
+
+```text
+commit
+push
+release
+publish
+```
+
+Não reverta alterações do usuário fora da tarefa.
+
+Antes de concluir:
+
+```bash
+git diff
+git diff --check
+```
+
+---
+
+## 20. Entrega final
+
+Informe objetivamente:
+
+1. o que mudou;
+2. arquivos principais;
+3. decisões relevantes;
+4. validações executadas;
+5. resultado dos builds/testes;
+6. limitações ou pendências reais.
+
+---
+
+## 21. Regra final
+
+Antes de adicionar código, responda:
+
+```text
+Essa regra pertence ao domínio?
+Essa responsabilidade pertence a este repositório?
+Já existe padrão equivalente?
+Já existe componente compartilhado?
+O estado precisa estar na URL?
+Isso é mock ou verdade futura?
+Estou criando complexidade que o negócio não pediu?
+```
+
+A melhor implementação é a menor solução que preserva:
+
+```text
+domínio
++
+fronteiras
++
+design system
++
+UX consistente
++
+build
+```
