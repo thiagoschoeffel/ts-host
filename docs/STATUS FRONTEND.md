@@ -1,6 +1,6 @@
 # Status frontend — Sabor Santè
 
-Atualizado em 4 de setembro de 2026 após a consolidação demonstrativa de Congelados e da primeira jornada funcional de Atendimento / WhatsApp, com o cruzamento de `ESTUDO DE CASO.md`, `GUIA UI.md`, `ARQUITETURA FRONTEND.md` e das branches `main` dos cinco repositórios do frontend.
+Atualizado em 4 de setembro de 2026 após a consolidação demonstrativa de Congelados, da primeira jornada funcional de Atendimento / WhatsApp e da experiência de capacidade simples no Pedido, com o cruzamento de `ESTUDO DE CASO.md`, `GUIA UI.md`, `ARQUITETURA FRONTEND.md` e das branches `main` dos cinco repositórios do frontend.
 
 Este arquivo registra o estado verificado, as lacunas e a sequência recomendada de evolução. As regras permanentes continuam pertencendo aos três documentos de referência.
 
@@ -62,7 +62,7 @@ ts-host
 | Hoje | Protótipo funcional | Dashboard operacional e estado demonstrativo de sincronização | Dados reais e consolidação pela API |
 | Atendimento / WhatsApp | Protótipo funcional | Caixa de entrada responsiva, skeletons estruturais, histórico sanitizado, alternância Automação/Humano, envio manual, falha com retentativa idempotente, entrada no Pedido aberto e acompanhamento demonstrativo da franquia mensal | Integração oficial, webhook, persistência e controle autoritativos da franquia, processamento sequencial e sincronização com o aplicativo WhatsApp |
 | Pedidos | Protótipo funcional | Lista, criação, edição, detalhe, confirmação, cancelamento e reagendamento simulados | `ConfirmarPedido` autoritativo, capacidade, estoque congelado, créditos e financeiro em uma transação |
-| Capacidade | Pendente | Consequências são apenas descritas/simuladas no Pedido | Reserva e liberação concorrentes na API |
+| Capacidade | Protótipo funcional | O formulário projeta apenas refeições da produção diária sem reservá-las; a confirmação valida e reserva, o cancelamento anterior à produção libera e o painel Hoje reflete o saldo demonstrativo. Há cenários determinísticos de esgotamento e conflito concorrente | Reserva, liberação e concorrência autoritativas na API |
 | Produção diária | Protótipo funcional | Consulta agregada a partir de pedidos demonstrativos | API baseada apenas em pedidos confirmados; manter congelados fora dessa apuração |
 | Embalagem | Protótipo funcional | Fila e conferência visual distinguem itens do dia e congelados já etiquetados; “Embalado” persiste snapshots e abre as etiquetas necessárias; reimpressão seletiva mantém status e estoque independentes | Persistência autoritativa e adapter Zebra/ZPL |
 | Entregas | Protótipo funcional | Rotas, paradas, tentativas, falhas, reagendamento e folha de rota | Persistência, auditoria, validações de transição e integração com Pedido/entregadores reais |
@@ -154,7 +154,7 @@ A Embalagem agora representa o conjunto físico completo de etiquetas por meio d
 
 - Atendimento / WhatsApp — primeira jornada demonstrativa concluída, incluindo skeletons estruturais da lista e da conversa; integração oficial e efeitos autoritativos permanecem para a API;
 - planejamento semanal do Cardápio — jornada demonstrativa concluída, preservando a independência de revisão e publicação de cada dia;
-- experiência completa de capacidade;
+- experiência completa de capacidade — concluída no escopo demonstrativo, incluindo projeção no Pedido aberto, reserva na confirmação, liberação antes da produção e cenários de esgotamento/conflito;
 - jornadas completas de Financeiro, Planos/Créditos e cancelamento;
 - unificação de Clientes e Entregadores entre os módulos.
 
@@ -190,7 +190,7 @@ A Embalagem agora representa o conjunto físico completo de etiquetas por meio d
 1. Congelados em Gestão, incluindo estoque por lote e etiqueta de produto — concluído no escopo demonstrativo.
 2. Congelados no Pedido e na Embalagem, incluindo etiquetas individuais e externa — concluído no escopo demonstrativo.
 3. Atendimento / WhatsApp — primeira jornada concluída no escopo demonstrativo.
-4. Planejamento semanal — concluído no escopo demonstrativo; consolidar Financeiro, Planos/Créditos, Capacidade, Clientes e Entregadores no frontend.
+4. Planejamento semanal e Capacidade — concluídos no escopo demonstrativo; consolidar Financeiro, Planos/Créditos, Clientes e Entregadores no frontend.
 5. Fechar navegação, contratos federados, estados, responsividade, testes e CI do frontend.
 6. Declarar formalmente o frontend consolidado.
 7. Somente então retomar a API e realizar a integração autoritativa.

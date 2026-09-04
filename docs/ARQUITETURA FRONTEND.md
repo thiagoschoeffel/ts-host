@@ -148,6 +148,7 @@ Estado atual relevante:
 
 - Hoje possui dashboard demonstrativo;
 - Pedidos possui lista, criação, edição e detalhe;
+- Capacidade simples possui snapshot demonstrativo substituível, projeção no Pedido aberto e validação na confirmação; congelados ficam fora da contagem e a autoridade transacional permanece pendente na API;
 - Produção possui consulta operacional;
 - Embalagem possui experiência própria;
 - Entregas possui experiência própria;
@@ -884,7 +885,13 @@ backend
 
 O frontend pode antecipar cálculo para UX, mas deve aceitar resposta autoritativa do servidor.
 
-## 29.1. Franquia do WhatsApp
+## 29.1. Capacidade operacional
+
+Enquanto o backend está congelado, Operação usa um adapter local simples para estabilizar a experiência de capacidade. O formulário do Pedido apresenta a projeção sem reservar; a confirmação relê o saldo e pode rejeitar um conflito; somente o cancelamento no estágio Confirmado libera automaticamente a reserva demonstrativa. Itens de estoque congelado não participam da contagem.
+
+O estado local e o limite usado pela demonstração não são contrato da API. Na integração final, validação, reserva e liberação devem fazer parte da transação autoritativa de `ConfirmarPedido` e aceitar concorrência real.
+
+## 29.2. Franquia do WhatsApp
 
 Enquanto o backend está congelado, Atendimento usa um snapshot demonstrativo substituível para validar a apresentação da franquia mensal. O contrato de interface distingue mensagens de serviço entregues das reservadas para envios em andamento e inclui limite gratuito, margem de pausa, período, renovação, número comercial e estado autoritativo.
 
