@@ -38,7 +38,7 @@ ESTUDO DE CASO
 Se a resposta estiver no workspace, não peça confirmação.  
 Se houver ambiguidade real de negócio, não invente regra.
 
-Pendência conhecida: validade de congelados foi descrita como **90 dias**, mas etiquetas existentes sugerem **3 meses de calendário**. Não hardcode até confirmação.
+Decisão confirmada: a validade de congelados é de **90 dias corridos após a fabricação**. Centralize o cálculo no domínio, teste viradas de mês/ano e não recalcule lotes históricos.
 
 ---
 
