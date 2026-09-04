@@ -525,6 +525,15 @@ release
 publish
 ```
 
+A execução solicitada de um épico de `docs/ROADMAP.md` é autorização explícita para criar os commits e fazer o push previstos na Definition of Done daquele épico. Nesse caso:
+
+- valide antes de versionar;
+- crie um commit convencional e coeso por repositório afetado;
+- não inclua mudanças locais alheias ao épico;
+- faça push da branch corrente em todos os repositórios afetados;
+- só marque o épico como concluído depois que todos os pushes forem confirmados;
+- se commit ou push falhar, mantenha o épico em andamento e relate a pendência real.
+
 Não reverta alterações do usuário fora da tarefa.
 
 Antes de concluir:

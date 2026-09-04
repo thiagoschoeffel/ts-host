@@ -47,7 +47,7 @@ ts-host
 | Contratos federados | Parcial | Fachadas pequenas e declarações manuais no host; geração de tipos permanece desabilitada (`dts: false`) |
 | Design system | Implementado | `ts-components` 0.7.4 está alinhado nos quatro consumidores e possui componentes, ícones e Storybook |
 | Padrões do Guia UI | Parcial | Páginas recentes seguem os padrões principais; cenários determinísticos e estados completos ainda não são uniformes em toda tela antiga |
-| API de negócio | Parcial | A API possui PostgreSQL, primeira fatia autoritativa de congelados e fundação SaaS multi-tenant; os remotes ainda não estão integrados e o domínio completo permanece pendente |
+| API de negócio | Parcial | A API possui PostgreSQL, fundação SaaS multi-tenant, primeira fatia autoritativa de congelados e confirmação transacional de Pedido com capacidade, cobrança e FEFO; os remotes ainda não estão integrados e créditos, composição, restrições e o domínio completo permanecem pendentes |
 | Autenticação e autorização | Pendente | A API resolve o tenant por claim autenticada e bloqueia contexto ausente fora de desenvolvimento, mas o provedor de identidade, a sessão real e as políticas por ação/recurso ainda não existem |
 | Testes automatizados | Parcial | Management possui testes da validade civil de congelados; ainda faltam suítes de componente, contrato, integração e E2E nos fluxos críticos |
 | CI dos aplicativos | Pendente | Apenas `ts-components` possui workflow, voltado à publicação; falta pipeline de qualidade dos aplicativos |
@@ -108,6 +108,8 @@ A frente foi iniciada em `/congelados`, dentro de Gestão, e já alcança o cicl
 6. **Arquitetura SaaS:** a Sabor Santè é a primeira Organização. Dados de negócio são isolados por Organização; usuários acessam empresas por associações explícitas e o frontend nunca determina o tenant por um `OrganizationId` arbitrário.
 
 ## Sequência obrigatória do que vem a seguir
+
+O planejamento executável por épicos, seus critérios de aceite e a regra de entrega por *one-shot* estão em [`ROADMAP.md`](./ROADMAP.md). Um épico somente é considerado concluído depois das validações, commits e push de todos os repositórios afetados.
 
 Regra de projeto aplicada: a API só seria retomada depois da consolidação formal do frontend. Esse marco foi concluído em 4 de setembro de 2026 e a implementação autoritativa já está em andamento. Os mocks, fixtures e adapters locais continuam servindo como referência de experiência, sem se tornarem automaticamente DTOs ou modelos de persistência.
 
@@ -184,8 +186,9 @@ A Embalagem agora representa o conjunto físico completo de etiquetas por meio d
 - modelar contratos por caso de uso a partir do estudo de caso e das jornadas consolidadas;
 - fundação SaaS multi-tenant concluída na API, com Organização, associação de usuários, isolamento automático de leitura e escrita, restrições compostas e migration dos dados existentes para o tenant Sabor Santè;
 - persistência PostgreSQL, migrations e idempotência da primeira fatia de congelados concluídas; autenticação real, autorização e auditoria permanecem pendentes;
-- implementar `ConfirmarPedido` como operação atômica para capacidade, créditos, financeiro e estoque congelado;
-- implementar FEFO, validade e movimentos como regras autoritativas do domínio;
+- primeira fatia de `ConfirmarPedido` concluída com status, versão otimista, capacidade diária, cobrança, transação serializável, idempotência e estoque congelado;
+- FEFO, validade, movimentos e alocações por PedidoItem implementados como regras autoritativas; criação pública do Pedido e configuração da capacidade são a próxima fatia;
+- incorporar créditos de plano, crédito financeiro, composição e restrições à mesma transação de confirmação;
 - substituir gradualmente os adapters locais dos remotes pela comunicação com a API;
 - adicionar telemetria e correlação de requests na integração real.
 
