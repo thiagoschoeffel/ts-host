@@ -41,7 +41,7 @@ ts-host
 | URLs dos remotes | Implementado | Configuráveis por ambiente, validadas para HTTP(S), com fallback local |
 | Falha de carregamento de remote | Implementado | O shell apresenta erro explícito e ação de nova tentativa |
 | Rotas e breadcrumbs | Implementado | O host é o único proprietário do Vue Router e das URLs públicas |
-| Navegação SPA | Parcial | Existe bridge no host e utilitários nos remotes, mas ainda há `window.location.assign` e links que dependem da interceptação global |
+| Navegação SPA | Parcial | Ações programáticas dos remotes usam a bridge do host, com fallback quando executadas isoladamente; links internos semânticos ainda dependem da interceptação global |
 | Contratos federados | Parcial | Fachadas pequenas e declarações manuais no host; geração de tipos permanece desabilitada (`dts: false`) |
 | Design system | Implementado | `ts-components` 0.7.4 está alinhado nos quatro consumidores e possui componentes, ícones e Storybook |
 | Padrões do Guia UI | Parcial | Páginas recentes seguem os padrões principais; cenários determinísticos e estados completos ainda não são uniformes em toda tela antiga |
