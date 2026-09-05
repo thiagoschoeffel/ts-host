@@ -42,7 +42,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 - [x] **E07 — Estabelecer identidade, autorização e auditoria**
 - [x] **E08 — Integrar a Gestão de Congelados à API**
 - [x] **E09 — Integrar Pedidos e Capacidade à API**
-- [ ] **E10 — Integrar Produção, Embalagem e impressão Zebra**
+- [x] **E10 — Integrar Produção, Embalagem e impressão Zebra**
 - [ ] **E11 — Integrar Catálogo, Produzíveis e Cardápios**
 - [ ] **E12 — Integrar Clientes, Planos, Créditos e Financeiro**
 - [ ] **E13 — Integrar Entregadores e Entregas**
@@ -142,6 +142,8 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 **Aceite:** não resta regra autoritativa de capacidade ou FEFO no Vue; conflitos têm recuperação compreensível; navegação preserva contexto; cenários de esgotamento, concorrência e retentativa passam; builds e testes integrados, documentação, commits e push verdes.
 
 ### E10 — Integrar Produção, Embalagem e impressão Zebra
+
+**Estado:** concluído em 5 de setembro de 2026.
 
 **Resultado esperado:** operar a execução física a partir de Pedidos reais e imprimir etiquetas por um adapter de infraestrutura substituível.
 

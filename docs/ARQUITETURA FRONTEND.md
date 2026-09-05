@@ -146,11 +146,11 @@ Entregas
 
 Estado atual relevante:
 
-- Hoje combina os cards ainda demonstrativos das áreas futuras com contagem de Pedidos e capacidade diária consultadas na API;
+- Hoje combina os cards ainda demonstrativos das áreas futuras com Pedidos, capacidade diária, Produção e Embalagem consultados na API;
 - Pedidos possui lista, criação, edição, detalhe, confirmação, cancelamento e reagendamento integrados à API autenticada;
 - Capacidade usa o snapshot autoritativo por data, apresenta projeção no Pedido aberto sem reservar e delega validação, reserva e liberação à transação da API; congelados ficam fora da contagem;
-- Produção possui consulta operacional;
-- Embalagem possui experiência própria;
+- Produção consulta a agregação autoritativa dos componentes efetivos de Pedidos confirmados e exclui congelados;
+- Embalagem consulta a fila autoritativa, persiste snapshot e histórico de impressão e usa o adapter Zebra/ZPL da estação;
 - Entregas possui experiência própria;
 - Atendimento possui caixa de entrada e jornada demonstrativa com histórico, handoff humano, retentativa e entrada no Pedido aberto; integração oficial e persistência permanecem pendentes.
 
@@ -1560,7 +1560,7 @@ Cobertura automatizada ainda é insuficiente.
 
 ## 55.5. Backend
 
-Os fluxos de Pedido e capacidade já usam atomicidade, autorização, versão otimista e idempotência reais. Produção, Embalagem, Entregas, Atendimento, Catálogo e Comercial ainda possuem partes demonstrativas previstas nos épicos seguintes.
+Os fluxos de Pedido, capacidade, Produção e Embalagem já usam contratos autenticados e persistência real; a embalagem usa versão otimista e idempotência, enquanto impressão permanece um efeito independente. Entregas, Atendimento, Catálogo e Comercial ainda possuem partes demonstrativas previstas nos épicos seguintes.
 
 ---
 
