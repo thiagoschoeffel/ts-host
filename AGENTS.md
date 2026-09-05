@@ -525,14 +525,18 @@ release
 publish
 ```
 
-A execução solicitada de um épico de `docs/ROADMAP.md` é autorização explícita para criar os commits e fazer o push previstos na Definition of Done daquele épico. Nesse caso:
+A execução solicitada de um épico de `docs/ROADMAP.md` é autorização explícita para criar os commits, publicar as branches de trabalho e criar ou atualizar os pull requests previstos na Definition of Done daquele épico. Nesse caso:
 
+- antes da primeira alteração, crie a mesma branch `feat/eNN-descricao-curta` em todos os repositórios afetados;
+- nunca implemente, faça commit ou push de épico diretamente em `main` ou `master`;
+- se commits do épico já estiverem na branch protegida local, crie a branch de trabalho no `HEAD` atual para preservá-los, sem reset ou descarte;
 - valide antes de versionar;
 - crie um commit convencional e coeso por repositório afetado;
 - não inclua mudanças locais alheias ao épico;
-- faça push da branch corrente em todos os repositórios afetados;
-- só marque o épico como concluído depois que todos os pushes forem confirmados;
-- se commit ou push falhar, mantenha o épico em andamento e relate a pendência real.
+- faça push somente das branches de trabalho e configure o upstream;
+- abra ou atualize um pull request para `main` em cada repositório afetado; o merge continua sujeito à revisão e às proteções do repositório;
+- só marque o épico como concluído depois que todos os pushes e pull requests forem confirmados;
+- se commit, push ou criação do pull request falhar, mantenha o épico em andamento e relate a pendência real.
 
 Não reverta alterações do usuário fora da tarefa.
 

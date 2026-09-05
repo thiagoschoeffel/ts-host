@@ -10,21 +10,22 @@ O roadmap define a ordem de execução. O estudo de caso continua sendo a fonte 
 
 Um épico iniciado deve ser levado até uma destas situações:
 
-- **concluído:** escopo e critérios de aceite atendidos, validações verdes, documentação atualizada, commits criados e push realizado em todos os repositórios afetados;
+- **concluído:** escopo e critérios de aceite atendidos, validações verdes, documentação atualizada, commits criados, branches de trabalho publicadas e pull requests abertos ou atualizados em todos os repositórios afetados;
 - **bloqueado:** existe uma decisão de negócio, credencial, serviço externo ou falha irrecuperável que impede a conclusão; o bloqueio deve ser registrado objetivamente e nenhuma conclusão parcial deve ser marcada como entregue.
 
 Regras de execução:
 
 1. executar apenas um épico por vez, seguindo a ordem deste documento;
-2. antes de alterar arquivos, verificar o estado Git de todos os repositórios envolvidos e preservar mudanças anteriores que não pertencem ao épico;
+2. antes de alterar arquivos, verificar o estado Git de todos os repositórios envolvidos, preservar mudanças anteriores que não pertencem ao épico e criar em todos eles a mesma branch `feat/eNN-descricao-curta`;
 3. não ampliar o escopo com itens de épicos futuros;
 4. implementar a menor fatia completa que satisfaça os critérios de aceite;
 5. executar todas as validações indicadas e as validações obrigatórias de cada repositório;
 6. atualizar este checklist e a documentação afetada na mesma entrega;
 7. criar um commit convencional e coeso em cada repositório alterado; uma evolução transversal pode, portanto, gerar mais de um commit;
-8. fazer push dos commits para a branch corrente de cada repositório;
-9. somente depois do push marcar o épico como concluído;
-10. se commit ou push não puder ser realizado, manter o épico em andamento e informar precisamente o que falta.
+8. nunca implementar, fazer commit ou push diretamente em `main` ou `master`; se commits do épico já estiverem na branch protegida local, criar a branch de trabalho no `HEAD` atual, sem reset ou descarte;
+9. fazer push somente das branches de trabalho, configurar o upstream e abrir ou atualizar um pull request para `main` em cada repositório afetado;
+10. somente depois de confirmar todos os pushes e pull requests marcar o épico como concluído; o merge permanece sujeito à revisão e às proteções do repositório;
+11. se commit, push ou criação do pull request não puder ser realizado, manter o épico em andamento e informar precisamente o que falta.
 
 Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas nos commits. Se houver sobreposição que não possa ser separada com segurança, a execução deve parar e registrar o impedimento.
 
@@ -35,7 +36,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 - [x] **E03 — Concluir e publicar a primeira confirmação autoritativa de Pedido**
 - [x] **E04 — Criar Pedido aberto e configurar capacidade diária**
 - [x] **E05 — Completar a transação de confirmação do Pedido**
-- [ ] **E06 — Implementar cancelamento, reagendamento e reversões**
+- [x] **E06 — Implementar cancelamento, reagendamento e reversões**
 - [ ] **E07 — Estabelecer identidade, autorização e auditoria**
 - [ ] **E08 — Integrar a Gestão de Congelados à API**
 - [ ] **E09 — Integrar Pedidos e Capacidade à API**
@@ -99,6 +100,8 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 **Aceite:** nenhum efeito parcial em falha; crédito normal consumido somente na confirmação; ausência de saldo ou incompatibilidade de restrição impede a operação; reexecução idempotente; histórico permanece estável após mudanças posteriores de catálogo; testes de concorrência e rollback; migrations, build, documentação, commits e push verdes.
 
 ### E06 — Implementar cancelamento, reagendamento e reversões
+
+**Estado:** concluído em 4 de setembro de 2026.
 
 **Resultado esperado:** fechar o ciclo transacional do Pedido depois da confirmação.
 
