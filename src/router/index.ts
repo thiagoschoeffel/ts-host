@@ -10,7 +10,7 @@ const ManagementPage = () => import('moduleManagement/ManagementPage')
 
 const operationRoutes: RouteRecordRaw[] = [
   { path: 'hoje', component: OperationPage, props: { section: 'hoje', apiRequest: authenticatedFetch }, meta: { label: 'Hoje' } },
-  { path: 'atendimento', component: OperationPage, props: { section: 'atendimento' }, meta: { label: 'Atendimento' } },
+  { path: 'atendimento', component: OperationPage, props: { section: 'atendimento', apiRequest: authenticatedFetch }, meta: { label: 'Atendimento' } },
   {
     path: 'pedidos',
     component: OperationPage,

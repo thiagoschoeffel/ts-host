@@ -152,7 +152,7 @@ Estado atual relevante:
 - Produção consulta a agregação autoritativa dos componentes efetivos de Pedidos confirmados e exclui congelados;
 - Embalagem consulta a fila autoritativa, persiste snapshot e histórico de impressão e usa o adapter Zebra/ZPL da estação;
 - Entregas usa a API para rotas, paradas, tentativas e reagendamentos;
-- Atendimento possui caixa de entrada e jornada demonstrativa com histórico, handoff humano, retentativa e entrada no Pedido aberto; integração oficial e persistência permanecem pendentes.
+- Atendimento possui caixa de entrada integrada à API, histórico persistente, handoff humano, envio e retentativa idempotentes, entrada no Pedido e quota mensal autoritativa; a homologação final depende do sandbox da Meta.
 
 ---
 
@@ -887,13 +887,11 @@ Conflitos de versão, capacidade e estoque retornam como erro recuperável. A in
 
 ## 29.2. Franquia do WhatsApp
 
-Enquanto a integração de Atendimento prevista no E14 não foi executada, a área
-usa um snapshot demonstrativo substituível para validar a apresentação da
-franquia mensal. O contrato de interface distingue mensagens de serviço
+Desde o E14, Atendimento consome o snapshot autoritativo da API. O contrato de interface distingue mensagens de serviço
 entregues das reservadas para envios em andamento e inclui limite gratuito,
 margem de pausa, período, renovação, número comercial e estado autoritativo.
 
-Na integração final:
+Fluxo implementado:
 
 ```text
 webhook de entrega / falha
@@ -1558,7 +1556,7 @@ Cobertura automatizada ainda é insuficiente.
 
 ## 55.5. Backend
 
-Os fluxos de Pedido, capacidade, Produção, Embalagem, Catálogo, Produzíveis, Cardápios, Clientes, Planos, Créditos, Financeiro, Entregadores e Entregas usam contratos autenticados e persistência real. Rotas mantêm snapshots históricos, sequência própria e tentativas imutáveis; Atendimento permanece demonstrativo até o E14.
+Os fluxos de Pedido, capacidade, Produção, Embalagem, Catálogo, Produzíveis, Cardápios, Clientes, Planos, Créditos, Financeiro, Entregadores, Entregas e Atendimento usam contratos autenticados e persistência real. Rotas e conversas mantêm histórico e sequência próprios; credenciais da Meta permanecem exclusivamente na API.
 
 ---
 
