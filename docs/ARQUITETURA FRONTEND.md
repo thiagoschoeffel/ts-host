@@ -1550,10 +1550,7 @@ Avaliar geração quando a API federada crescer.
 
 ## 55.3. Estado demonstrativo duplicado
 
-Clientes/Planos/Financeiro ainda possuem fontes demonstrativas. Pedido persiste o identificador externo do cliente e apresenta os efeitos financeiros autoritativos, mas o diretório completo será integrado no E12.
-
-Manter adapters e fixtures locais simples até a integração do E12, quando essas
-fontes devem convergir para a API.
+Clientes, Planos e Financeiro usam um adapter HTTP autenticado e a fonte autoritativa da API. O Pedido seleciona apenas clientes ativos desse mesmo diretório; saldos de créditos e cobranças são projeções de movimentações e alocações persistidas.
 
 ## 55.4. Testes
 
@@ -1561,7 +1558,7 @@ Cobertura automatizada ainda é insuficiente.
 
 ## 55.5. Backend
 
-Os fluxos de Pedido, capacidade, Produção, Embalagem, Catálogo, Produzíveis e Cardápios já usam contratos autenticados e persistência real; Pedido aceita apenas referências publicadas e disponíveis no dia, a embalagem usa versão otimista e idempotência, enquanto impressão permanece um efeito independente. Entregas, Atendimento, Clientes, Planos e Financeiro ainda possuem partes demonstrativas previstas nos épicos seguintes.
+Os fluxos de Pedido, capacidade, Produção, Embalagem, Catálogo, Produzíveis, Cardápios, Clientes, Planos, Créditos e Financeiro usam contratos autenticados e persistência real; Pedido aceita apenas referências autoritativas, a embalagem usa versão otimista e idempotência, enquanto impressão permanece um efeito independente. Entregas e Atendimento ainda possuem partes demonstrativas previstas nos épicos seguintes.
 
 ---
 
