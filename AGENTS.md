@@ -534,9 +534,10 @@ A execução solicitada de um épico de `docs/ROADMAP.md` é autorização expl�
 - crie um commit convencional e coeso por repositório afetado;
 - não inclua mudanças locais alheias ao épico;
 - faça push somente das branches de trabalho e configure o upstream;
-- abra ou atualize um pull request para `main` em cada repositório afetado; o merge continua sujeito à revisão e às proteções do repositório;
-- só marque o épico como concluído depois que todos os pushes e pull requests forem confirmados;
-- se commit, push ou criação do pull request falhar, mantenha o épico em andamento e relate a pendência real.
+- abra ou atualize um pull request para `main` em cada repositório afetado e integre todos eles sem exigir ação manual do usuário; faça o merge imediatamente quando permitido ou habilite o auto-merge quando checks ou proteções estiverem pendentes, acompanhando até a integração ser confirmada;
+- depois de confirmar todos os merges, faça checkout de `main` em cada repositório afetado e atualize-a por fast-forward a partir de `origin/main`, deixando o workspace pronto para o próximo épico;
+- só marque o épico como concluído depois que todos os pushes, merges e retornos à `main` atualizada forem confirmados;
+- se commit, push, criação ou merge do pull request, ou o retorno seguro à `main`, falhar, mantenha o épico em andamento e relate a pendência real.
 
 Não reverta alterações do usuário fora da tarefa.
 

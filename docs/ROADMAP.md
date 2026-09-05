@@ -10,7 +10,7 @@ O roadmap define a ordem de execução. O estudo de caso continua sendo a fonte 
 
 Um épico iniciado deve ser levado até uma destas situações:
 
-- **concluído:** escopo e critérios de aceite atendidos, validações verdes, documentação atualizada, commits criados, branches de trabalho publicadas e pull requests abertos ou atualizados em todos os repositórios afetados;
+- **concluído:** escopo e critérios de aceite atendidos, validações verdes, documentação atualizada, commits criados, branches de trabalho publicadas, pull requests integrados e repositórios afetados novamente em `main` atualizada;
 - **bloqueado:** existe uma decisão de negócio, credencial, serviço externo ou falha irrecuperável que impede a conclusão; o bloqueio deve ser registrado objetivamente e nenhuma conclusão parcial deve ser marcada como entregue.
 
 Regras de execução:
@@ -24,8 +24,10 @@ Regras de execução:
 7. criar um commit convencional e coeso em cada repositório alterado; uma evolução transversal pode, portanto, gerar mais de um commit;
 8. nunca implementar, fazer commit ou push diretamente em `main` ou `master`; se commits do épico já estiverem na branch protegida local, criar a branch de trabalho no `HEAD` atual, sem reset ou descarte;
 9. fazer push somente das branches de trabalho, configurar o upstream e abrir ou atualizar um pull request para `main` em cada repositório afetado;
-10. somente depois de confirmar todos os pushes e pull requests marcar o épico como concluído; o merge permanece sujeito à revisão e às proteções do repositório;
-11. se commit, push ou criação do pull request não puder ser realizado, manter o épico em andamento e informar precisamente o que falta.
+10. depois de abrir ou atualizar todos os pull requests do épico, integrá-los sem exigir ação manual do usuário: fazer o merge imediatamente quando permitido ou habilitar o auto-merge quando checks ou proteções ainda estiverem pendentes, acompanhando até a integração ser confirmada;
+11. após confirmar todos os merges, fazer checkout de `main` em cada repositório afetado e atualizá-la por fast-forward a partir de `origin/main`, deixando o workspace pronto para o próximo épico;
+12. somente depois de confirmar todos os pushes, merges e retornos à `main` atualizada marcar o épico como concluído;
+13. se commit, push, criação ou merge do pull request, ou o retorno seguro à `main`, não puder ser realizado, manter o épico em andamento e informar precisamente o que falta.
 
 Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas nos commits. Se houver sobreposição que não possa ser separada com segurança, a execução deve parar e registrar o impedimento.
 
