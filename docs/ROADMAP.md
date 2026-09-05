@@ -143,6 +143,8 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 
 ### E10 — Integrar Produção, Embalagem e impressão Zebra
 
+**Estado:** em andamento em 5 de setembro de 2026.
+
 **Resultado esperado:** operar a execução física a partir de Pedidos reais e imprimir etiquetas por um adapter de infraestrutura substituível.
 
 **Inclui:** Hoje e Produção derivados de pedidos confirmados; fila e snapshots de Embalagem; transição para Embalado; etiquetas individuais da produção do dia e externa do pacote; reimpressão; descoberta e implementação do adapter Zebra/ZPL adequado ao ambiente; histórico de tentativas.

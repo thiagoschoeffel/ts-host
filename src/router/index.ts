@@ -57,8 +57,8 @@ const operationRoutes: RouteRecordRaw[] = [
       parentHref: '/operacoes/pedidos'
     }
   },
-  { path: 'producao', component: OperationPage, props: { section: 'producao' }, meta: { label: 'Produção' } },
-  { path: 'embalagem', component: OperationPage, props: { section: 'embalagem' }, meta: { label: 'Embalagem' } },
+  { path: 'producao', component: OperationPage, props: { section: 'producao', apiRequest: authenticatedFetch }, meta: { label: 'Produção' } },
+  { path: 'embalagem', component: OperationPage, props: { section: 'embalagem', apiRequest: authenticatedFetch }, meta: { label: 'Embalagem' } },
   { path: 'entregas', component: OperationPage, props: { section: 'entregas' }, meta: { label: 'Entregas' } }
 ]
 
