@@ -40,6 +40,7 @@ declare module 'moduleOperation/OperationPage' {
     section?: OperationSection
     orderPage?: OrderPage
     orderId?: string
+    apiRequest?: (path: string, init?: RequestInit) => Promise<Response>
   }>
   export default component
 }

@@ -146,9 +146,9 @@ Entregas
 
 Estado atual relevante:
 
-- Hoje possui dashboard demonstrativo;
-- Pedidos possui lista, criação, edição e detalhe;
-- Capacidade simples possui snapshot demonstrativo substituível, projeção no Pedido aberto e validação na confirmação; congelados ficam fora da contagem e a autoridade transacional permanece pendente na API;
+- Hoje combina os cards ainda demonstrativos das áreas futuras com contagem de Pedidos e capacidade diária consultadas na API;
+- Pedidos possui lista, criação, edição, detalhe, confirmação, cancelamento e reagendamento integrados à API autenticada;
+- Capacidade usa o snapshot autoritativo por data, apresenta projeção no Pedido aberto sem reservar e delega validação, reserva e liberação à transação da API; congelados ficam fora da contagem;
 - Produção possui consulta operacional;
 - Embalagem possui experiência própria;
 - Entregas possui experiência própria;
@@ -887,9 +887,9 @@ O frontend pode antecipar cálculo para UX, mas deve aceitar resposta autoritati
 
 ## 29.1. Capacidade operacional
 
-Enquanto o backend está congelado, Operação usa um adapter local simples para estabilizar a experiência de capacidade. O formulário do Pedido apresenta a projeção sem reservar; a confirmação relê o saldo e pode rejeitar um conflito; somente o cancelamento no estágio Confirmado libera automaticamente a reserva demonstrativa. Itens de estoque congelado não participam da contagem.
+Operação consulta `TotalUnits`, `ReservedUnits`, `AvailableUnits` e `Version` por data no adapter HTTP autenticado. O formulário apresenta apenas uma projeção informativa e não reserva capacidade. `ConfirmarPedido` relê e reserva o saldo em transação serializável; reagendamento transfere a reserva atomicamente e cancelamento libera somente no estágio permitido pelo domínio. Itens de estoque congelado não participam da contagem.
 
-O estado local e o limite usado pela demonstração não são contrato da API. Na integração final, validação, reserva e liberação devem fazer parte da transação autoritativa de `ConfirmarPedido` e aceitar concorrência real.
+Conflitos de versão, capacidade e estoque retornam como erro recuperável. A interface mantém o rascunho ou recarrega o detalhe autoritativo para que o operador possa revisar e repetir a intenção com uma nova chave de idempotência.
 
 ## 29.2. Franquia do WhatsApp
 
@@ -1552,7 +1552,7 @@ Avaliar geração quando a API federada crescer.
 
 ## 55.3. Estado demonstrativo duplicado
 
-Clientes/Planos/Financeiro e Pedidos ainda podem possuir fontes demonstrativas diferentes.
+Clientes/Planos/Financeiro ainda possuem fontes demonstrativas. Pedido persiste o identificador externo do cliente e apresenta os efeitos financeiros autoritativos, mas o diretório completo será integrado no E12.
 
 Durante a consolidação do frontend, manter adapters e fixtures locais simples. Resolver definitivamente na API apenas na etapa final, depois que os fluxos estiverem consolidados.
 
@@ -1562,7 +1562,7 @@ Cobertura automatizada ainda é insuficiente.
 
 ## 55.5. Backend
 
-Mocks ainda não implementam atomicidade, autorização e concorrência reais.
+Os fluxos de Pedido e capacidade já usam atomicidade, autorização, versão otimista e idempotência reais. Produção, Embalagem, Entregas, Atendimento, Catálogo e Comercial ainda possuem partes demonstrativas previstas nos épicos seguintes.
 
 ---
 
