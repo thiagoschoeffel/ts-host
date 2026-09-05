@@ -1,6 +1,6 @@
 import { shallowRef } from 'vue'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
-import { hasAuthenticatedSession, initializeAuthentication, takePostAuthenticationPath } from '../auth'
+import { authenticatedFetch, hasAuthenticatedSession, initializeAuthentication, takePostAuthenticationPath } from '../auth'
 
 export const remoteLoadError = shallowRef<Error>()
 
@@ -251,13 +251,13 @@ export const router = createRouter({
     {
       path: '/congelados',
       component: ManagementPage,
-      props: { section: 'congelados', frozenPage: 'list' },
+      props: { section: 'congelados', frozenPage: 'list', apiRequest: authenticatedFetch },
       meta: { sectionLabel: 'Gestão', label: 'Congelados' }
     },
     {
       path: '/congelados/entrada',
       component: ManagementPage,
-      props: { section: 'congelados', frozenPage: 'entry' },
+      props: { section: 'congelados', frozenPage: 'entry', apiRequest: authenticatedFetch },
       meta: {
         sectionLabel: 'Gestão', label: 'Registrar entrada', parentLabel: 'Congelados', parentHref: '/congelados'
       }
@@ -265,7 +265,9 @@ export const router = createRouter({
     {
       path: '/congelados/lotes/:id',
       component: ManagementPage,
-      props: route => ({ section: 'congelados', frozenPage: 'lot', frozenLotId: String(route.params.id) }),
+      props: route => ({
+        section: 'congelados', frozenPage: 'lot', frozenLotId: String(route.params.id), apiRequest: authenticatedFetch
+      }),
       meta: {
         sectionLabel: 'Gestão', label: 'Lote de congelado', parentLabel: 'Congelados', parentHref: '/congelados'
       }

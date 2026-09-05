@@ -1368,7 +1368,7 @@ grupos de escolha
 
 ---
 
-# 49. Contrato futuro de Management para Congelados
+# 49. Contrato federado de Management para Congelados
 
 Evolução conceitual:
 
@@ -1381,16 +1381,17 @@ ManagementSection
 └── usuarios
 ```
 
-Props futuras podem representar:
+O contrato implementado recebe:
 
 ```text
 frozenPage
 frozenLotId
+apiRequest
 ```
 
-A forma exata deve seguir a convenção real no momento da implementação.
+O host continua dono das URLs e injeta `apiRequest`, uma função que adiciona o Bearer token e a Organização ativa. O remote não lê tokens nem duplica a sessão OIDC.
 
-O host continua dono das URLs.
+O `RouterView` inclui a Organização ativa em sua chave. Uma troca de empresa remonta a tela atual e elimina projeções do tenant anterior antes de carregar os novos dados.
 
 ---
 
@@ -1476,9 +1477,9 @@ O serviço deve retornar estado de erro recuperável.
 
 ---
 
-# 53. Estoque congelado e API futura
+# 53. Estoque congelado e API autoritativa
 
-No protótipo pode existir store local.
+Desde o E08, configurações, saldo, validade, lotes e movimentos são lidos e alterados somente pela API autenticada. O adapter local de Congelados foi removido; filtros, busca e ordenação continuam como estado de apresentação do remote.
 
 Na solução real:
 
