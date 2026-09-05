@@ -70,6 +70,7 @@ declare module 'moduleManagement/ManagementPage' {
     offerId?: string
     frozenPage?: 'list' | 'entry' | 'lot'
     frozenLotId?: string
+    apiRequest?: (path: string, init?: RequestInit) => Promise<Response>
     deliveryDriverPage?: 'list' | 'new' | 'edit'
     deliveryDriverId?: string
     userPage?: 'list' | 'new' | 'edit'

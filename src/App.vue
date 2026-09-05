@@ -115,7 +115,7 @@ watch(isSidebarCollapsed, (collapsed) => {
     <div class="flex min-h-0 flex-1 overflow-hidden">
       <AppSidebar :collapsed="isSidebarCollapsed" />
       <ModuleContent>
-        <RouterView />
+        <RouterView :key="`${route.fullPath}:${authentication.session.value?.activeOrganizationId}`" />
         <template #breadcrumbs>
           <AppBreadcrumbs :items="breadcrumbs" />
         </template>

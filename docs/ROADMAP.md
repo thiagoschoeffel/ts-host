@@ -53,7 +53,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 
 ### E01 — Consolidar o frontend demonstrativo V1
 
-**Estado:** concluído em 4 de setembro de 2026.
+**Estado:** em andamento; implementação e validações concluídas em 4 de setembro de 2026, aguardando publicação e integração dos pull requests.
 
 **Resultado esperado:** disponibilizar uma linha de base navegável e responsiva das jornadas V1, sem promover mocks, stores locais ou interfaces de apresentação a contratos definitivos da API.
 
@@ -122,6 +122,8 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 **Aceite:** chamadas anônimas e cross-tenant são bloqueadas; usuário sem associação não acessa a Organização; troca de empresa não aceita `OrganizationId` arbitrário; ações críticas registram autoria confiável; testes de segurança, builds, documentação, commits e push verdes.
 
 ### E08 — Integrar a Gestão de Congelados à API
+
+**Estado:** concluído em 4 de setembro de 2026.
 
 **Resultado esperado:** substituir o estado demonstrativo de Congelados por persistência autoritativa sem alterar a jornada validada.
 
