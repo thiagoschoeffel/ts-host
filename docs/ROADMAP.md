@@ -183,6 +183,8 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 
 ### E14 — Integrar Atendimento e WhatsApp oficial
 
+**Estado:** em andamento; implementação concluída localmente, aguardando credenciais para homologação no sandbox oficial da Meta.
+
 **Resultado esperado:** substituir a simulação do Atendimento por mensageria oficial, persistente e observável.
 
 **Inclui:** integração oficial escolhida; webhook autenticado e idempotente; processamento sequencial por conversa; histórico; envio e retentativa; handoff Automação/Humano; sincronização com o aplicativo WhatsApp dentro dos limites do provedor; franquia mensal autoritativa; vínculo com Cliente e Pedido.

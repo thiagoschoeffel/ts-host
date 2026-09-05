@@ -11,7 +11,7 @@ O frontend já é um **protótipo funcional amplo**: shell, três remotes, desig
 
 **Marco formal:** esta linha de base está consolidada para orientar os casos de uso autoritativos da API. Melhorias posteriores de bundle, CI, testes, contratos federados, navegação e refinamentos de UX continuam planejadas, mas não bloqueiam mais o backend nem transformam interfaces de mock em DTOs.
 
-Ele ainda **não está pronto para operar todo o negócio com dados reais**. Os fluxos até Logística já usam a API autenticada e autoritativa; Atendimento ainda é demonstrativo. Observabilidade e CI nos aplicativos também permanecem incompletos.
+Ele ainda **não está pronto para produção**. Os fluxos até Atendimento usam a API autenticada e autoritativa; a homologação do número de teste da Meta ainda depende das credenciais do ambiente. Observabilidade e CI nos aplicativos também permanecem incompletos.
 
 A principal ampliação de escopo é **Congelados**. Gestão já integra consulta, entrada de produção, detalhe, movimentações e ajuste/descarte à API. Em Operação, o Pedido aceita itens mistos, consulta saldo vendável, delega a alocação FEFO e os estornos à transação autoritativa, mantém congelados fora da capacidade diária e preserva a futura composição com Embalagem. A integração Zebra/ZPL e a persistência dos fluxos físicos seguintes continuam pendentes. A topologia atual comporta a evolução sem criar outro remote nem um catálogo comercial paralelo:
 
@@ -62,8 +62,8 @@ ts-host
 
 | Área | Estado | O que existe hoje | O que falta para a V1 |
 | --- | --- | --- | --- |
-| Hoje | Parcial | Pedidos, capacidade, Produção, Embalagem e Entregas vêm da API | Integrar os indicadores de Atendimento no E14 |
-| Atendimento / WhatsApp | Protótipo funcional | Caixa de entrada responsiva, skeletons estruturais, histórico sanitizado, alternância Automação/Humano, envio manual, falha com retentativa idempotente, entrada no Pedido aberto e acompanhamento demonstrativo da franquia mensal | Integração oficial, webhook, persistência e controle autoritativos da franquia, processamento sequencial e sincronização com o aplicativo WhatsApp |
+| Hoje | Parcial | Pedidos, capacidade, Produção, Embalagem, Entregas e Atendimento vêm da API | Consolidar observabilidade no E15 |
+| Atendimento / WhatsApp | Integrado, aguardando homologação Meta | Caixa de entrada responsiva e autenticada, histórico sanitizado e persistente, webhook assinado e idempotente, ordem por conversa, alternância Automação/Humano, envio e retentativa, vínculo com Cliente/Pedido e franquia mensal autoritativa | Validar recebimento, envio, status e coexistência no número de teste oficial com credenciais do ambiente |
 | Pedidos | Integrado | Lista, criação, edição, detalhe, confirmação, cancelamento e reagendamento usam API autenticada, referências autoritativas, versão otimista e idempotência; detalhe apresenta efeitos históricos | — |
 | Capacidade | Integrado | Formulário e painel Hoje consultam o saldo por data; a projeção não reserva, enquanto confirmação, cancelamento e reagendamento aplicam a regra autoritativa e concorrente na API | A configuração administrativa dedicada pode ser refinada junto das evoluções operacionais futuras |
 | Produção diária | Integrado | Consulta autenticada agrega componentes efetivos de Pedidos confirmados e posteriores; itens congelados não entram na apuração | — |
@@ -163,7 +163,7 @@ A Embalagem agora representa o conjunto físico completo de etiquetas por meio d
 
 ### 4. Fechar as demais lacunas funcionais do frontend V1 — consolidado como linha de base demonstrativa
 
-- Atendimento / WhatsApp — primeira jornada demonstrativa concluída, incluindo skeletons estruturais da lista e da conversa; integração oficial e efeitos autoritativos permanecem para a API;
+- Atendimento / WhatsApp — jornada conectada à API, com skeletons estruturais, histórico persistente, handoff, envio, retentativa e quota autoritativa; falta homologar o sandbox da Meta;
 - planejamento semanal do Cardápio — jornada demonstrativa concluída, preservando a independência de revisão e publicação de cada dia;
 - experiência de capacidade integrada à API, incluindo projeção no Pedido aberto, reserva na confirmação, liberação antes da produção e conflitos concorrentes;
 - telas de Financeiro e Planos/Créditos permanecem demonstrativas; confirmação e cancelamento de Pedido já persistem seus efeitos autoritativos na API;
@@ -204,10 +204,10 @@ A Embalagem agora representa o conjunto físico completo de etiquetas por meio d
 
 1. Congelados em Gestão, incluindo estoque por lote e etiqueta de produto — concluído no escopo demonstrativo.
 2. Congelados no Pedido e na Embalagem, incluindo etiquetas individuais e externa — concluído no escopo demonstrativo.
-3. Atendimento / WhatsApp — primeira jornada concluída no escopo demonstrativo.
+3. Atendimento / WhatsApp — integração autoritativa implementada; homologação do sandbox da Meta pendente.
 4. Planejamento semanal, Capacidade, Financeiro, Planos/Créditos, Clientes e Entregadores — consolidados como linha de base demonstrativa.
 5. Frontend formalmente consolidado em 4 de setembro de 2026; evoluções técnicas seguem como trabalho posterior não bloqueante.
-6. API e frontend integrados até o E13; Atendimento e WhatsApp oficial são a próxima entrega (E14).
+6. API e frontend integrados até o E14; a homologação da Meta encerra o E14 antes do início do E15.
 
 ## Não promover a arquitetura definitiva
 
