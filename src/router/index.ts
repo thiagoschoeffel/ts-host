@@ -110,13 +110,13 @@ export const router = createRouter({
     {
       path: '/clientes',
       component: CommercialPage,
-      props: { section: 'clientes', customerPage: 'list' },
+      props: { section: 'clientes', customerPage: 'list', apiRequest: authenticatedFetch },
       meta: { sectionLabel: 'Comercial', label: 'Clientes' }
     },
     {
       path: '/clientes/novo',
       component: CommercialPage,
-      props: { section: 'clientes', customerPage: 'new' },
+      props: { section: 'clientes', customerPage: 'new', apiRequest: authenticatedFetch },
       meta: {
         sectionLabel: 'Comercial',
         label: 'Novo cliente', parentLabel: 'Clientes', parentHref: '/clientes'
@@ -125,7 +125,7 @@ export const router = createRouter({
     {
       path: '/clientes/:id/editar',
       component: CommercialPage,
-      props: route => ({ section: 'clientes', customerPage: 'edit', customerId: String(route.params.id) }),
+      props: route => ({ section: 'clientes', customerPage: 'edit', customerId: String(route.params.id), apiRequest: authenticatedFetch }),
       meta: {
         sectionLabel: 'Comercial',
         label: 'Editar cliente', parentLabel: 'Clientes', parentHref: '/clientes'
@@ -134,7 +134,7 @@ export const router = createRouter({
     {
       path: '/clientes/:id',
       component: CommercialPage,
-      props: route => ({ section: 'clientes', customerPage: 'detail', customerId: String(route.params.id) }),
+      props: route => ({ section: 'clientes', customerPage: 'detail', customerId: String(route.params.id), apiRequest: authenticatedFetch }),
       meta: {
         sectionLabel: 'Comercial',
         label: 'Detalhe', parentLabel: 'Clientes', parentHref: '/clientes'
@@ -143,49 +143,49 @@ export const router = createRouter({
     {
       path: '/planos',
       component: CommercialPage,
-      props: { section: 'planos', planPage: 'list' },
+      props: { section: 'planos', planPage: 'list', apiRequest: authenticatedFetch },
       meta: { sectionLabel: 'Comercial', label: 'Planos e Créditos' }
     },
     {
       path: '/planos/novo',
       component: CommercialPage,
-      props: { section: 'planos', planPage: 'new' },
+      props: { section: 'planos', planPage: 'new', apiRequest: authenticatedFetch },
       meta: { sectionLabel: 'Comercial', label: 'Novo plano', parentLabel: 'Planos e Créditos', parentHref: '/planos' }
     },
     {
       path: '/planos/aquisicoes/nova',
       component: CommercialPage,
-      props: { section: 'planos', planPage: 'new-acquisition' },
+      props: { section: 'planos', planPage: 'new-acquisition', apiRequest: authenticatedFetch },
       meta: { sectionLabel: 'Comercial', label: 'Nova aquisição', parentLabel: 'Planos e Créditos', parentHref: '/planos' }
     },
     {
       path: '/planos/movimentacoes/nova',
       component: CommercialPage,
-      props: { section: 'planos', planPage: 'new-movement' },
+      props: { section: 'planos', planPage: 'new-movement', apiRequest: authenticatedFetch },
       meta: { sectionLabel: 'Comercial', label: 'Estornar consumo', parentLabel: 'Planos e Créditos', parentHref: '/planos' }
     },
     {
       path: '/planos/:id/editar',
       component: CommercialPage,
-      props: route => ({ section: 'planos', planPage: 'edit', planId: String(route.params.id) }),
+      props: route => ({ section: 'planos', planPage: 'edit', planId: String(route.params.id), apiRequest: authenticatedFetch }),
       meta: { sectionLabel: 'Comercial', label: 'Editar plano', parentLabel: 'Planos e Créditos', parentHref: '/planos' }
     },
     {
       path: '/financeiro',
       component: CommercialPage,
-      props: { section: 'financeiro', financialPage: 'list' },
+      props: { section: 'financeiro', financialPage: 'list', apiRequest: authenticatedFetch },
       meta: { sectionLabel: 'Comercial', label: 'Financeiro' }
     },
     {
       path: '/financeiro/pagamentos/novo',
       component: CommercialPage,
-      props: { section: 'financeiro', financialPage: 'new-payment' },
+      props: { section: 'financeiro', financialPage: 'new-payment', apiRequest: authenticatedFetch },
       meta: { sectionLabel: 'Comercial', label: 'Registrar pagamento', parentLabel: 'Financeiro', parentHref: '/financeiro' }
     },
     {
       path: '/financeiro/cobrancas/:id',
       component: CommercialPage,
-      props: route => ({ section: 'financeiro', financialPage: 'charge-detail', chargeId: String(route.params.id) }),
+      props: route => ({ section: 'financeiro', financialPage: 'charge-detail', chargeId: String(route.params.id), apiRequest: authenticatedFetch }),
       meta: { sectionLabel: 'Comercial', label: 'Cobrança', parentLabel: 'Financeiro', parentHref: '/financeiro' }
     },
     {
