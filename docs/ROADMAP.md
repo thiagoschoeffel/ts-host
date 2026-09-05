@@ -36,7 +36,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 - [x] **E03 — Concluir e publicar a primeira confirmação autoritativa de Pedido**
 - [x] **E04 — Criar Pedido aberto e configurar capacidade diária**
 - [x] **E05 — Completar a transação de confirmação do Pedido**
-- [ ] **E06 — Implementar cancelamento, reagendamento e reversões**
+- [x] **E06 — Implementar cancelamento, reagendamento e reversões**
 - [ ] **E07 — Estabelecer identidade, autorização e auditoria**
 - [ ] **E08 — Integrar a Gestão de Congelados à API**
 - [ ] **E09 — Integrar Pedidos e Capacidade à API**
@@ -100,6 +100,8 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 **Aceite:** nenhum efeito parcial em falha; crédito normal consumido somente na confirmação; ausência de saldo ou incompatibilidade de restrição impede a operação; reexecução idempotente; histórico permanece estável após mudanças posteriores de catálogo; testes de concorrência e rollback; migrations, build, documentação, commits e push verdes.
 
 ### E06 — Implementar cancelamento, reagendamento e reversões
+
+**Estado:** concluído em 4 de setembro de 2026.
 
 **Resultado esperado:** fechar o ciclo transacional do Pedido depois da confirmação.
 
