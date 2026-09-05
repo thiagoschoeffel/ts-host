@@ -151,7 +151,7 @@ Estado atual relevante:
 - Capacidade usa o snapshot autoritativo por data, apresenta projeção no Pedido aberto sem reservar e delega validação, reserva e liberação à transação da API; congelados ficam fora da contagem;
 - Produção consulta a agregação autoritativa dos componentes efetivos de Pedidos confirmados e exclui congelados;
 - Embalagem consulta a fila autoritativa, persiste snapshot e histórico de impressão e usa o adapter Zebra/ZPL da estação;
-- Entregas possui experiência própria;
+- Entregas usa a API para rotas, paradas, tentativas e reagendamentos;
 - Atendimento possui caixa de entrada e jornada demonstrativa com histórico, handoff humano, retentativa e entrada no Pedido aberto; integração oficial e persistência permanecem pendentes.
 
 ---
@@ -188,8 +188,8 @@ Usuários
 Congelados já usa a API autenticada para configurações, saldo, vencimentos,
 entrada de produção, lotes, movimentações, ajuste e descarte. Catálogo e
 Produzíveis também usam fontes autoritativas e preservam versões históricas;
-Entregadores e Usuários ainda preservam fontes demonstrativas até
-os respectivos épicos de integração.
+Entregadores usa cadastro e disponibilidade autoritativos; Usuários ainda
+preserva a interface demonstrativa sobre a identidade já integrada.
 
 Não criar um remote separado para Congelados sem necessidade concreta de autonomia de deploy/equipe.
 
@@ -1558,7 +1558,7 @@ Cobertura automatizada ainda é insuficiente.
 
 ## 55.5. Backend
 
-Os fluxos de Pedido, capacidade, Produção, Embalagem, Catálogo, Produzíveis, Cardápios, Clientes, Planos, Créditos e Financeiro usam contratos autenticados e persistência real; Pedido aceita apenas referências autoritativas, a embalagem usa versão otimista e idempotência, enquanto impressão permanece um efeito independente. Entregas e Atendimento ainda possuem partes demonstrativas previstas nos épicos seguintes.
+Os fluxos de Pedido, capacidade, Produção, Embalagem, Catálogo, Produzíveis, Cardápios, Clientes, Planos, Créditos, Financeiro, Entregadores e Entregas usam contratos autenticados e persistência real. Rotas mantêm snapshots históricos, sequência própria e tentativas imutáveis; Atendimento permanece demonstrativo até o E14.
 
 ---
 

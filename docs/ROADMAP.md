@@ -45,7 +45,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 - [x] **E10 — Integrar Produção, Embalagem e impressão Zebra**
 - [x] **E11 — Integrar Catálogo, Produzíveis e Cardápios**
 - [x] **E12 — Integrar Clientes, Planos, Créditos e Financeiro**
-- [ ] **E13 — Integrar Entregadores e Entregas**
+- [x] **E13 — Integrar Entregadores e Entregas**
 - [ ] **E14 — Integrar Atendimento e WhatsApp oficial**
 - [ ] **E15 — Consolidar observabilidade, qualidade e deploy da V1**
 
@@ -172,6 +172,8 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 **Aceite:** saldos são derivados de movimentações; FIFO e estornos preservam origem; ajustes manuais não se confundem com consumo; dados pessoais respeitam tenant e autorização; telas deixam de usar stores locais; testes, builds, documentação, commits e push verdes.
 
 ### E13 — Integrar Entregadores e Entregas
+
+**Estado:** concluído em 5 de setembro de 2026.
 
 **Resultado esperado:** persistir e controlar a jornada logística completa do Pedido.
 
