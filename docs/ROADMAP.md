@@ -41,7 +41,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 - [x] **E06 — Implementar cancelamento, reagendamento e reversões**
 - [x] **E07 — Estabelecer identidade, autorização e auditoria**
 - [x] **E08 — Integrar a Gestão de Congelados à API**
-- [ ] **E09 — Integrar Pedidos e Capacidade à API**
+- [x] **E09 — Integrar Pedidos e Capacidade à API**
 - [ ] **E10 — Integrar Produção, Embalagem e impressão Zebra**
 - [ ] **E11 — Integrar Catálogo, Produzíveis e Cardápios**
 - [ ] **E12 — Integrar Clientes, Planos, Créditos e Financeiro**
@@ -132,6 +132,8 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 **Aceite:** todas as telas leem e escrevem pela API autenticada; saldo e validade vêm do domínio; falhas não deixam a UI otimista incorreta; fluxo funciona em desktop/mobile e após alternar remotes; testes de contrato/componente, builds integrados, documentação, commits e push verdes.
 
 ### E09 — Integrar Pedidos e Capacidade à API
+
+**Estado:** concluído em 4 de setembro de 2026.
 
 **Resultado esperado:** tornar criação, edição, confirmação, detalhe e capacidade do Pedido fluxos reais.
 

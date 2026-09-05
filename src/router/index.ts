@@ -9,18 +9,18 @@ const CommercialPage = () => import('moduleCommercial/CommercialPage')
 const ManagementPage = () => import('moduleManagement/ManagementPage')
 
 const operationRoutes: RouteRecordRaw[] = [
-  { path: 'hoje', component: OperationPage, props: { section: 'hoje' }, meta: { label: 'Hoje' } },
+  { path: 'hoje', component: OperationPage, props: { section: 'hoje', apiRequest: authenticatedFetch }, meta: { label: 'Hoje' } },
   { path: 'atendimento', component: OperationPage, props: { section: 'atendimento' }, meta: { label: 'Atendimento' } },
   {
     path: 'pedidos',
     component: OperationPage,
-    props: { section: 'pedidos', orderPage: 'list' },
+    props: { section: 'pedidos', orderPage: 'list', apiRequest: authenticatedFetch },
     meta: { label: 'Pedidos' }
   },
   {
     path: 'pedidos/novo',
     component: OperationPage,
-    props: { section: 'pedidos', orderPage: 'new' },
+    props: { section: 'pedidos', orderPage: 'new', apiRequest: authenticatedFetch },
     meta: {
       label: 'Novo pedido',
       parentLabel: 'Pedidos',
@@ -33,7 +33,8 @@ const operationRoutes: RouteRecordRaw[] = [
     props: (route) => ({
       section: 'pedidos',
       orderPage: 'edit',
-      orderId: String(route.params.id)
+      orderId: String(route.params.id),
+      apiRequest: authenticatedFetch
     }),
     meta: {
       label: 'Editar pedido',
@@ -47,7 +48,8 @@ const operationRoutes: RouteRecordRaw[] = [
     props: (route) => ({
       section: 'pedidos',
       orderPage: 'detail',
-      orderId: String(route.params.id)
+      orderId: String(route.params.id),
+      apiRequest: authenticatedFetch
     }),
     meta: {
       label: 'Pedido',
