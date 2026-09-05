@@ -40,7 +40,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 - [x] **E05 — Completar a transação de confirmação do Pedido**
 - [x] **E06 — Implementar cancelamento, reagendamento e reversões**
 - [x] **E07 — Estabelecer identidade, autorização e auditoria**
-- [ ] **E08 — Integrar a Gestão de Congelados à API**
+- [x] **E08 — Integrar a Gestão de Congelados à API**
 - [ ] **E09 — Integrar Pedidos e Capacidade à API**
 - [ ] **E10 — Integrar Produção, Embalagem e impressão Zebra**
 - [ ] **E11 — Integrar Catálogo, Produzíveis e Cardápios**
@@ -53,7 +53,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 
 ### E01 — Consolidar o frontend demonstrativo V1
 
-**Estado:** em andamento; implementação e validações concluídas em 4 de setembro de 2026, aguardando publicação e integração dos pull requests.
+**Estado:** concluído em 4 de setembro de 2026.
 
 **Resultado esperado:** disponibilizar uma linha de base navegável e responsiva das jornadas V1, sem promover mocks, stores locais ou interfaces de apresentação a contratos definitivos da API.
 
