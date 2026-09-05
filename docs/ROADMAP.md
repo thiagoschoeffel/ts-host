@@ -133,7 +133,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 
 ### E09 — Integrar Pedidos e Capacidade à API
 
-**Estado:** concluído em 5 de setembro de 2026.
+**Estado:** em andamento; implementação e validações concluídas, aguardando autorização explícita para commits, push e integração dos pull requests.
 
 **Resultado esperado:** tornar criação, edição, confirmação, detalhe e capacidade do Pedido fluxos reais.
 
@@ -172,6 +172,8 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 **Aceite:** saldos são derivados de movimentações; FIFO e estornos preservam origem; ajustes manuais não se confundem com consumo; dados pessoais respeitam tenant e autorização; telas deixam de usar stores locais; testes, builds, documentação, commits e push verdes.
 
 ### E13 — Integrar Entregadores e Entregas
+
+**Estado:** concluído em 5 de setembro de 2026.
 
 **Resultado esperado:** persistir e controlar a jornada logística completa do Pedido.
 

@@ -1,7 +1,7 @@
 # Status frontend — Sabor Santè
 
-Atualizado em 5 de setembro de 2026 após a conclusão dos épicos E02–E09 e a
-integração autoritativa de Congelados, Pedidos e capacidade.
+Atualizado em 5 de setembro de 2026 após a integração autoritativa de
+Entregadores e Entregas no E13.
 
 Este arquivo registra o estado verificado, as lacunas e a sequência recomendada de evolução. As regras permanentes continuam pertencendo aos três documentos de referência.
 
@@ -11,7 +11,7 @@ O frontend já é um **protótipo funcional amplo**: shell, três remotes, desig
 
 **Marco formal:** esta linha de base está consolidada para orientar os casos de uso autoritativos da API. Melhorias posteriores de bundle, CI, testes, contratos federados, navegação e refinamentos de UX continuam planejadas, mas não bloqueiam mais o backend nem transformam interfaces de mock em DTOs.
 
-Ele ainda **não está pronto para operar todo o negócio com dados reais**. Congelados, Pedidos, capacidade, Produção e Embalagem já usam a API autenticada e autoritativa; Entregas, Atendimento, Catálogo e Comercial ainda preservam partes demonstrativas previstas nos próximos épicos. Observabilidade e CI nos aplicativos também permanecem incompletos.
+Ele ainda **não está pronto para operar todo o negócio com dados reais**. Os fluxos até Logística já usam a API autenticada e autoritativa; Atendimento ainda é demonstrativo. Observabilidade e CI nos aplicativos também permanecem incompletos.
 
 A principal ampliação de escopo é **Congelados**. Gestão já integra consulta, entrada de produção, detalhe, movimentações e ajuste/descarte à API. Em Operação, o Pedido aceita itens mistos, consulta saldo vendável, delega a alocação FEFO e os estornos à transação autoritativa, mantém congelados fora da capacidade diária e preserva a futura composição com Embalagem. A integração Zebra/ZPL e a persistência dos fluxos físicos seguintes continuam pendentes. A topologia atual comporta a evolução sem criar outro remote nem um catálogo comercial paralelo:
 
@@ -62,21 +62,21 @@ ts-host
 
 | Área | Estado | O que existe hoje | O que falta para a V1 |
 | --- | --- | --- | --- |
-| Hoje | Parcial | Pedidos, capacidade, Produção e Embalagem vêm da API; Entregas e áreas futuras ainda são demonstrativas | Derivar o restante do painel dos fluxos autoritativos dos próximos épicos |
+| Hoje | Parcial | Pedidos, capacidade, Produção, Embalagem e Entregas vêm da API | Integrar os indicadores de Atendimento no E14 |
 | Atendimento / WhatsApp | Protótipo funcional | Caixa de entrada responsiva, skeletons estruturais, histórico sanitizado, alternância Automação/Humano, envio manual, falha com retentativa idempotente, entrada no Pedido aberto e acompanhamento demonstrativo da franquia mensal | Integração oficial, webhook, persistência e controle autoritativos da franquia, processamento sequencial e sincronização com o aplicativo WhatsApp |
-| Pedidos | Integrado | Lista, criação, edição, detalhe, confirmação, cancelamento e reagendamento usam API autenticada, versão otimista e idempotência; detalhe apresenta efeitos históricos | Integrar cadastro autoritativo de clientes/ofertas nos E11/E12 e derivar Produção/Embalagem nos épicos seguintes |
+| Pedidos | Integrado | Lista, criação, edição, detalhe, confirmação, cancelamento e reagendamento usam API autenticada, referências autoritativas, versão otimista e idempotência; detalhe apresenta efeitos históricos | — |
 | Capacidade | Integrado | Formulário e painel Hoje consultam o saldo por data; a projeção não reserva, enquanto confirmação, cancelamento e reagendamento aplicam a regra autoritativa e concorrente na API | A configuração administrativa dedicada pode ser refinada junto das evoluções operacionais futuras |
-| Produção diária | Integrado | Consulta autenticada agrega componentes efetivos de Pedidos confirmados e posteriores; itens congelados não entram na apuração | Refinar junto das fontes autoritativas de Catálogo no E11 |
-| Embalagem | Integrado | Fila autoritativa, embalagem idempotente, snapshot histórico, uma etiqueta por unidade diária, pacote externo e reimpressão seletiva; congelados não recebem duplicata | Enriquecer telefone/endereço quando Clientes forem integrados no E12 |
-| Entregas | Protótipo funcional | Rotas, paradas, tentativas, falhas, reagendamento e folha de rota | Persistência, auditoria, validações de transição e integração com Pedido/entregadores reais |
-| Clientes | Protótipo funcional | Lista, detalhe, cadastro, endereços, preferências, restrições e observações | Fonte única com Pedidos e persistência segura na API |
+| Produção diária | Integrado | Consulta autenticada agrega componentes efetivos de Pedidos confirmados e posteriores; itens congelados não entram na apuração | — |
+| Embalagem | Integrado | Fila autoritativa, embalagem idempotente, snapshot histórico, uma etiqueta por unidade diária, pacote externo e reimpressão seletiva; congelados não recebem duplicata | — |
+| Entregas | Integrado | Rotas e paradas ordenadas, folha, atribuição, início transacional, tentativas históricas, falhas, conclusão e reagendamento usam a API | Refinamentos de roteirização automática permanecem fora da V1 |
+| Clientes | Integrado | Lista, detalhe, cadastro, endereços, preferências, restrições e entregador preferencial usam fontes autoritativas | — |
 | Catálogo / Ofertas | Protótipo funcional | Ofertas, componentes, escolhas, adicionais e tipos de componente | API, contratos definitivos e vínculo real com cardápio/pedido |
 | Produzíveis / Composições | Protótipo funcional | Cadastro, detalhe e versões de composição | Integrar a composição versionada já usada como snapshot pela confirmação e completar sua gestão autoritativa |
 | Cardápio diário | Protótipo funcional | Calendário, criação/edição, publicação, disponibilidade e importação por planilha demonstrativa | API e integração autoritativa com catálogo e Pedido |
 | Planejamento semanal | Protótipo funcional | Grade compacta com autocomplete para selecionar dias e resolver as três categorias, escolha e ordenação de ofertas, salvamento da intenção e derivação de novos cardápios diários em rascunho sem substituir dias existentes | Persistência autoritativa, comunicação externa do plano e integração com preparação/compra |
 | Planos e Créditos | Protótipo funcional | Planos, aquisições, saldos, movimentações e estorno demonstrativos | Integrar consumo FIFO autoritativo da confirmação; completar gestão, consultas e estornos do cancelamento |
 | Financeiro | Protótipo funcional | Cobranças, pagamentos, alocações, saldos e crédito financeiro demonstrativos | Integrar cobrança e crédito financeiro autoritativos da confirmação; completar pagamentos, consultas e reversões do cancelamento |
-| Entregadores | Protótipo funcional | Lista e cadastro demonstrativos | Fonte única para preferência, atribuição e tentativa real |
+| Entregadores | Integrado | Cadastro versionado, disponibilidade, preferência, atribuição e tentativa real usam a API | — |
 | Usuários | Parcial | Lista e cadastro demonstrativos; identidade, sessão, associação, papéis e auditoria confiável já existem na plataforma/API | Integrar a gestão autoritativa de usuários e associações à tela |
 
 ## Nova frente: Congelados e etiquetas
@@ -207,7 +207,7 @@ A Embalagem agora representa o conjunto físico completo de etiquetas por meio d
 3. Atendimento / WhatsApp — primeira jornada concluída no escopo demonstrativo.
 4. Planejamento semanal, Capacidade, Financeiro, Planos/Créditos, Clientes e Entregadores — consolidados como linha de base demonstrativa.
 5. Frontend formalmente consolidado em 4 de setembro de 2026; evoluções técnicas seguem como trabalho posterior não bloqueante.
-6. API e frontend integrados até o E10; Catálogo, Produzíveis e Cardápios são a próxima entrega (E11).
+6. API e frontend integrados até o E13; Atendimento e WhatsApp oficial são a próxima entrega (E14).
 
 ## Não promover a arquitetura definitiva
 
