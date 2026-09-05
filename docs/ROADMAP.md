@@ -193,6 +193,8 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 
 ### E15 — Consolidar observabilidade, qualidade e deploy da V1
 
+**Estado:** em andamento; implementação e validações concluídas localmente, aguardando versionamento e integração. O avanço ocorreu por autorização explícita enquanto a homologação externa do E14 permanece pendente.
+
 **Resultado esperado:** tornar o conjunto operável, diagnosticável e publicável com segurança.
 
 **Inclui:** logs estruturados e correlação ponta a ponta; métricas e captura central de erros; health checks reais; testes unitários, integração, contrato, componente e E2E dos fluxos críticos; CI independente por repositório; contratos federados tipados; estratégia de versões host/remotes; cache e rollback de `remoteEntry.js`; orçamento e divisão de bundles; migrations como etapa de deploy; matriz desktop/mobile e regressão de ordem de CSS.

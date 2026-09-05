@@ -1,6 +1,7 @@
 import { shallowRef } from 'vue'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import { authenticatedFetch, hasAuthenticatedSession, initializeAuthentication, takePostAuthenticationPath } from '../auth'
+import { reportClientError } from '../telemetry'
 
 export const remoteLoadError = shallowRef<Error>()
 
@@ -327,4 +328,5 @@ router.beforeEach(async (to) => {
 
 router.onError((error) => {
   remoteLoadError.value = error instanceof Error ? error : new Error(String(error))
+  void reportClientError(error, 'router.remote-load')
 })

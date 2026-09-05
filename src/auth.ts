@@ -138,7 +138,9 @@ export async function authenticatedFetch(path: string, init: RequestInit = {}) {
     throw new Error('A sessão autenticada não está disponível.')
 
   const headers = new Headers(init.headers)
+  const correlationId = globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`
   headers.set('Authorization', `Bearer ${user.access_token}`)
   headers.set('X-Organization-Id', activeSession.activeOrganizationId)
+  headers.set('X-Correlation-Id', correlationId)
   return fetch(`${apiUrl}${path}`, { ...init, headers })
 }
