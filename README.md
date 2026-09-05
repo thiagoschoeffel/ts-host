@@ -1,7 +1,8 @@
 # TS Host
 
-An independent application responsible for the layout and navigation. It loads
-the remote module from the URL configured in `vite.config.ts`.
+Aplicação shell responsável por layout, autenticação, navegação e composição dos
+três módulos federados: Operação, Comercial e Gestão. As URLs dos remotes são
+configuráveis por ambiente, com os fallbacks locais definidos em `vite.config.ts`.
 
 ## GitHub Packages authentication
 
@@ -25,6 +26,20 @@ npm run dev
 ```
 
 The application runs at http://localhost:4173.
+
+## Module Federation
+
+Os remotes locais são carregados por padrão nestes endereços:
+
+```text
+Operação  http://localhost:4174/remoteEntry.js
+Comercial http://localhost:4175/remoteEntry.js
+Gestão    http://localhost:4176/remoteEntry.js
+```
+
+Para outro ambiente, configure `VITE_OPERATION_REMOTE_URL`,
+`VITE_COMMERCIAL_REMOTE_URL` e `VITE_MANAGEMENT_REMOTE_URL`. Consulte
+`.env.example` para a configuração completa.
 
 ## Authentication
 
@@ -52,4 +67,5 @@ VITE_ZEBRA_DPI=203
 `browser` always opens the browser print dialog. `auto` uses Zebra when it is
 available and falls back to the browser otherwise.
 
-For production, change the `entry` property to the published module URL.
+Em produção, configure as URLs publicadas dos remotes pelas variáveis de
+ambiente; não é necessário alterar o código-fonte.

@@ -1,6 +1,6 @@
 # Arquitetura Técnica do Frontend — Sabor Santè
 
-> **Estado analisado:** 03 de setembro de 2026.
+> **Estado analisado:** 05 de setembro de 2026, após a conclusão do E09.
 >
 > **Fonte da implementação:** branch `main` dos repositórios públicos do projeto.
 >
@@ -180,15 +180,15 @@ Responsável por cadastros e configurações de Gestão:
 ```text
 Catálogo
 Produzíveis
+Congelados e estoque específico de congelados
 Entregadores
 Usuários
 ```
 
-Evolução planejada pelo domínio atualizado:
-
-```text
-Congelados e estoque específico de congelados
-```
+Congelados já usa a API autenticada para configurações, saldo, vencimentos,
+entrada de produção, lotes, movimentações, ajuste e descarte. Catálogo,
+Produzíveis, Entregadores e Usuários ainda preservam fontes demonstrativas até
+os respectivos épicos de integração.
 
 Não criar um remote separado para Congelados sem necessidade concreta de autonomia de deploy/equipe.
 
@@ -422,6 +422,7 @@ Props principais:
 section
 orderPage
 orderId
+apiRequest
 ```
 
 ---
@@ -431,6 +432,7 @@ orderId
 ```text
 /cardapios
 /cardapios/novo
+/cardapios/planejamento
 /cardapios/:date
 
 /clientes
@@ -467,6 +469,10 @@ A fachada Comercial recebe contexto por props.
 /produziveis/:id/composicao/nova
 /produziveis/:id
 
+/congelados
+/congelados/entrada
+/congelados/lotes/:id
+
 /entregadores
 /entregadores/novo
 /entregadores/:id/editar
@@ -474,14 +480,6 @@ A fachada Comercial recebe contexto por props.
 /usuarios
 /usuarios/novo
 /usuarios/:id/editar
-```
-
-Evolução planejada:
-
-```text
-/congelados
-/congelados/entrada
-/congelados/lotes/:id
 ```
 
 `/congelados` administra estoque e habilitação de Itens Produzíveis existentes; não representa um segundo catálogo de produtos.
@@ -509,16 +507,6 @@ Comercial
 ├── Planos e Créditos
 └── Financeiro
 
-Gestão
-├── Catálogo
-├── Produzíveis
-├── Entregadores
-└── Usuários
-```
-
-Evolução planejada:
-
-```text
 Gestão
 ├── Catálogo
 ├── Produzíveis
@@ -753,11 +741,13 @@ Após atualizar:
 
 ---
 
-# 24. Estado demonstrativo
+# 24. Estado de integração
 
-O frontend ainda não possui API autoritativa conectada para o domínio completo. Por regra de sequência do projeto, a API só será retomada depois que o frontend estiver formalmente consolidado.
+O frontend ainda não possui API autoritativa conectada para o domínio completo.
+Após a consolidação formal do frontend, a API foi retomada e os épicos E08 e E09
+integraram Congelados, Pedidos e capacidade.
 
-São usados:
+Nas áreas ainda não integradas são usados:
 
 - mocks TypeScript;
 - `localStorage`;
@@ -788,7 +778,8 @@ aggregate root
 contrato de API
 ```
 
-A API .NET deve ser modelada, em sua etapa futura, a partir do estudo de caso e dos fluxos consolidados no frontend.
+A API .NET é modelada a partir do estudo de caso e dos fluxos consolidados no
+frontend, sem promover contratos demonstrativos a modelos autoritativos.
 
 ---
 
@@ -863,9 +854,11 @@ A solução final deve convergir para backend autoritativo.
 
 ---
 
-# 29. Estado remoto futuro
+# 29. Estado remoto e integração autoritativa
 
-A implementação desse estado ocorre somente depois da consolidação formal do frontend. Antes disso, os adapters podem existir com implementações locais para estabilizar contratos de interface, estados e jornadas, sem executar trabalho no `ts-api`.
+Congelados, Pedidos e capacidade já seguem o fluxo abaixo. As demais áreas devem
+adotá-lo nos próximos épicos, preservando adapters locais apenas como referência
+de apresentação enquanto ainda não estiverem integradas.
 
 Ao conectar a API:
 
@@ -893,7 +886,11 @@ Conflitos de versão, capacidade e estoque retornam como erro recuperável. A in
 
 ## 29.2. Franquia do WhatsApp
 
-Enquanto o backend está congelado, Atendimento usa um snapshot demonstrativo substituível para validar a apresentação da franquia mensal. O contrato de interface distingue mensagens de serviço entregues das reservadas para envios em andamento e inclui limite gratuito, margem de pausa, período, renovação, número comercial e estado autoritativo.
+Enquanto a integração de Atendimento prevista no E14 não foi executada, a área
+usa um snapshot demonstrativo substituível para validar a apresentação da
+franquia mensal. O contrato de interface distingue mensagens de serviço
+entregues das reservadas para envios em andamento e inclui limite gratuito,
+margem de pausa, período, renovação, número comercial e estado autoritativo.
 
 Na integração final:
 
@@ -1554,7 +1551,8 @@ Avaliar geração quando a API federada crescer.
 
 Clientes/Planos/Financeiro ainda possuem fontes demonstrativas. Pedido persiste o identificador externo do cliente e apresenta os efeitos financeiros autoritativos, mas o diretório completo será integrado no E12.
 
-Durante a consolidação do frontend, manter adapters e fixtures locais simples. Resolver definitivamente na API apenas na etapa final, depois que os fluxos estiverem consolidados.
+Manter adapters e fixtures locais simples até a integração do E12, quando essas
+fontes devem convergir para a API.
 
 ## 55.4. Testes
 
