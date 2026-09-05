@@ -33,7 +33,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 - [x] **E01 — Consolidar o frontend demonstrativo V1**
 - [x] **E02 — Estabelecer a API, o SaaS multi-tenant e Congelados autoritativos**
 - [x] **E03 — Concluir e publicar a primeira confirmação autoritativa de Pedido**
-- [ ] **E04 — Criar Pedido aberto e configurar capacidade diária**
+- [x] **E04 — Criar Pedido aberto e configurar capacidade diária**
 - [ ] **E05 — Completar a transação de confirmação do Pedido**
 - [ ] **E06 — Implementar cancelamento, reagendamento e reversões**
 - [ ] **E07 — Estabelecer identidade, autorização e auditoria**
@@ -79,6 +79,8 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 **Aceite:** confirmar apenas Pedido elegível; não consumir capacidade para congelados; impedir estoque negativo e lotes vencidos; rejeitar versão concorrente; repetir a mesma chave sem duplicar efeitos; testes de sucesso, conflito e rollback; migration aplicável; `dotnet test` e build Release verdes; documentação atualizada; commit e push do `ts-api` e dos documentos relacionados.
 
 ### E04 — Criar Pedido aberto e configurar capacidade diária
+
+**Estado:** concluído em 4 de setembro de 2026.
 
 **Resultado esperado:** eliminar a dependência de dados inseridos diretamente no banco para que a confirmação possa ser exercitada por casos de uso públicos.
 
