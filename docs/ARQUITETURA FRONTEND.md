@@ -169,7 +169,7 @@ Financeiro
 
 Também concentra atualmente stores/mocks demonstrativos dessas áreas.
 
-Estado atual relevante: Cardápios possui calendário diário e planejamento semanal demonstrativo separado. O planejamento registra intenção e pode derivar novos dias em rascunho sem sobrescrever cardápios diários existentes; revisão, publicação e alterações posteriores permanecem próprias de cada dia.
+Estado atual relevante: Cardápios usa a API autenticada para calendário diário, rascunho, publicação, disponibilidade, preço efetivo, importação e planejamento semanal. O planejamento registra intenção e pode derivar novos dias em rascunho sem sobrescrever cardápios diários existentes; revisão, publicação e alterações posteriores permanecem próprias de cada dia.
 
 ---
 
@@ -186,8 +186,9 @@ Usuários
 ```
 
 Congelados já usa a API autenticada para configurações, saldo, vencimentos,
-entrada de produção, lotes, movimentações, ajuste e descarte. Catálogo,
-Produzíveis, Entregadores e Usuários ainda preservam fontes demonstrativas até
+entrada de produção, lotes, movimentações, ajuste e descarte. Catálogo e
+Produzíveis também usam fontes autoritativas e preservam versões históricas;
+Entregadores e Usuários ainda preservam fontes demonstrativas até
 os respectivos épicos de integração.
 
 Não criar um remote separado para Congelados sem necessidade concreta de autonomia de deploy/equipe.
@@ -1560,7 +1561,7 @@ Cobertura automatizada ainda é insuficiente.
 
 ## 55.5. Backend
 
-Os fluxos de Pedido, capacidade, Produção e Embalagem já usam contratos autenticados e persistência real; a embalagem usa versão otimista e idempotência, enquanto impressão permanece um efeito independente. Entregas, Atendimento, Catálogo e Comercial ainda possuem partes demonstrativas previstas nos épicos seguintes.
+Os fluxos de Pedido, capacidade, Produção, Embalagem, Catálogo, Produzíveis e Cardápios já usam contratos autenticados e persistência real; Pedido aceita apenas referências publicadas e disponíveis no dia, a embalagem usa versão otimista e idempotência, enquanto impressão permanece um efeito independente. Entregas, Atendimento, Clientes, Planos e Financeiro ainda possuem partes demonstrativas previstas nos épicos seguintes.
 
 ---
 

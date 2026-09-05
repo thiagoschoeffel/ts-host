@@ -80,13 +80,13 @@ export const router = createRouter({
     {
       path: '/cardapios',
       component: CommercialPage,
-      props: { section: 'cardapios', menuPage: 'list' },
+      props: { section: 'cardapios', menuPage: 'list', apiRequest: authenticatedFetch },
       meta: { sectionLabel: 'Comercial', label: 'Cardápios' }
     },
     {
       path: '/cardapios/novo',
       component: CommercialPage,
-      props: { section: 'cardapios', menuPage: 'new' },
+      props: { section: 'cardapios', menuPage: 'new', apiRequest: authenticatedFetch },
       meta: {
         sectionLabel: 'Comercial', label: 'Novo cardápio', parentLabel: 'Cardápios', parentHref: '/cardapios'
       }
@@ -94,7 +94,7 @@ export const router = createRouter({
     {
       path: '/cardapios/planejamento',
       component: CommercialPage,
-      props: { section: 'cardapios', menuPage: 'planning' },
+      props: { section: 'cardapios', menuPage: 'planning', apiRequest: authenticatedFetch },
       meta: {
         sectionLabel: 'Comercial', label: 'Planejamento semanal', parentLabel: 'Cardápios', parentHref: '/cardapios'
       }
@@ -102,7 +102,7 @@ export const router = createRouter({
     {
       path: '/cardapios/:date',
       component: CommercialPage,
-      props: route => ({ section: 'cardapios', menuPage: 'edit', menuDate: String(route.params.date) }),
+      props: route => ({ section: 'cardapios', menuPage: 'edit', menuDate: String(route.params.date), apiRequest: authenticatedFetch }),
       meta: {
         sectionLabel: 'Comercial', label: 'Cardápio do dia', parentLabel: 'Cardápios', parentHref: '/cardapios'
       }
@@ -191,37 +191,37 @@ export const router = createRouter({
     {
       path: '/catalogo',
       component: ManagementPage,
-      props: { section: 'catalogo', catalogPage: 'list' },
+      props: { section: 'catalogo', catalogPage: 'list', apiRequest: authenticatedFetch },
       meta: { sectionLabel: 'Gestão', label: 'Catálogo' }
     },
     {
       path: '/catalogo/novo',
       component: ManagementPage,
-      props: { section: 'catalogo', catalogPage: 'new' },
+      props: { section: 'catalogo', catalogPage: 'new', apiRequest: authenticatedFetch },
       meta: { sectionLabel: 'Gestão', label: 'Nova oferta', parentLabel: 'Catálogo', parentHref: '/catalogo' }
     },
     {
       path: '/catalogo/:id/editar',
       component: ManagementPage,
-      props: route => ({ section: 'catalogo', catalogPage: 'edit', offerId: String(route.params.id) }),
+      props: route => ({ section: 'catalogo', catalogPage: 'edit', offerId: String(route.params.id), apiRequest: authenticatedFetch }),
       meta: { sectionLabel: 'Gestão', label: 'Editar oferta', parentLabel: 'Catálogo', parentHref: '/catalogo' }
     },
     {
       path: '/catalogo/:id',
       component: ManagementPage,
-      props: route => ({ section: 'catalogo', catalogPage: 'detail', offerId: String(route.params.id) }),
+      props: route => ({ section: 'catalogo', catalogPage: 'detail', offerId: String(route.params.id), apiRequest: authenticatedFetch }),
       meta: { sectionLabel: 'Gestão', label: 'Oferta', parentLabel: 'Catálogo', parentHref: '/catalogo' }
     },
     {
       path: '/produziveis',
       component: ManagementPage,
-      props: { section: 'produziveis', produciblePage: 'list' },
+      props: { section: 'produziveis', produciblePage: 'list', apiRequest: authenticatedFetch },
       meta: { sectionLabel: 'Gestão', label: 'Produzíveis' }
     },
     {
       path: '/produziveis/novo',
       component: ManagementPage,
-      props: { section: 'produziveis', produciblePage: 'new' },
+      props: { section: 'produziveis', produciblePage: 'new', apiRequest: authenticatedFetch },
       meta: {
         sectionLabel: 'Gestão', label: 'Novo item', parentLabel: 'Produzíveis', parentHref: '/produziveis'
       }
@@ -229,7 +229,7 @@ export const router = createRouter({
     {
       path: '/produziveis/:id/editar',
       component: ManagementPage,
-      props: route => ({ section: 'produziveis', produciblePage: 'edit', producibleId: String(route.params.id) }),
+      props: route => ({ section: 'produziveis', produciblePage: 'edit', producibleId: String(route.params.id), apiRequest: authenticatedFetch }),
       meta: {
         sectionLabel: 'Gestão', label: 'Editar item', parentLabel: 'Produzíveis', parentHref: '/produziveis'
       }
@@ -237,7 +237,7 @@ export const router = createRouter({
     {
       path: '/produziveis/:id/composicao/nova',
       component: ManagementPage,
-      props: route => ({ section: 'produziveis', produciblePage: 'new-composition-version', producibleId: String(route.params.id) }),
+      props: route => ({ section: 'produziveis', produciblePage: 'new-composition-version', producibleId: String(route.params.id), apiRequest: authenticatedFetch }),
       meta: {
         sectionLabel: 'Gestão', label: 'Nova composição', parentLabel: 'Produzíveis', parentHref: '/produziveis'
       }
@@ -245,7 +245,7 @@ export const router = createRouter({
     {
       path: '/produziveis/:id',
       component: ManagementPage,
-      props: route => ({ section: 'produziveis', produciblePage: 'detail', producibleId: String(route.params.id) }),
+      props: route => ({ section: 'produziveis', produciblePage: 'detail', producibleId: String(route.params.id), apiRequest: authenticatedFetch }),
       meta: {
         sectionLabel: 'Gestão', label: 'Item produzível', parentLabel: 'Produzíveis', parentHref: '/produziveis'
       }

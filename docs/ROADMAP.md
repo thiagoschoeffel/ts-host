@@ -153,6 +153,8 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 
 ### E11 — Integrar Catálogo, Produzíveis e Cardápios
 
+**Estado:** em andamento em 5 de setembro de 2026; implementação e validações concluídas, aguardando integração dos pull requests.
+
 **Resultado esperado:** estabelecer fontes autoritativas para o que pode ser produzido e vendido em cada dia.
 
 **Inclui:** Ofertas, escolhas, adicionais, tipos de componente, Itens Produzíveis e versões de composição; Cardápio diário; publicação e disponibilidade; planejamento semanal e derivação de rascunhos; importação com validação e relatório de erros.

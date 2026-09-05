@@ -57,6 +57,7 @@ declare module 'moduleCommercial/CommercialPage' {
     planId?: string
     financialPage?: 'list' | 'charge-detail' | 'new-payment'
     chargeId?: string
+    apiRequest?: (path: string, init?: RequestInit) => Promise<Response>
   }>
   export default component
 }
