@@ -47,7 +47,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 - [x] **E12 — Integrar Clientes, Planos, Créditos e Financeiro**
 - [x] **E13 — Integrar Entregadores e Entregas**
 - [ ] **E14 — Integrar Atendimento e WhatsApp oficial**
-- [ ] **E15 — Consolidar observabilidade, qualidade e deploy da V1**
+- [x] **E15 — Consolidar observabilidade, qualidade e deploy da V1**
 
 ## Épicos
 
@@ -193,7 +193,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 
 ### E15 — Consolidar observabilidade, qualidade e deploy da V1
 
-**Estado:** em andamento; implementação e validações concluídas localmente, aguardando versionamento e integração. O avanço ocorreu por autorização explícita enquanto a homologação externa do E14 permanece pendente.
+**Estado:** concluído em 5 de setembro de 2026 por autorização explícita para avançar enquanto a homologação externa do E14 permanece pendente.
 
 **Resultado esperado:** tornar o conjunto operável, diagnosticável e publicável com segurança.
 
