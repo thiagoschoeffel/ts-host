@@ -45,7 +45,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 - [x] **E10 — Integrar Produção, Embalagem e impressão Zebra**
 - [x] **E11 — Integrar Catálogo, Produzíveis e Cardápios**
 - [x] **E12 — Integrar Clientes, Planos, Créditos e Financeiro**
-- [ ] **E13 — Integrar Entregadores e Entregas**
+- [x] **E13 — Integrar Entregadores e Entregas**
 - [ ] **E14 — Integrar Atendimento e WhatsApp oficial**
 - [ ] **E15 — Consolidar observabilidade, qualidade e deploy da V1**
 
@@ -133,7 +133,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 
 ### E09 — Integrar Pedidos e Capacidade à API
 
-**Estado:** em andamento; implementação e validações concluídas, aguardando autorização explícita para commits, push e integração dos pull requests.
+**Estado:** concluído em 5 de setembro de 2026.
 
 **Resultado esperado:** tornar criação, edição, confirmação, detalhe e capacidade do Pedido fluxos reais.
 
