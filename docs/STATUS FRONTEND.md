@@ -1,6 +1,6 @@
 # Status frontend — Sabor Santè
 
-Atualizado em 4 de setembro de 2026 após a consolidação demonstrativa das jornadas V1, a regressão integrada desktop/mobile, a retomada da API e a implementação de sua fundação SaaS multi-tenant.
+Atualizado em 4 de setembro de 2026 após a consolidação demonstrativa das jornadas V1 e a conclusão dos épicos E02–E05 da API autoritativa.
 
 Este arquivo registra o estado verificado, as lacunas e a sequência recomendada de evolução. As regras permanentes continuam pertencendo aos três documentos de referência.
 
@@ -10,7 +10,7 @@ O frontend já é um **protótipo funcional amplo**: shell, três remotes, desig
 
 **Marco formal:** esta linha de base está consolidada para orientar os casos de uso autoritativos da API. Melhorias posteriores de bundle, CI, testes, contratos federados, navegação e refinamentos de UX continuam planejadas, mas não bloqueiam mais o backend nem transformam interfaces de mock em DTOs.
 
-Ele ainda **não está pronto para operar com dados reais**. A maior parte do comportamento de negócio usa mocks, stores locais, `localStorage` e atrasos simulados. A API já possui a primeira fatia autoritativa de congelados e a fundação multi-tenant, mas ainda não está integrada aos remotes e não cobre o domínio completo. Autenticação real, autorização, transações dos demais fluxos, concorrência, observabilidade e CI nos aplicativos permanecem incompletos.
+Ele ainda **não está pronto para operar com dados reais**. A maior parte do comportamento de negócio usa mocks, stores locais, `localStorage` e atrasos simulados. A API já possui a fundação multi-tenant, Congelados autoritativos e a transação completa de confirmação do Pedido, mas ainda não está integrada aos remotes e não cobre o domínio completo. Autenticação real, autorização, cancelamento, reagendamento, reversões, transações dos demais fluxos, observabilidade e CI nos aplicativos permanecem incompletos.
 
 A principal ampliação de escopo é **Congelados**. O frontend já possui consulta, entrada de produção, detalhe e movimentações do lote, ajuste/descarte e impressão/reimpressão de etiquetas de produto pelo navegador no módulo de Gestão. Em Operação, o Pedido aceita itens mistos, confere saldo vendável, prevê e registra alocação FEFO, representa o estorno conforme o estágio, mantém congelados fora da Produção diária e conclui a Embalagem com etiquetas individuais da produção do dia e etiqueta externa do pacote kraft. A integração do frontend com a persistência autoritativa e a integração Zebra/ZPL continuam pendentes. A topologia atual comporta a mudança sem criar outro remote nem um catálogo comercial paralelo:
 
@@ -45,9 +45,9 @@ ts-host
 | Rotas e breadcrumbs | Implementado | O host é o único proprietário do Vue Router e das URLs públicas |
 | Navegação SPA | Parcial | Ações programáticas dos remotes usam a bridge do host, com fallback quando executadas isoladamente; links internos semânticos ainda dependem da interceptação global |
 | Contratos federados | Parcial | Fachadas pequenas e declarações manuais no host; geração de tipos permanece desabilitada (`dts: false`) |
-| Design system | Implementado | `ts-components` 0.7.4 está alinhado nos quatro consumidores e possui componentes, ícones e Storybook |
+| Design system | Implementado | `ts-components` 0.7.8 está alinhado nos quatro consumidores e possui componentes, ícones e Storybook |
 | Padrões do Guia UI | Parcial | Páginas recentes seguem os padrões principais; cenários determinísticos e estados completos ainda não são uniformes em toda tela antiga |
-| API de negócio | Parcial | A API possui PostgreSQL, fundação SaaS multi-tenant, primeira fatia autoritativa de congelados e confirmação transacional de Pedido com capacidade, cobrança e FEFO; os remotes ainda não estão integrados e créditos, composição, restrições e o domínio completo permanecem pendentes |
+| API de negócio | Parcial | A API possui PostgreSQL, fundação SaaS multi-tenant, Congelados autoritativos e confirmação transacional do Pedido com capacidade, FEFO, composição versionada, restrições alimentares, créditos de plano por FIFO, crédito financeiro, cobrança e auditoria; os remotes ainda não estão integrados e cancelamento, reagendamento, reversões e o restante do domínio permanecem pendentes |
 | Autenticação e autorização | Pendente | A API resolve o tenant por claim autenticada e bloqueia contexto ausente fora de desenvolvimento, mas o provedor de identidade, a sessão real e as políticas por ação/recurso ainda não existem |
 | Testes automatizados | Parcial | Management possui testes da validade civil de congelados; ainda faltam suítes de componente, contrato, integração e E2E nos fluxos críticos |
 | CI dos aplicativos | Pendente | Apenas `ts-components` possui workflow, voltado à publicação; falta pipeline de qualidade dos aplicativos |
@@ -63,18 +63,18 @@ ts-host
 | --- | --- | --- | --- |
 | Hoje | Protótipo funcional | Dashboard operacional e estado demonstrativo de sincronização | Dados reais e consolidação pela API |
 | Atendimento / WhatsApp | Protótipo funcional | Caixa de entrada responsiva, skeletons estruturais, histórico sanitizado, alternância Automação/Humano, envio manual, falha com retentativa idempotente, entrada no Pedido aberto e acompanhamento demonstrativo da franquia mensal | Integração oficial, webhook, persistência e controle autoritativos da franquia, processamento sequencial e sincronização com o aplicativo WhatsApp |
-| Pedidos | Protótipo funcional | Lista, criação, edição, detalhe, confirmação, cancelamento e reagendamento simulados | `ConfirmarPedido` autoritativo, capacidade, estoque congelado, créditos e financeiro em uma transação |
-| Capacidade | Protótipo funcional | O formulário projeta apenas refeições da produção diária sem reservá-las; a confirmação valida e reserva, o cancelamento anterior à produção libera e o painel Hoje reflete o saldo demonstrativo. Há cenários determinísticos de esgotamento e conflito concorrente | Reserva, liberação e concorrência autoritativas na API |
+| Pedidos | Protótipo funcional | Lista, criação, edição, detalhe, confirmação, cancelamento e reagendamento simulados | Integrar criação, edição e confirmação autoritativas; implementar e integrar cancelamento, reagendamento e reversões |
+| Capacidade | Protótipo funcional | O formulário projeta apenas refeições da produção diária sem reservá-las; a confirmação valida e reserva, o cancelamento anterior à produção libera e o painel Hoje reflete o saldo demonstrativo. Há cenários determinísticos de esgotamento e conflito concorrente | Integrar configuração, consulta e reserva autoritativas; implementar liberação e reagendamento na API |
 | Produção diária | Protótipo funcional | Consulta agregada a partir de pedidos demonstrativos | API baseada apenas em pedidos confirmados; manter congelados fora dessa apuração |
 | Embalagem | Protótipo funcional | Fila e conferência visual distinguem itens do dia e congelados já etiquetados; “Embalado” persiste snapshots e abre as etiquetas necessárias; reimpressão seletiva mantém status e estoque independentes | Persistência autoritativa e adapter Zebra/ZPL |
 | Entregas | Protótipo funcional | Rotas, paradas, tentativas, falhas, reagendamento e folha de rota | Persistência, auditoria, validações de transição e integração com Pedido/entregadores reais |
 | Clientes | Protótipo funcional | Lista, detalhe, cadastro, endereços, preferências, restrições e observações | Fonte única com Pedidos e persistência segura na API |
 | Catálogo / Ofertas | Protótipo funcional | Ofertas, componentes, escolhas, adicionais e tipos de componente | API, contratos definitivos e vínculo real com cardápio/pedido |
-| Produzíveis / Composições | Protótipo funcional | Cadastro, detalhe e versões de composição | Persistência autoritativa e uso histórico integrado na confirmação |
+| Produzíveis / Composições | Protótipo funcional | Cadastro, detalhe e versões de composição | Integrar a composição versionada já usada como snapshot pela confirmação e completar sua gestão autoritativa |
 | Cardápio diário | Protótipo funcional | Calendário, criação/edição, publicação, disponibilidade e importação por planilha demonstrativa | API e integração autoritativa com catálogo e Pedido |
 | Planejamento semanal | Protótipo funcional | Grade compacta com autocomplete para selecionar dias e resolver as três categorias, escolha e ordenação de ofertas, salvamento da intenção e derivação de novos cardápios diários em rascunho sem substituir dias existentes | Persistência autoritativa, comunicação externa do plano e integração com preparação/compra |
-| Planos e Créditos | Protótipo funcional | Planos, aquisições, saldos, movimentações e estorno demonstrativos | FIFO e consumo/estorno autoritativos na confirmação/cancelamento do Pedido |
-| Financeiro | Protótipo funcional | Cobranças, pagamentos, alocações, saldos e crédito financeiro demonstrativos | Origem na confirmação, efeitos de cancelamento e transação na API |
+| Planos e Créditos | Protótipo funcional | Planos, aquisições, saldos, movimentações e estorno demonstrativos | Integrar consumo FIFO autoritativo da confirmação; completar gestão, consultas e estornos do cancelamento |
+| Financeiro | Protótipo funcional | Cobranças, pagamentos, alocações, saldos e crédito financeiro demonstrativos | Integrar cobrança e crédito financeiro autoritativos da confirmação; completar pagamentos, consultas e reversões do cancelamento |
 | Entregadores | Protótipo funcional | Lista e cadastro demonstrativos | Fonte única para preferência, atribuição e tentativa real |
 | Usuários | Protótipo funcional | Lista e cadastro de perfis/status | Identidade, sessão, autorização por ação/recurso e auditoria confiável |
 
@@ -186,9 +186,9 @@ A Embalagem agora representa o conjunto físico completo de etiquetas por meio d
 - modelar contratos por caso de uso a partir do estudo de caso e das jornadas consolidadas;
 - fundação SaaS multi-tenant concluída na API, com Organização, associação de usuários, isolamento automático de leitura e escrita, restrições compostas e migration dos dados existentes para o tenant Sabor Santè;
 - persistência PostgreSQL, migrations e idempotência da primeira fatia de congelados concluídas; autenticação real, autorização e auditoria permanecem pendentes;
-- primeira fatia de `ConfirmarPedido` concluída com status, versão otimista, capacidade diária, cobrança, transação serializável, idempotência e estoque congelado;
-- FEFO, validade, movimentos e alocações por PedidoItem implementados como regras autoritativas; criação pública do Pedido e configuração da capacidade são a próxima fatia;
-- incorporar créditos de plano, crédito financeiro, composição e restrições à mesma transação de confirmação;
+- criação, edição e consulta públicas do Pedido, além da configuração e consulta da capacidade diária, concluídas;
+- `ConfirmarPedido` concluído com status, versão otimista, capacidade diária, FEFO, estoque congelado, composição versionada, restrições alimentares, créditos de plano por FIFO, crédito financeiro, cobrança, auditoria, transação serializável e idempotência;
+- implementar cancelamento, reagendamento e reversões como a próxima fatia autoritativa;
 - substituir gradualmente os adapters locais dos remotes pela comunicação com a API;
 - adicionar telemetria e correlação de requests na integração real.
 
@@ -199,7 +199,7 @@ A Embalagem agora representa o conjunto físico completo de etiquetas por meio d
 3. Atendimento / WhatsApp — primeira jornada concluída no escopo demonstrativo.
 4. Planejamento semanal, Capacidade, Financeiro, Planos/Créditos, Clientes e Entregadores — consolidados como linha de base demonstrativa.
 5. Frontend formalmente consolidado em 4 de setembro de 2026; evoluções técnicas seguem como trabalho posterior não bloqueante.
-6. Retomar a API e realizar a integração autoritativa — em andamento.
+6. API autoritativa concluída até o E05; E06, cancelamento, reagendamento e reversões, é a próxima entrega antes da integração dos remotes.
 
 ## Não promover a arquitetura definitiva
 

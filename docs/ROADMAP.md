@@ -34,7 +34,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 - [x] **E02 — Estabelecer a API, o SaaS multi-tenant e Congelados autoritativos**
 - [x] **E03 — Concluir e publicar a primeira confirmação autoritativa de Pedido**
 - [x] **E04 — Criar Pedido aberto e configurar capacidade diária**
-- [ ] **E05 — Completar a transação de confirmação do Pedido**
+- [x] **E05 — Completar a transação de confirmação do Pedido**
 - [ ] **E06 — Implementar cancelamento, reagendamento e reversões**
 - [ ] **E07 — Estabelecer identidade, autorização e auditoria**
 - [ ] **E08 — Integrar a Gestão de Congelados à API**
@@ -89,6 +89,8 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 **Aceite:** criar um Pedido aberto válido somente com referências autoritativas; editar sem sobrescrever versão concorrente; rejeitar configuração congelada inválida; configurar capacidade sem duplicidade por Organização/data; consultar saldo coerente; confirmar o Pedido usando apenas APIs públicas; migration, testes de aplicação/integração, build, documentação, commits e push verdes.
 
 ### E05 — Completar a transação de confirmação do Pedido
+
+**Estado:** concluído em 4 de setembro de 2026.
 
 **Resultado esperado:** fazer `ConfirmarPedido` consolidar todas as invariantes comerciais e operacionais previstas para a V1 em uma única transação conceitual.
 
