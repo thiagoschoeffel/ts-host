@@ -5,7 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 4173",
-    "build": "vue-tsc --noEmit && vite build"
+    "build": "vue-tsc --noEmit && vite build",
+    "check:bundle": "node scripts/check-bundle-budget.mjs",
+    "verify:deployment": "node scripts/verify-deployment.mjs",
+    "ci": "npm run build && npm run check:bundle"
+  },
+  "bundleBudget": {
+    "js": { "bytes": 1800000, "gzipBytes": 450000 },
+    "css": { "bytes": 100000, "gzipBytes": 20000 },
+    "remoteEntry": { "bytes": 25000, "gzipBytes": 8000 }
   },
   "dependencies": {
     "@thiagoschoeffel/ts-components": "^0.7.8",

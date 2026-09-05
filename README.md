@@ -69,3 +69,11 @@ available and falls back to the browser otherwise.
 
 Em produção, configure as URLs publicadas dos remotes pelas variáveis de
 ambiente; não é necessário alterar o código-fonte.
+
+## Operação da V1
+
+O build bloqueia regressões de tamanho com `npm run check:bundle`. Os remotes e
+o design system usam versões singleton estritas; falhas federadas são
+apresentadas ao usuário e enviadas à captura central de erros. Deploy, cache de
+`remoteEntry.js`, correlação, métricas e rollback estão definidos em
+[docs/OPERACAO_V1.md](docs/OPERACAO_V1.md).

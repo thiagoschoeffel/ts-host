@@ -3,6 +3,11 @@ import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig, loadEnv } from 'vite'
 
+const sharedDependencies = {
+  vue: { singleton: true, requiredVersion: '^3.5.42', strictVersion: true },
+  '@thiagoschoeffel/ts-components': { singleton: true, requiredVersion: '^0.7.8', strictVersion: true },
+}
+
 function remoteEntry(value: string | undefined, fallback: string, name: string) {
   const entry = value || fallback
   const url = new URL(entry)
@@ -45,7 +50,7 @@ export default defineConfig(({ mode }) => {
       // The host already declares the remote module in src/env.d.ts.
       // Disabled here to keep this example concise.
       dts: false,
-      shared: ['vue']
+      shared: sharedDependencies
     })
   ]
   }

@@ -650,7 +650,8 @@ Não foi possível carregar este módulo
 
 O retry atual recarrega a página.
 
-Esse comportamento deve ser preservado e posteriormente conectado a observabilidade.
+Esse comportamento é preservado e conectado à captura autenticada de erros do
+host, com origem `router.remote-load` e correlação criada no cliente.
 
 Não apresentar tela vazia quando `remoteEntry.js` falhar.
 
@@ -1282,12 +1283,15 @@ Deploy precisa considerar:
 - compatibilidade host/remote.
 
 `remoteEntry.js` deve permitir descoberta da versão corrente sem cache indefinido incompatível.
+O contrato executável de cache, promoção e rollback está em `OPERACAO_V1.md`.
 
 ---
 
 # 47. Compatibilidade host/remote
 
-Hoje não existe negociação formal de versão.
+Vue e `@thiagoschoeffel/ts-components` são dependências singleton com versão
+obrigatória estrita. O host fornece o design system e uma divergência falha de
+forma detectável no carregamento do remote.
 
 Compatibilidade depende de:
 
@@ -1304,6 +1308,9 @@ Mudanças incompatíveis exigem:
 
 - backward compatibility; ou
 - deploy coordenado.
+
+Os remotes geram `@mf-types.zip` no build a partir dos props expostos. O CI
+publica esses tipos junto do artefato imutável e bloqueia falha de geração.
 
 ---
 
@@ -1542,9 +1549,9 @@ Convergir para um contrato SPA único.
 
 ## 55.2. Tipos federados
 
-`dts: false` exige manutenção manual do contrato no host.
-
-Avaliar geração quando a API federada crescer.
+Os três remotes geram declarações federadas a partir de interfaces de props
+exportadas. O host conserva declarações locais para build independente; revisão
+de contrato deve comparar essas declarações com `@mf-types.zip` do artefato.
 
 ## 55.3. Estado demonstrativo duplicado
 
@@ -1552,7 +1559,9 @@ Clientes, Planos e Financeiro usam um adapter HTTP autenticado e a fonte autorit
 
 ## 55.4. Testes
 
-Cobertura automatizada ainda é insuficiente.
+Testes de domínio, adapters e API são executados pelos workflows independentes.
+A matriz integrada desktop/mobile e a ordem de CSS fazem parte do gate de
+promoção documentado em `OPERACAO_V1.md`.
 
 ## 55.5. Backend
 
@@ -1571,6 +1580,10 @@ Não registrar como dívida itens já resolvidos:
 ✅ foco visível existe no shell
 ✅ Commercial e Management são remotes reais
 ✅ ts-components está alinhado em 0.7.8 nos consumidores consultados
+✅ tipos federados são gerados pelos três remotes
+✅ versões compartilhadas incompatíveis falham no runtime
+✅ CI e budgets de bundle são independentes por repositório
+✅ correlação, logs JSON, captura de erros, métricas e health checks estão ativos
 ```
 
 Documentação futura deve verificar o código antes de repetir uma dívida histórica.

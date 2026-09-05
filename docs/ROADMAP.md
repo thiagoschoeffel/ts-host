@@ -47,7 +47,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 - [x] **E12 — Integrar Clientes, Planos, Créditos e Financeiro**
 - [x] **E13 — Integrar Entregadores e Entregas**
 - [ ] **E14 — Integrar Atendimento e WhatsApp oficial**
-- [ ] **E15 — Consolidar observabilidade, qualidade e deploy da V1**
+- [x] **E15 — Consolidar observabilidade, qualidade e deploy da V1**
 
 ## Épicos
 
@@ -192,6 +192,8 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 **Aceite:** mensagens duplicadas não geram efeitos duplicados; ordem por conversa é preservada; falhas são recuperáveis; opt-in, privacidade e limites do provedor estão documentados; segredo não chega ao frontend; testes com sandbox do provedor, builds, documentação, commits e push verdes.
 
 ### E15 — Consolidar observabilidade, qualidade e deploy da V1
+
+**Estado:** concluído em 5 de setembro de 2026 por autorização explícita para avançar enquanto a homologação externa do E14 permanece pendente.
 
 **Resultado esperado:** tornar o conjunto operável, diagnosticável e publicável com segurança.
 
