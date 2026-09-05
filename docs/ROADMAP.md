@@ -43,7 +43,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 - [x] **E08 — Integrar a Gestão de Congelados à API**
 - [x] **E09 — Integrar Pedidos e Capacidade à API**
 - [x] **E10 — Integrar Produção, Embalagem e impressão Zebra**
-- [ ] **E11 — Integrar Catálogo, Produzíveis e Cardápios**
+- [x] **E11 — Integrar Catálogo, Produzíveis e Cardápios**
 - [ ] **E12 — Integrar Clientes, Planos, Créditos e Financeiro**
 - [ ] **E13 — Integrar Entregadores e Entregas**
 - [ ] **E14 — Integrar Atendimento e WhatsApp oficial**
@@ -153,7 +153,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 
 ### E11 — Integrar Catálogo, Produzíveis e Cardápios
 
-**Estado:** em andamento em 5 de setembro de 2026; implementação e validações concluídas, aguardando integração dos pull requests.
+**Estado:** concluído em 5 de setembro de 2026.
 
 **Resultado esperado:** estabelecer fontes autoritativas para o que pode ser produzido e vendido em cada dia.
 
