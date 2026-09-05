@@ -1,6 +1,7 @@
 # Status frontend — Sabor Santè
 
-Atualizado em 4 de setembro de 2026 após a consolidação demonstrativa das jornadas V1 e a conclusão dos épicos E02–E05 da API autoritativa.
+Atualizado em 5 de setembro de 2026 após a conclusão dos épicos E02–E09 e a
+integração autoritativa de Congelados, Pedidos e capacidade.
 
 Este arquivo registra o estado verificado, as lacunas e a sequência recomendada de evolução. As regras permanentes continuam pertencendo aos três documentos de referência.
 
@@ -49,11 +50,11 @@ ts-host
 | Padrões do Guia UI | Parcial | Páginas recentes seguem os padrões principais; cenários determinísticos e estados completos ainda não são uniformes em toda tela antiga |
 | API de negócio | Parcial | A API possui PostgreSQL, fundação SaaS multi-tenant, ciclo transacional do Pedido até cancelamento/reagendamento e identidade/autorização reais; Gestão de Congelados e Operação de Pedidos/capacidade já estão integradas |
 | Autenticação e autorização | Implementado | Keycloak/OIDC com PKCE no shell, JWT na API, sessão validada, associação e papel por Organização, seleção revalidada no servidor e autoria derivada da identidade |
-| Testes automatizados | Parcial | Management possui testes da validade civil de congelados; ainda faltam suítes de componente, contrato, integração e E2E nos fluxos críticos |
+| Testes automatizados | Parcial | Management testa o adapter de Congelados, Operation testa regras de domínio e o adapter de Pedidos, e a API possui suíte unitária/aplicacional; ainda faltam suítes de componente, contrato integrado e E2E nos fluxos críticos |
 | CI dos aplicativos | Pendente | Apenas `ts-components` possui workflow, voltado à publicação; falta pipeline de qualidade dos aplicativos |
 | Observabilidade | Parcial | A API propaga `X-Correlation-Id` e o preserva na auditoria crítica; captura central de erros, logs e métricas ponta a ponta permanecem para o E15 |
 | Compatibilidade de deploy | Parcial | Builds e URLs independentes existem; não há negociação formal de versão host/remote |
-| Desempenho de bundles | Parcial | Os cinco builds passam, mas Operation e Commercial emitem aviso de chunks acima de 500 kB |
+| Desempenho de bundles | Parcial | Os cinco builds passam; host e os três remotes emitem aviso de chunks acima de 500 kB, e o bundle não comprimido de `ts-components` também ultrapassa esse patamar |
 
 ## Estado funcional por domínio
 
@@ -61,7 +62,7 @@ ts-host
 
 | Área | Estado | O que existe hoje | O que falta para a V1 |
 | --- | --- | --- | --- |
-| Hoje | Protótipo funcional | Dashboard operacional e estado demonstrativo de sincronização | Dados reais e consolidação pela API |
+| Hoje | Parcial | Contagem de Pedidos e capacidade diária vêm da API; os demais cards e detalhes operacionais ainda são demonstrativos | Derivar todo o painel dos fluxos autoritativos de Produção, Embalagem e Entregas |
 | Atendimento / WhatsApp | Protótipo funcional | Caixa de entrada responsiva, skeletons estruturais, histórico sanitizado, alternância Automação/Humano, envio manual, falha com retentativa idempotente, entrada no Pedido aberto e acompanhamento demonstrativo da franquia mensal | Integração oficial, webhook, persistência e controle autoritativos da franquia, processamento sequencial e sincronização com o aplicativo WhatsApp |
 | Pedidos | Integrado | Lista, criação, edição, detalhe, confirmação, cancelamento e reagendamento usam API autenticada, versão otimista e idempotência; detalhe apresenta efeitos históricos | Integrar cadastro autoritativo de clientes/ofertas nos E11/E12 e derivar Produção/Embalagem nos épicos seguintes |
 | Capacidade | Integrado | Formulário e painel Hoje consultam o saldo por data; a projeção não reserva, enquanto confirmação, cancelamento e reagendamento aplicam a regra autoritativa e concorrente na API | A configuração administrativa dedicada pode ser refinada junto das evoluções operacionais futuras |
@@ -84,11 +85,11 @@ A frente foi iniciada em `/congelados`, dentro de Gestão, e já alcança o cicl
 
 | Entrega | Estado | Repositório principal | Dependências |
 | --- | --- | --- | --- |
-| Configuração de congelado | Protótipo funcional | `ts-module-management` | Habilitação, edição, inativação e reativação demonstrativas referenciam diretamente o Item Produzível, preservam o histórico e definem apresentação e preço variável sem duplicar uma Oferta por preparação; falta persistência autoritativa |
-| Estoque com tabs Estoque/Produtos habilitados/Vencimentos | Protótipo funcional | `ts-module-management` | Consulta responsiva, busca, estados visuais e ordenação FEFO dos vencimentos; falta fonte autoritativa |
-| Entrada de produção congelada | Protótipo funcional | `ts-module-management` | Rota e formulário selecionam configuração ativa, calculam 90 dias corridos e criam lote + `EntradaProducao` juntos no estado da sessão; após salvar, oferecem impressão sem acoplá-la ao estoque |
-| Detalhe do lote e movimentações | Protótipo funcional | `ts-module-management` | Resumo, responsável, motivo, saldo resultante e histórico demonstrativo; falta fonte autoritativa |
-| Ajuste e descarte | Protótipo funcional | `ts-module-management` | Comandos demonstrativos exigem quantidade, motivo e responsável, preservam movimentos e impedem saldo negativo; falta persistência autoritativa |
+| Configuração de congelado | Integrado | `ts-module-management` + `ts-api` | Habilitação, edição, inativação e reativação usam a API autenticada e referenciam diretamente Oferta e Item Produzível autoritativos |
+| Estoque com tabs Estoque/Produtos habilitados/Vencimentos | Integrado | `ts-module-management` + `ts-api` | Saldo vendável, saldo físico, lotes e vencimentos vêm das consultas tenant-aware da API |
+| Entrada de produção congelada | Integrado | `ts-module-management` + `ts-api` | A API calcula a validade civil e cria lote + `EntradaProducao` atomicamente; a impressão continua independente do estoque |
+| Detalhe do lote e movimentações | Integrado | `ts-module-management` + `ts-api` | Resumo, saldos e movimentos são persistidos; o histórico autoritativo de tentativas de impressão entra no E10 |
+| Ajuste e descarte | Integrado | `ts-module-management` + `ts-api` | Comandos autenticados, auditáveis e idempotentes preservam movimentos e impedem saldo negativo |
 | Etiqueta de produto 100 × 50 mm | Protótipo funcional | `ts-module-management` | Preview 2:1, quantidade independente do estoque, estados de progresso/erro e serviço com adapter de impressão do navegador; integração Zebra/ZPL permanece pendente |
 | Reimpressão de produto | Protótipo funcional | `ts-module-management` | Reutiliza snapshot histórico do lote, registra tentativas e não altera estoque; falta integração com o adapter Zebra/ZPL |
 | Congelados no Pedido | Integrado | `ts-module-operation` + `ts-api` | Configurações e saldo vendável vêm da API; confirmação faz alocação FEFO e o detalhe apresenta os lotes persistidos |
@@ -109,7 +110,7 @@ A frente foi iniciada em `/congelados`, dentro de Gestão, e já alcança o cicl
 
 ## Sequência obrigatória do que vem a seguir
 
-O planejamento executável por épicos, seus critérios de aceite e a regra de entrega por *one-shot* estão em [`ROADMAP.md`](./ROADMAP.md). Um épico somente é considerado concluído depois das validações, commits e push de todos os repositórios afetados.
+O planejamento executável por épicos, seus critérios de aceite e a regra de entrega por *one-shot* estão em [`ROADMAP.md`](./ROADMAP.md). Um épico somente é considerado concluído depois das validações, commits, pull requests integrados e retorno dos repositórios afetados à `main` atualizada.
 
 Regra de projeto aplicada: a API só seria retomada depois da consolidação formal do frontend. Esse marco foi concluído em 4 de setembro de 2026 e a implementação autoritativa já está em andamento. Os mocks, fixtures e adapters locais continuam servindo como referência de experiência, sem se tornarem automaticamente DTOs ou modelos de persistência.
 
@@ -120,9 +121,11 @@ Regra de projeto aplicada: a API só seria retomada depois da consolidação for
 - conteúdo operacional das etiquetas e destino Zebra/ZPL confirmados;
 - seleção concreta do adapter de impressão transferida para descoberta técnica do ambiente.
 
-### 1. Consolidar Congelados em Gestão no frontend — concluído no escopo demonstrativo
+### 1. Consolidar e integrar Congelados em Gestão — concluído no E08
 
-A jornada navegável de Gestão está consolidada com adapters e estado de sessão locais. Persistência real e integração Zebra/ZPL permanecem deliberadamente fora desta etapa e não impedem o início do passo 2.
+A jornada navegável de Gestão foi preservada e seu adapter passou a usar a API
+autenticada. Configurações, estoque, validade, entrada, lote, ajuste e descarte
+são autoritativos; impressão física e histórico de tentativas permanecem no E10.
 
 - adicionar contrato federado, rotas e navegação;
 - implementar Produtos habilitados, Estoque e Vencimentos;
@@ -130,18 +133,21 @@ A jornada navegável de Gestão está consolidada com adapters e estado de sess�
 - implementar entrada, lote, movimentos, ajuste e descarte;
 - persistir snapshot e histórico de impressão para permitir reimpressão da etiqueta no detalhe do lote;
 - consolidar estados de loading, vazio, sem resultados, erro, sucesso e responsividade;
-- validar o fluxo de impressão e preparar um adapter local substituível, sem iniciar integração backend.
+- validar o fluxo de impressão e manter o adapter substituível para a integração do E10.
 
-Mocks e stores desta fase existem para validar UX. Devem permanecer simples, encapsulados por adapters locais quando necessário e não podem ser tratados como contratos definitivos da API.
+Mocks remanescentes em outras áreas continuam apenas como referência de UX e não
+podem ser tratados como contratos definitivos da API.
 
-### 2. Consolidar Congelados no ciclo do Pedido — concluído no escopo demonstrativo
+### 2. Integrar Congelados no ciclo do Pedido — concluído no E09
 
-O Pedido agora representa a jornada completa de seleção até cancelamento com fixtures e adapter local. A decisão final de concorrência, atomicidade e persistência continua reservada à API.
+O Pedido usa contexto autoritativo para montar itens mistos e delega concorrência,
+atomicidade, FEFO, reserva e reversões à API. Fixtures antigas permanecem somente
+nas páginas operacionais ainda não integradas.
 
 - permitir que a Oferta genérica de Congelados receba uma configuração disponível e que o Pedido tenha itens mistos;
-- representar disponibilidade vendável sem contar lotes vencidos nos cenários demonstrativos;
-- representar alocação FEFO, saída e estorno nos fluxos e estados da interface;
-- estornar apenas conforme a regra operacional validada;
+- consultar disponibilidade vendável sem contar lotes vencidos;
+- apresentar alocação FEFO, saída e estorno persistidos pela API;
+- estornar somente conforme a regra operacional autoritativa;
 - garantir que venda de congelado não entre na Produção diária.
 
 ### 3. Completar Embalagem e etiquetas no frontend — concluído no escopo demonstrativo
@@ -159,8 +165,8 @@ A Embalagem agora representa o conjunto físico completo de etiquetas por meio d
 
 - Atendimento / WhatsApp — primeira jornada demonstrativa concluída, incluindo skeletons estruturais da lista e da conversa; integração oficial e efeitos autoritativos permanecem para a API;
 - planejamento semanal do Cardápio — jornada demonstrativa concluída, preservando a independência de revisão e publicação de cada dia;
-- experiência completa de capacidade — concluída no escopo demonstrativo, incluindo projeção no Pedido aberto, reserva na confirmação, liberação antes da produção e cenários de esgotamento/conflito;
-- jornadas demonstrativas de Financeiro, Planos/Créditos e cancelamento consolidadas como referência funcional; efeitos autoritativos pertencem à API;
+- experiência de capacidade integrada à API, incluindo projeção no Pedido aberto, reserva na confirmação, liberação antes da produção e conflitos concorrentes;
+- telas de Financeiro e Planos/Créditos permanecem demonstrativas; confirmação e cancelamento de Pedido já persistem seus efeitos autoritativos na API;
 - Clientes e Entregadores possuem interfaces consolidadas; a fonte única será introduzida pela integração com a API.
 
 ### 5. Evoluir tecnicamente o frontend — trabalho posterior não bloqueante
@@ -190,7 +196,8 @@ A Embalagem agora representa o conjunto físico completo de etiquetas por meio d
 - `ConfirmarPedido` concluído com status, versão otimista, capacidade diária, FEFO, estoque congelado, composição versionada, restrições alimentares, créditos de plano por FIFO, crédito financeiro, cobrança, auditoria, transação serializável e idempotência;
 - cancelamento, reagendamento e reversões autoritativos concluídos;
 - identidade Keycloak/OIDC, sessão do shell, autorização por associação/papel e auditoria correlacionada concluídas;
-- substituir gradualmente os adapters locais dos remotes pela comunicação com a API;
+- integração de Congelados em Gestão e de Pedidos/capacidade em Operação concluída;
+- substituir gradualmente os adapters locais restantes pela comunicação com a API;
 - adicionar telemetria e correlação de requests na integração real.
 
 ## Prioridade consolidada
@@ -200,7 +207,7 @@ A Embalagem agora representa o conjunto físico completo de etiquetas por meio d
 3. Atendimento / WhatsApp — primeira jornada concluída no escopo demonstrativo.
 4. Planejamento semanal, Capacidade, Financeiro, Planos/Créditos, Clientes e Entregadores — consolidados como linha de base demonstrativa.
 5. Frontend formalmente consolidado em 4 de setembro de 2026; evoluções técnicas seguem como trabalho posterior não bloqueante.
-6. API autoritativa concluída até o E07; a integração de Congelados dos remotes é a próxima entrega.
+6. API e frontend integrados até o E09; Produção, Embalagem e impressão Zebra são a próxima entrega (E10).
 
 ## Não promover a arquitetura definitiva
 

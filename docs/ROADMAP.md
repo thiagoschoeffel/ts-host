@@ -1,6 +1,6 @@
 # Roadmap de desenvolvimento — Sabor Santè
 
-Atualizado em 4 de setembro de 2026.
+Atualizado em 5 de setembro de 2026.
 
 Este é o checklist executivo e operacional das próximas evoluções do produto. Cada épico representa uma entrega coesa, planejada para ser executada em um único *one-shot*: compreender o contexto, implementar, validar, documentar, criar os commits e fazer o push de tudo que pertence à evolução.
 
@@ -133,7 +133,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 
 ### E09 — Integrar Pedidos e Capacidade à API
 
-**Estado:** concluído em 4 de setembro de 2026.
+**Estado:** concluído em 5 de setembro de 2026.
 
 **Resultado esperado:** tornar criação, edição, confirmação, detalhe e capacidade do Pedido fluxos reais.
 
