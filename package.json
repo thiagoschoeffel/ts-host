@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@thiagoschoeffel/ts-components": "^0.7.8",
+    "oidc-client-ts": "^3.5.0",
     "vue": "^3.5.42",
     "vue-router": "^4.6.4"
   },

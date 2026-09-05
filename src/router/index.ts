@@ -1,5 +1,6 @@
 import { shallowRef } from 'vue'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+import { hasAuthenticatedSession, initializeAuthentication, takePostAuthenticationPath } from '../auth'
 
 export const remoteLoadError = shallowRef<Error>()
 
@@ -62,6 +63,11 @@ const operationRoutes: RouteRecordRaw[] = [
 export const router = createRouter({
   history: createWebHistory(),
   routes: [
+    {
+      path: '/auth/callback',
+      component: { render: () => null },
+      meta: { label: 'Autenticando' }
+    },
     { path: '/', redirect: '/operacoes/hoje' },
     {
       path: '/operacoes',
@@ -304,8 +310,15 @@ export const router = createRouter({
   ]
 })
 
-router.beforeEach(() => {
+router.beforeEach(async (to) => {
   remoteLoadError.value = undefined
+  await initializeAuthentication()
+  if (!hasAuthenticatedSession())
+    return false
+  const postAuthenticationPath = takePostAuthenticationPath()
+  return to.path === '/auth/callback' && postAuthenticationPath
+    ? postAuthenticationPath
+    : true
 })
 
 router.onError((error) => {

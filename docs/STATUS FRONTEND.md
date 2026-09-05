@@ -47,11 +47,11 @@ ts-host
 | Contratos federados | Parcial | Fachadas pequenas e declarações manuais no host; geração de tipos permanece desabilitada (`dts: false`) |
 | Design system | Implementado | `ts-components` 0.7.8 está alinhado nos quatro consumidores e possui componentes, ícones e Storybook |
 | Padrões do Guia UI | Parcial | Páginas recentes seguem os padrões principais; cenários determinísticos e estados completos ainda não são uniformes em toda tela antiga |
-| API de negócio | Parcial | A API possui PostgreSQL, fundação SaaS multi-tenant, Congelados autoritativos e confirmação transacional do Pedido com capacidade, FEFO, composição versionada, restrições alimentares, créditos de plano por FIFO, crédito financeiro, cobrança e auditoria; os remotes ainda não estão integrados e cancelamento, reagendamento, reversões e o restante do domínio permanecem pendentes |
-| Autenticação e autorização | Pendente | A API resolve o tenant por claim autenticada e bloqueia contexto ausente fora de desenvolvimento, mas o provedor de identidade, a sessão real e as políticas por ação/recurso ainda não existem |
+| API de negócio | Parcial | A API possui PostgreSQL, fundação SaaS multi-tenant, ciclo transacional do Pedido até cancelamento/reagendamento e identidade/autorização reais; os remotes ainda não estão integrados e o restante do domínio permanece pendente |
+| Autenticação e autorização | Implementado | Keycloak/OIDC com PKCE no shell, JWT na API, sessão validada, associação e papel por Organização, seleção revalidada no servidor e autoria derivada da identidade |
 | Testes automatizados | Parcial | Management possui testes da validade civil de congelados; ainda faltam suítes de componente, contrato, integração e E2E nos fluxos críticos |
 | CI dos aplicativos | Pendente | Apenas `ts-components` possui workflow, voltado à publicação; falta pipeline de qualidade dos aplicativos |
-| Observabilidade | Pendente | Sem captura central de erro, telemetria de API/remote ou correlação de requests |
+| Observabilidade | Parcial | A API propaga `X-Correlation-Id` e o preserva na auditoria crítica; captura central de erros, logs e métricas ponta a ponta permanecem para o E15 |
 | Compatibilidade de deploy | Parcial | Builds e URLs independentes existem; não há negociação formal de versão host/remote |
 | Desempenho de bundles | Parcial | Os cinco builds passam, mas Operation e Commercial emitem aviso de chunks acima de 500 kB |
 
@@ -76,7 +76,7 @@ ts-host
 | Planos e Créditos | Protótipo funcional | Planos, aquisições, saldos, movimentações e estorno demonstrativos | Integrar consumo FIFO autoritativo da confirmação; completar gestão, consultas e estornos do cancelamento |
 | Financeiro | Protótipo funcional | Cobranças, pagamentos, alocações, saldos e crédito financeiro demonstrativos | Integrar cobrança e crédito financeiro autoritativos da confirmação; completar pagamentos, consultas e reversões do cancelamento |
 | Entregadores | Protótipo funcional | Lista e cadastro demonstrativos | Fonte única para preferência, atribuição e tentativa real |
-| Usuários | Protótipo funcional | Lista e cadastro de perfis/status | Identidade, sessão, autorização por ação/recurso e auditoria confiável |
+| Usuários | Parcial | Lista e cadastro demonstrativos; identidade, sessão, associação, papéis e auditoria confiável já existem na plataforma/API | Integrar a gestão autoritativa de usuários e associações à tela |
 
 ## Nova frente: Congelados e etiquetas
 
@@ -185,10 +185,11 @@ A Embalagem agora representa o conjunto físico completo de etiquetas por meio d
 - revisar o scaffold existente antes de aproveitá-lo;
 - modelar contratos por caso de uso a partir do estudo de caso e das jornadas consolidadas;
 - fundação SaaS multi-tenant concluída na API, com Organização, associação de usuários, isolamento automático de leitura e escrita, restrições compostas e migration dos dados existentes para o tenant Sabor Santè;
-- persistência PostgreSQL, migrations e idempotência da primeira fatia de congelados concluídas; autenticação real, autorização e auditoria permanecem pendentes;
+- persistência PostgreSQL, migrations e idempotência da primeira fatia de congelados concluídas;
 - criação, edição e consulta públicas do Pedido, além da configuração e consulta da capacidade diária, concluídas;
 - `ConfirmarPedido` concluído com status, versão otimista, capacidade diária, FEFO, estoque congelado, composição versionada, restrições alimentares, créditos de plano por FIFO, crédito financeiro, cobrança, auditoria, transação serializável e idempotência;
-- implementar cancelamento, reagendamento e reversões como a próxima fatia autoritativa;
+- cancelamento, reagendamento e reversões autoritativos concluídos;
+- identidade Keycloak/OIDC, sessão do shell, autorização por associação/papel e auditoria correlacionada concluídas;
 - substituir gradualmente os adapters locais dos remotes pela comunicação com a API;
 - adicionar telemetria e correlação de requests na integração real.
 
@@ -199,7 +200,7 @@ A Embalagem agora representa o conjunto físico completo de etiquetas por meio d
 3. Atendimento / WhatsApp — primeira jornada concluída no escopo demonstrativo.
 4. Planejamento semanal, Capacidade, Financeiro, Planos/Créditos, Clientes e Entregadores — consolidados como linha de base demonstrativa.
 5. Frontend formalmente consolidado em 4 de setembro de 2026; evoluções técnicas seguem como trabalho posterior não bloqueante.
-6. API autoritativa concluída até o E05; E06, cancelamento, reagendamento e reversões, é a próxima entrega antes da integração dos remotes.
+6. API autoritativa concluída até o E07; a integração de Congelados dos remotes é a próxima entrega.
 
 ## Não promover a arquitetura definitiva
 

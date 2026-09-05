@@ -1,6 +1,12 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
+  readonly VITE_API_URL?: string
+  readonly VITE_OIDC_AUTHORITY?: string
+  readonly VITE_OIDC_CLIENT_ID?: string
+}
+
+interface ImportMetaEnv {
   readonly VITE_OPERATION_REMOTE_URL?: string
   readonly VITE_COMMERCIAL_REMOTE_URL?: string
   readonly VITE_MANAGEMENT_REMOTE_URL?: string

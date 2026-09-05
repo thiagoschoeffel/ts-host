@@ -966,13 +966,19 @@ O frontend:
 - não pode usar `OrganizationId` de formulário, query string, `localStorage` ou estado de componente como autoridade de isolamento;
 - não deve adicionar `OrganizationId` arbitrário aos DTOs de negócio para tentar controlar o escopo da API.
 
-A API determina o tenant a partir da identidade autenticada e da Organização ativa validada no servidor. O seletor, a URL ou o subdomínio de Organização permanecem decisões futuras de experiência e não devem ser antecipados enquanto houver apenas uma Organização operacional.
+A API determina o tenant a partir da identidade autenticada e da Organização ativa validada no servidor. O E07 adotou Keycloak/OIDC: o host usa Authorization Code + PKCE e a API valida o JWT para a audiência `ts-api`. O endpoint `/api/session` devolve o usuário de plataforma, a Organização ativa e somente suas associações ativas.
+
+Quando há mais de uma associação, o seletor do header envia `X-Organization-Id` como pedido de troca. O valor permanece apenas em memória, força a remontagem do conteúdo federado e só se torna ativo depois de `/api/session` confirmar a associação no servidor. A claim `organization_id` continua sendo o default emitido pelo provedor; nem claim nem header substituem a verificação da associação persistida.
+
+Papéis iniciais são `Owner`, `Administrator`, `Operator` e `DeliveryDriver`. A API aplica políticas de leitura, operação e administração por endpoint; o frontend pode adequar a apresentação, mas nunca é a fronteira de autorização.
 
 ---
 
 # 33. Auditoria
 
 Ações críticas devem ser auditadas no backend.
+
+A auditoria autoritativa preserva ator derivado do `sub`, Organização, instante UTC, ação, recurso e correlação. `ActorId` não pertence aos payloads HTTP e `X-Correlation-Id` é propagado pela API ou criado pelo servidor quando ausente.
 
 Frontend pode exibir:
 
