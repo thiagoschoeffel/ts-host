@@ -26,6 +26,18 @@ npm run dev
 
 The application runs at http://localhost:4173.
 
+## Authentication
+
+The shell authenticates with an OpenID Connect provider using Authorization Code + PKCE, validates the platform session through the API and keeps tokens in `sessionStorage`. Configure:
+
+```dotenv
+VITE_API_URL=http://localhost:8080
+VITE_OIDC_AUTHORITY=http://localhost:8081/realms/sabor-sante
+VITE_OIDC_CLIENT_ID=ts-host
+```
+
+The local Keycloak realm is provided by `../ts-api/compose.yaml`. The organization selector only requests a change: the API validates the active membership before accepting it, and the shell remounts federated content after a confirmed change.
+
 ## Label printing
 
 The host centralizes the printer configuration used by Packing and Frozen
