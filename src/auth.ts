@@ -16,8 +16,14 @@ export interface Session {
   organizations: SessionOrganization[]
 }
 
-const authority = import.meta.env.VITE_OIDC_AUTHORITY || 'http://localhost:8081/realms/sabor-sante'
-const apiUrl = (import.meta.env.VITE_API_URL || 'http://localhost:8080').replace(/\/$/, '')
+function requiredProductionSetting(name: string, value: string | undefined, developmentFallback: string) {
+  if (value) return value
+  if (import.meta.env.PROD) throw new Error(`${name} é obrigatória em produção.`)
+  return developmentFallback
+}
+
+const authority = requiredProductionSetting('VITE_OIDC_AUTHORITY', import.meta.env.VITE_OIDC_AUTHORITY, 'http://localhost:8081/realms/sabor-sante')
+const apiUrl = requiredProductionSetting('VITE_API_URL', import.meta.env.VITE_API_URL, 'http://localhost:8080').replace(/\/$/, '')
 const redirectUri = `${window.location.origin}/auth/callback`
 const manager = new UserManager({
   authority,
@@ -106,7 +112,13 @@ export async function signOut() {
   await manager.signoutRedirect({ id_token_hint: oidcUser.value?.id_token })
 }
 
-manager.events.addUserLoaded((user) => { oidcUser.value = user })
+manager.events.addUserLoaded((user) => {
+  oidcUser.value = user
+  void loadSession(session.value?.activeOrganizationId).catch((reason) => {
+    session.value = null
+    error.value = reason instanceof Error ? reason.message : 'Não foi possível atualizar a sessão.'
+  })
+})
 manager.events.addUserUnloaded(() => { oidcUser.value = null; session.value = null })
 
 export function useAuthentication() {

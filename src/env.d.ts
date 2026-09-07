@@ -37,10 +37,10 @@ declare module 'moduleOperation/OperationPage' {
   type OperationSection = 'hoje' | 'atendimento' | 'pedidos' | 'producao' | 'embalagem' | 'entregas'
   type OrderPage = 'list' | 'new' | 'detail' | 'edit'
   const component: DefineComponent<{
-    section?: OperationSection
+    section: OperationSection
     orderPage?: OrderPage
     orderId?: string
-    apiRequest?: (path: string, init?: RequestInit) => Promise<Response>
+    apiRequest: (path: string, init?: RequestInit) => Promise<Response>
   }>
   export default component
 }
@@ -48,7 +48,7 @@ declare module 'moduleOperation/OperationPage' {
 declare module 'moduleCommercial/CommercialPage' {
   import type { DefineComponent } from 'vue'
   const component: DefineComponent<{
-    section?: 'clientes' | 'cardapios' | 'planos' | 'financeiro'
+    section: 'clientes' | 'cardapios' | 'planos' | 'financeiro'
     customerPage?: 'list' | 'new' | 'detail' | 'edit'
     customerId?: string
     menuPage?: 'list' | 'planning' | 'new' | 'edit'
@@ -57,7 +57,7 @@ declare module 'moduleCommercial/CommercialPage' {
     planId?: string
     financialPage?: 'list' | 'charge-detail' | 'new-payment'
     chargeId?: string
-    apiRequest?: (path: string, init?: RequestInit) => Promise<Response>
+    apiRequest: (path: string, init?: RequestInit) => Promise<Response>
   }>
   export default component
 }
@@ -65,14 +65,14 @@ declare module 'moduleCommercial/CommercialPage' {
 declare module 'moduleManagement/ManagementPage' {
   import type { DefineComponent } from 'vue'
   const component: DefineComponent<{
-    section?: 'produziveis' | 'catalogo' | 'congelados' | 'entregadores' | 'usuarios'
+    section: 'produziveis' | 'catalogo' | 'congelados' | 'entregadores' | 'usuarios'
     produciblePage?: 'list' | 'new' | 'detail' | 'edit' | 'new-composition-version'
     producibleId?: string
     catalogPage?: 'list' | 'new' | 'detail' | 'edit'
     offerId?: string
     frozenPage?: 'list' | 'entry' | 'lot'
     frozenLotId?: string
-    apiRequest?: (path: string, init?: RequestInit) => Promise<Response>
+    apiRequest: (path: string, init?: RequestInit) => Promise<Response>
     deliveryDriverPage?: 'list' | 'new' | 'edit'
     deliveryDriverId?: string
     userPage?: 'list' | 'new' | 'edit'

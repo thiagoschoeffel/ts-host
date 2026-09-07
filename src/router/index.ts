@@ -60,7 +60,7 @@ const operationRoutes: RouteRecordRaw[] = [
   },
   { path: 'producao', component: OperationPage, props: { section: 'producao', apiRequest: authenticatedFetch }, meta: { label: 'Produção' } },
   { path: 'embalagem', component: OperationPage, props: { section: 'embalagem', apiRequest: authenticatedFetch }, meta: { label: 'Embalagem' } },
-  { path: 'entregas', component: OperationPage, props: { section: 'entregas' }, meta: { label: 'Entregas' } }
+  { path: 'entregas', component: OperationPage, props: { section: 'entregas', apiRequest: authenticatedFetch }, meta: { label: 'Entregas' } }
 ]
 
 export const router = createRouter({
@@ -278,40 +278,44 @@ export const router = createRouter({
     {
       path: '/entregadores',
       component: ManagementPage,
-      props: { section: 'entregadores', deliveryDriverPage: 'list' },
+      props: { section: 'entregadores', deliveryDriverPage: 'list', apiRequest: authenticatedFetch },
       meta: { sectionLabel: 'Gestão', label: 'Entregadores' }
     },
     {
       path: '/entregadores/novo',
       component: ManagementPage,
-      props: { section: 'entregadores', deliveryDriverPage: 'new' },
+      props: { section: 'entregadores', deliveryDriverPage: 'new', apiRequest: authenticatedFetch },
       meta: { sectionLabel: 'Gestão', label: 'Novo entregador', parentLabel: 'Entregadores', parentHref: '/entregadores' }
     },
     {
       path: '/entregadores/:id/editar',
       component: ManagementPage,
-      props: route => ({ section: 'entregadores', deliveryDriverPage: 'edit', deliveryDriverId: String(route.params.id) }),
+      props: route => ({ section: 'entregadores', deliveryDriverPage: 'edit', deliveryDriverId: String(route.params.id), apiRequest: authenticatedFetch }),
       meta: { sectionLabel: 'Gestão', label: 'Editar entregador', parentLabel: 'Entregadores', parentHref: '/entregadores' }
     },
     {
       path: '/usuarios',
       component: ManagementPage,
-      props: { section: 'usuarios', userPage: 'list' },
+      props: { section: 'usuarios', userPage: 'list', apiRequest: authenticatedFetch },
       meta: { sectionLabel: 'Gestão', label: 'Usuários' }
     },
     {
       path: '/usuarios/novo',
       component: ManagementPage,
-      props: { section: 'usuarios', userPage: 'new' },
-      meta: { sectionLabel: 'Gestão', label: 'Novo usuário', parentLabel: 'Usuários', parentHref: '/usuarios' }
+      props: { section: 'usuarios', userPage: 'new', apiRequest: authenticatedFetch },
+      meta: { sectionLabel: 'Gestão', label: 'Associar identidade', parentLabel: 'Usuários', parentHref: '/usuarios' }
     },
     {
       path: '/usuarios/:id/editar',
       component: ManagementPage,
-      props: route => ({ section: 'usuarios', userPage: 'edit', userId: String(route.params.id) }),
+      props: route => ({ section: 'usuarios', userPage: 'edit', userId: String(route.params.id), apiRequest: authenticatedFetch }),
       meta: { sectionLabel: 'Gestão', label: 'Editar usuário', parentLabel: 'Usuários', parentHref: '/usuarios' }
     },
-    { path: '/:pathMatch(.*)*', redirect: '/operacoes/hoje' }
+    {
+      path: '/:pathMatch(.*)*',
+      component: () => import('../views/NotFoundPage.vue'),
+      meta: { sectionLabel: 'Navegação', label: 'Página não encontrada' }
+    }
   ]
 })
 

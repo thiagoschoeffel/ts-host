@@ -147,10 +147,10 @@ Entregas
 Estado atual relevante:
 
 - Hoje combina os cards ainda demonstrativos das áreas futuras com Pedidos, capacidade diária, Produção e Embalagem consultados na API;
-- Pedidos possui lista, criação, edição, detalhe, confirmação, cancelamento e reagendamento integrados à API autenticada;
+- Pedidos possui lista, criação, edição, detalhe, confirmação, cancelamento e reagendamento integrados à API autenticada; modalidade, contato, endereço e janela formam um snapshot próprio, editável enquanto aberto e congelado na confirmação;
 - Capacidade usa o snapshot autoritativo por data, apresenta projeção no Pedido aberto sem reservar e delega validação, reserva e liberação à transação da API; congelados ficam fora da contagem;
 - Produção consulta a agregação autoritativa dos componentes efetivos de Pedidos confirmados e exclui congelados;
-- Embalagem consulta a fila autoritativa, persiste snapshot e histórico de impressão e usa o adapter Zebra/ZPL da estação;
+- Embalagem consulta a fila autoritativa, gera etiquetas a partir do snapshot histórico do Pedido, persiste snapshot e histórico de impressão e usa o adapter Zebra/ZPL da estação;
 - Entregas usa a API para rotas, paradas, tentativas e reagendamentos;
 - Atendimento possui caixa de entrada integrada à API, histórico persistente, handoff humano, envio e retentativa idempotentes, entrada no Pedido e quota mensal autoritativa; a homologação final depende do sandbox da Meta.
 
@@ -188,8 +188,9 @@ Usuários
 Congelados já usa a API autenticada para configurações, saldo, vencimentos,
 entrada de produção, lotes, movimentações, ajuste e descarte. Catálogo e
 Produzíveis também usam fontes autoritativas e preservam versões históricas;
-Entregadores usa cadastro e disponibilidade autoritativos; Usuários ainda
-preserva a interface demonstrativa sobre a identidade já integrada.
+Entregadores usa cadastro e disponibilidade autoritativos. Usuários administra
+associações reais entre identidades OIDC já provisionadas e a Organização,
+incluindo papel e status; criação de credencial continua pertencendo ao provedor.
 
 Não criar um remote separado para Congelados sem necessidade concreta de autonomia de deploy/equipe.
 
@@ -312,6 +313,10 @@ http://localhost:4174/remoteEntry.js
 http://localhost:4175/remoteEntry.js
 http://localhost:4176/remoteEntry.js
 ```
+
+Fora de desenvolvimento, as três URLs são obrigatórias e a inicialização falha
+explicitamente quando alguma configuração está ausente. O mesmo princípio vale
+para a URL da API e a autoridade OIDC.
 
 A configuração valida que a URL use:
 
@@ -941,7 +946,9 @@ O `GUIA UI.md` define a apresentação visual do conteúdo formatado.
 
 # 32. Autenticação e autorização
 
-Cadastro de Usuários não equivale a autenticação.
+Cadastro de Usuários não equivale a autenticação. A tela de Gestão administra a
+associação autoritativa e auditada de uma identidade já existente no provedor;
+ela não cria senha nem simula acesso no navegador.
 
 Antes de dados reais:
 
@@ -1394,7 +1401,7 @@ apiRequest
 
 O host continua dono das URLs e injeta `apiRequest`, uma função que adiciona o Bearer token e a Organização ativa. O remote não lê tokens nem duplica a sessão OIDC.
 
-O `RouterView` inclui a Organização ativa em sua chave. Uma troca de empresa remonta a tela atual e elimina projeções do tenant anterior antes de carregar os novos dados.
+O `RouterView` inclui a fronteira do remote e a Organização ativa em sua chave. Uma troca de empresa remonta a tela atual e elimina projeções do tenant anterior antes de carregar os novos dados; alterações apenas de query string são observadas pela página sem remontar toda a fachada federada.
 
 ---
 

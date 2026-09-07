@@ -16,6 +16,11 @@ function remoteEntry(value: string | undefined, fallback: string, name: string) 
   return url.toString()
 }
 
+function configuredRemote(value: string | undefined, fallback: string, name: string, mode: string) {
+  if (!value && mode !== 'development') throw new Error(`${name} é obrigatória fora do ambiente de desenvolvimento.`)
+  return remoteEntry(value, fallback, name)
+}
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', 'VITE_')
   return {
@@ -31,19 +36,19 @@ export default defineConfig(({ mode }) => {
         moduleOperation: {
           type: 'module',
           name: 'moduleOperation',
-          entry: remoteEntry(env.VITE_OPERATION_REMOTE_URL, 'http://localhost:4174/remoteEntry.js', 'VITE_OPERATION_REMOTE_URL'),
+          entry: configuredRemote(env.VITE_OPERATION_REMOTE_URL, 'http://localhost:4174/remoteEntry.js', 'VITE_OPERATION_REMOTE_URL', mode),
           shareScope: 'default'
         },
         moduleCommercial: {
           type: 'module',
           name: 'moduleCommercial',
-          entry: remoteEntry(env.VITE_COMMERCIAL_REMOTE_URL, 'http://localhost:4175/remoteEntry.js', 'VITE_COMMERCIAL_REMOTE_URL'),
+          entry: configuredRemote(env.VITE_COMMERCIAL_REMOTE_URL, 'http://localhost:4175/remoteEntry.js', 'VITE_COMMERCIAL_REMOTE_URL', mode),
           shareScope: 'default'
         },
         moduleManagement: {
           type: 'module',
           name: 'moduleManagement',
-          entry: remoteEntry(env.VITE_MANAGEMENT_REMOTE_URL, 'http://localhost:4176/remoteEntry.js', 'VITE_MANAGEMENT_REMOTE_URL'),
+          entry: configuredRemote(env.VITE_MANAGEMENT_REMOTE_URL, 'http://localhost:4176/remoteEntry.js', 'VITE_MANAGEMENT_REMOTE_URL', mode),
           shareScope: 'default'
         }
       },
