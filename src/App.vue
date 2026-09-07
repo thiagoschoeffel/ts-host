@@ -19,6 +19,14 @@ const currentDateLabel = ref(formatCurrentDateLabel())
 let dateTimer: ReturnType<typeof setInterval> | undefined
 const route = useRoute()
 const authentication = useAuthentication()
+async function changeOrganization(organizationId: string) {
+  try {
+    await authentication.changeOrganization(organizationId)
+  }
+  catch {
+    // A autenticação preserva a organização anterior e expõe o erro recuperável no shell.
+  }
+}
 const breadcrumbs = computed(() => {
   const items: BreadcrumbItem[] = [
     { label: String(route.meta.sectionLabel ?? 'Operações') }
@@ -111,6 +119,14 @@ onBeforeUnmount(() => {
       <Button class="mt-5" @click="authentication.initialize">Tentar novamente</Button>
     </section>
   </main>
+  <main v-else-if="!authentication.session.value?.activeOrganizationId"
+    class="flex h-dvh items-center justify-center bg-slate-50 p-6">
+    <section class="w-full max-w-md rounded-lg border border-slate-200 bg-white p-6 text-center shadow-xs">
+      <h1 class="text-lg font-semibold text-slate-800">Nenhuma organização disponível</h1>
+      <p class="mt-2 text-sm text-slate-500">Sua identidade está válida, mas ainda não possui uma associação ativa. Solicite acesso a uma organização para continuar.</p>
+      <Button class="mt-5" variant="secondary" @click="authentication.signOut">Sair</Button>
+    </section>
+  </main>
   <div v-else class="flex h-dvh flex-col overflow-hidden">
     <AppHeader
       :current-date-label="currentDateLabel"
@@ -118,8 +134,11 @@ onBeforeUnmount(() => {
       :session="authentication.session.value!"
       @toggle-desktop-sidebar="isSidebarCollapsed = !isSidebarCollapsed"
       @toggle-mobile-sidebar="isMobileSidebarOpen = !isMobileSidebarOpen"
-      @change-organization="authentication.changeOrganization"
+      @change-organization="changeOrganization"
       @logout="authentication.signOut" />
+    <div v-if="authentication.organizationError.value" class="border-y border-red-200 bg-red-50 px-4 py-2 text-center text-sm text-red-700" role="alert">
+      {{ authentication.organizationError.value }} A organização anterior continua ativa.
+    </div>
     <AppSidebarDrawer :open="isMobileSidebarOpen" @close="isMobileSidebarOpen = false" />
     <div class="flex min-h-0 flex-1 overflow-hidden">
       <AppSidebar :collapsed="isSidebarCollapsed" />
