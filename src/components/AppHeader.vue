@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Avatar, LogOutIcon, MenuIcon } from '@thiagoschoeffel/ts-components'
+import { Avatar, LogOutIcon, MenuIcon, Select } from '@thiagoschoeffel/ts-components'
 import type { Session } from '../auth'
 
 defineProps<{
@@ -33,10 +33,7 @@ defineEmits<{
         <MenuIcon :size="20" />
       </button>
 
-      <div class="flex items-center gap-3">
-        <div class="flex size-8 items-center justify-center rounded bg-slate-800 text-sm font-bold text-white">L</div>
-        <h1 class="text-lg font-semibold text-slate-800">System</h1>
-      </div>
+      <div class="flex size-8 items-center justify-center rounded bg-slate-800 text-sm font-bold text-white" aria-label="TS">TS</div>
     </div>
 
     <span class="hidden flex-1 text-center font-semibold text-slate-800 md:block">
@@ -44,16 +41,14 @@ defineEmits<{
     </span>
 
     <div class="ml-auto flex items-center gap-3 md:ml-0">
-      <label class="sr-only" for="active-organization">Organização ativa</label>
-      <select
-        id="active-organization"
-        :value="session.activeOrganizationId"
-        class="w-28 rounded-lg border border-slate-200 bg-white px-2 py-2 text-sm text-slate-800 md:w-auto md:max-w-52 md:px-3"
-        @change="$emit('changeOrganization', ($event.target as HTMLSelectElement).value)">
-        <option v-for="organization in session.organizations" :key="organization.id" :value="organization.id">
-          {{ organization.name }}
-        </option>
-      </select>
+      <div class="w-28 md:w-52">
+        <Select
+          id="active-organization"
+          :model-value="session.activeOrganizationId"
+          :options="session.organizations.map(organization => ({ value: organization.id, label: organization.name }))"
+          aria-label="Organização ativa"
+          @update:model-value="$emit('changeOrganization', $event)" />
+      </div>
       <span class="hidden sm:block">
         <Avatar :fallback="session.displayName.slice(0, 2).toUpperCase()" :title="session.displayName" />
       </span>
