@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { Button } from '@thiagoschoeffel/ts-components'
 import { RouterView, useRoute } from 'vue-router'
 import AppBreadcrumbs, { type BreadcrumbItem } from './components/AppBreadcrumbs.vue'
@@ -15,7 +15,8 @@ const isSidebarCollapsed = ref(
   localStorage.getItem(SIDEBAR_STORAGE_KEY) === 'true'
 )
 const isMobileSidebarOpen = ref(false)
-const currentDateLabel = formatCurrentDateLabel()
+const currentDateLabel = ref(formatCurrentDateLabel())
+let dateTimer: ReturnType<typeof setInterval> | undefined
 const route = useRoute()
 const authentication = useAuthentication()
 const breadcrumbs = computed(() => {
@@ -85,6 +86,14 @@ const breadcrumbs = computed(() => {
 watch(isSidebarCollapsed, (collapsed) => {
   localStorage.setItem(SIDEBAR_STORAGE_KEY, String(collapsed))
 })
+
+onMounted(() => {
+  dateTimer = setInterval(() => { currentDateLabel.value = formatCurrentDateLabel() }, 60_000)
+})
+
+onBeforeUnmount(() => {
+  if (dateTimer) clearInterval(dateTimer)
+})
 </script>
 
 <template>
@@ -115,7 +124,7 @@ watch(isSidebarCollapsed, (collapsed) => {
     <div class="flex min-h-0 flex-1 overflow-hidden">
       <AppSidebar :collapsed="isSidebarCollapsed" />
       <ModuleContent>
-        <RouterView :key="`${route.fullPath}:${authentication.session.value?.activeOrganizationId}`" />
+        <RouterView :key="`${String(route.meta.sectionLabel ?? route.path)}:${authentication.session.value?.activeOrganizationId}`" />
         <template #breadcrumbs>
           <AppBreadcrumbs :items="breadcrumbs" />
         </template>
