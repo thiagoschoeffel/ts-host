@@ -16,7 +16,7 @@
     "remoteEntry": { "bytes": 25000, "gzipBytes": 8000 }
   },
   "dependencies": {
-    "@thiagoschoeffel/ts-components": "^0.7.9",
+    "@thiagoschoeffel/ts-components": "^0.7.10",
     "oidc-client-ts": "^3.5.0",
     "vue": "^3.5.42",
     "vue-router": "^4.6.4"

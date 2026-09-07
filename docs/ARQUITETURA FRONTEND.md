@@ -146,7 +146,7 @@ Entregas
 
 Estado atual relevante:
 
-- Hoje combina os cards ainda demonstrativos das áreas futuras com Pedidos, capacidade diária, Produção e Embalagem consultados na API;
+- Hoje combina os cards ainda demonstrativos das áreas futuras com Pedidos, capacidade diária, Produção e Embalagem consultados na API; o indicador do cabeçalho deriva dessas consultas e distingue atualização completa, parcial e falha;
 - Pedidos possui lista, criação, edição, detalhe, confirmação, cancelamento e reagendamento integrados à API autenticada; modalidade, contato, endereço e janela formam um snapshot próprio, editável enquanto aberto e congelado na confirmação;
 - Capacidade usa o snapshot autoritativo por data, apresenta projeção no Pedido aberto sem reservar e delega validação, reserva e liberação à transação da API; congelados ficam fora da contagem;
 - Produção consulta a agregação autoritativa dos componentes efetivos de Pedidos confirmados e exclui congelados;
@@ -170,6 +170,8 @@ Financeiro
 Também concentra atualmente stores/mocks demonstrativos dessas áreas.
 
 Estado atual relevante: Cardápios usa a API autenticada para calendário diário, rascunho, publicação, disponibilidade, preço efetivo, importação e planejamento semanal. O planejamento registra intenção e pode derivar novos dias em rascunho sem sobrescrever cardápios diários existentes; revisão, publicação e alterações posteriores permanecem próprias de cada dia.
+
+No Financeiro, a chave de idempotência nasce com a intenção de pagamento e é preservada em tentativas com o mesmo payload. A confirmação do POST e a recarga do snapshot são estados separados: falha apenas na recarga não autoriza registrar novamente o pagamento.
 
 ---
 
@@ -906,6 +908,8 @@ webhook de entrega / falha
 → frontend apenas apresenta o snapshot retornado
 ```
 
+O envio distingue rejeição confirmada pelo provedor de resultado incerto. Rejeição confirmada pode liberar a reserva e permitir retentativa; timeout, resposta de sucesso sem identificador ou falha local depois do efeito externo preservam a reserva e não habilitam reenvio automático. Diagnósticos síncronos guardam somente status, códigos, subcódigo, classificação transitória e identificador de rastreio permitidos, nunca token ou payload integral.
+
 O frontend não pode usar seu contador local como proteção financeira. Aos 97%, a API pausa a automação sem desligar recebimento, histórico ou atendimento humano; ao esgotar a franquia, bloqueia o envio de serviço pela API enquanto não houver autorização explícita para custo pago.
 
 ---
@@ -970,7 +974,7 @@ O frontend:
 - não pode usar `OrganizationId` de formulário, query string, `localStorage` ou estado de componente como autoridade de isolamento;
 - não deve adicionar `OrganizationId` arbitrário aos DTOs de negócio para tentar controlar o escopo da API.
 
-A API determina o tenant a partir da identidade autenticada e da Organização ativa validada no servidor. O E07 adotou Keycloak/OIDC: o host usa Authorization Code + PKCE e a API valida o JWT para a audiência `ts-api`. O endpoint `/api/session` devolve o usuário de plataforma, a Organização ativa e somente suas associações ativas.
+A API determina o tenant operacional a partir da identidade autenticada e da Organização ativa validada no servidor. O E07 adotou Keycloak/OIDC: o host usa Authorization Code + PKCE e a API valida o JWT para a audiência `ts-api`. O endpoint `/api/session` é a exceção explícita de descoberta: autentica a identidade sem exigir tenant prévio, devolve somente o próprio usuário e suas associações ativas e seleciona uma associação válida. Se a claim antiga não estiver mais acessível, outra associação ativa pode ser escolhida; ausência de associação produz estado orientativo sem criar empresa fictícia. Endpoints de negócio continuam exigindo tenant validado.
 
 Quando há mais de uma associação, o seletor do header envia `X-Organization-Id` como pedido de troca. O valor permanece apenas em memória, força a remontagem do conteúdo federado e só se torna ativo depois de `/api/session` confirmar a associação no servidor. A claim `organization_id` continua sendo o default emitido pelo provedor; nem claim nem header substituem a verificação da associação persistida.
 

@@ -12,7 +12,7 @@ export interface SessionOrganization {
 export interface Session {
   userId: string
   displayName: string
-  activeOrganizationId: string
+  activeOrganizationId: string | null
   organizations: SessionOrganization[]
 }
 
@@ -40,6 +40,7 @@ const oidcUser = ref<User | null>(null)
 const session = ref<Session | null>(null)
 const loading = ref(true)
 const error = ref<string | null>(null)
+const organizationError = ref<string | null>(null)
 let postAuthenticationPath: string | null = null
 
 async function loadSession(organizationId?: string) {
@@ -60,13 +61,14 @@ async function loadSession(organizationId?: string) {
 }
 
 export async function initializeAuthentication() {
+  error.value = null
+  organizationError.value = null
   if (oidcUser.value && !oidcUser.value.expired && session.value) {
     loading.value = false
     return
   }
 
   loading.value = true
-  error.value = null
   try {
     const isCallback = window.location.pathname === '/auth/callback'
       && new URLSearchParams(window.location.search).has('code')
@@ -95,12 +97,12 @@ export async function initializeAuthentication() {
 
 export async function changeOrganization(organizationId: string) {
   loading.value = true
-  error.value = null
+  organizationError.value = null
   try {
     await loadSession(organizationId)
   }
   catch (reason) {
-    error.value = reason instanceof Error ? reason.message : 'Não foi possível trocar a organização.'
+    organizationError.value = reason instanceof Error ? reason.message : 'Não foi possível trocar a organização.'
     throw reason
   }
   finally {
@@ -114,7 +116,7 @@ export async function signOut() {
 
 manager.events.addUserLoaded((user) => {
   oidcUser.value = user
-  void loadSession(session.value?.activeOrganizationId).catch((reason) => {
+  void loadSession(session.value?.activeOrganizationId ?? undefined).catch((reason) => {
     session.value = null
     error.value = reason instanceof Error ? reason.message : 'Não foi possível atualizar a sessão.'
   })
@@ -126,6 +128,7 @@ export function useAuthentication() {
     session,
     loading,
     error,
+    organizationError,
     isAuthenticated: computed(() => Boolean(oidcUser.value && session.value)),
     initialize: initializeAuthentication,
     changeOrganization,
@@ -148,6 +151,8 @@ export async function authenticatedFetch(path: string, init: RequestInit = {}) {
   const activeSession = session.value
   if (!user || user.expired || !activeSession)
     throw new Error('A sessão autenticada não está disponível.')
+  if (!activeSession.activeOrganizationId)
+    throw new Error('Selecione uma organização ativa antes de acessar dados operacionais.')
 
   const headers = new Headers(init.headers)
   const correlationId = globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`
