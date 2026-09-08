@@ -49,3 +49,57 @@ O chunk compartilhado do design system no host é conscientemente o maior artefa
 ## Matriz de regressão
 
 Antes de promover produção, validar desktop e mobile nos fluxos: Catálogo → Cardápio → Pedido; Pedido → confirmação → Produção → Embalagem → Entrega; Congelados → Pedido → Embalagem; Clientes → Planos/Créditos → Financeiro; e Atendimento quando o sandbox Meta estiver configurado. Para CSS federado, navegar Operação → Comercial → Gestão → Operação e confirmar que altura, padding, overlays e rich-text permanecem estáveis.
+
+## Onboarding SaaS e aceite A/B
+
+### Pré-condições do ambiente
+
+- exigir MFA no provedor OIDC para os operadores globais e confirmar o desafio com uma conta real;
+- configurar remetente Resend verificado, URL pública de convite e chave durável de derivação dos tokens;
+- manter `IntegrationSecrets__EncryptionKey` como chave Base64 de 32 bytes fora do repositório;
+- guardar SHAs da API, host e quatro remotes, URLs imutáveis atuais e backup do PostgreSQL;
+- aplicar migrations antes da API e confirmar readiness antes de publicar o remote de Plataforma.
+
+A chave de criptografia das integrações não pode ser trocada isoladamente: conexões existentes
+ficariam ilegíveis. A rotação de token, app secret e token de webhook é feita salvando novos valores
+no detalhe da empresa. A rotação da chave mestra exige uma rotina controlada de recifragem e não
+faz parte de um deploy ordinário.
+
+### Roteiro de homologação
+
+1. Entrar como operador global com MFA e registrar a correlação da sessão.
+2. Abrir a empresa A e registrar estado, versão, plano, membros e uma amostra de dados operacionais.
+3. Criar a empresa B uma única vez pelo remote de Plataforma e guardar `onboardingId` e `operationId`.
+4. Confirmar o envio do convite no Resend. Em falha, usar a retentativa da mesma operação; não criar
+   outra empresa nem inserir dados por SQL.
+5. Aceitar o convite com uma identidade cujo e-mail corresponda ao destinatário e confirmar a
+   associação `Owner` somente na empresa B.
+6. Atribuir uma versão de plano SaaS, ativar B e, se o canal for usado, cadastrar sua conexão
+   WhatsApp própria e a URL de webhook por `connectionId`.
+7. Selecionar B no host, validar as áreas habilitadas e confirmar ausência de clientes, pedidos,
+   estoque, conversas e membros da empresa A.
+8. Voltar à empresa A e comparar os registros do passo 2. Confirmar também que a conexão e os
+   recibos de webhook de B não aparecem nem produzem efeitos em A.
+9. Localizar criação, convite, plano, ativação e integração na auditoria global pelas correlações.
+
+O CI executa a versão automatizada desse roteiro em PostgreSQL real: preserva dados da empresa A,
+provisiona e ativa B, configura conexões distintas e tenta uma escrita cruzada que precisa falhar.
+A homologação manual continua necessária para provar MFA e entrega real do e-mail no ambiente.
+
+### Rollback da plataforma
+
+O procedimento foi ensaiado localmente em 08/09/2026: a API anterior à S07 (`6e4fc8f`)
+iniciou e respondeu `healthy` em `/health/ready` contra um banco já atualizado até
+`20260908212732_AddOrganizationExternalIntegrations`.
+
+1. Impedir novas criações de onboarding no gateway sem apagar operações já persistidas.
+2. Reapontar host e remote de Plataforma para a última matriz imutável compatível.
+3. Reverter a API somente para um artefato que aceite o schema aditivo atual. Não executar `down`
+   migrations nem remover empresas, convites, grants, operações, assinaturas ou conexões.
+4. Ao voltar para uma API anterior à S07, manter temporariamente as variáveis legadas do WhatsApp
+   da empresa A; a conexão cifrada permanece preservada para o roll-forward.
+5. Manter as chaves de convite e de criptografia exatamente iguais durante rollback e roll-forward.
+6. Retomar operações em `Pending` ou com lease expirado. Para `NeedsAttention`, usar retentativa
+   com a versão atual; nunca recriar B para contornar a falha.
+7. Confirmar readiness, sessão da empresa A e auditoria. Depois do roll-forward, repetir o roteiro
+   A/B antes de reabrir novos onboardings.
