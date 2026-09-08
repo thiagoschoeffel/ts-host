@@ -162,4 +162,4 @@ O banco temporário será removido ao fim da execução; o volume persistente lo
 | S05 | quarto remote conectado, sem persistência simulada | concluído em 08/09/2026; empresas, auditoria e onboarding usam contratos autoritativos |
 | S06 | direitos e suspensão aplicados no backend | concluído em 08/09/2026; plano versionado, habilitações, ativação e suspensão validados em API e PostgreSQL |
 | S07 | conexões A/B isoladas e legado migrável | concluído em 08/09/2026; ativos verificados, segredos cifrados, webhook por conexão e migration validados |
-| S08 | aceite completo A/B, runbooks e rollback | não iniciado |
+| S08 | aceite completo A/B, runbooks e rollback | automação PostgreSQL, runbooks e ensaio de rollback concluídos em 08/09/2026; homologação externa de MFA e Resend pendente |

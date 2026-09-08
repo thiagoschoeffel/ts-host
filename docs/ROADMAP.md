@@ -204,7 +204,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 
 ### E16 — Administrar a plataforma SaaS e o onboarding de empresas
 
-**Estado:** em execução desde 8 de setembro de 2026; S00, S04–S07 concluídas, S01–S03 em homologação e S08 não iniciada.
+**Estado:** em execução desde 8 de setembro de 2026; implementação local S00–S08 concluída e homologações externas de MFA e Resend pendentes.
 
 **Objetivo:** admitir uma segunda empresa por onboarding assistido, com operador global autorizado, convite seguro do primeiro proprietário, provisionamento recuperável e isolamento integral da organização existente.
 
