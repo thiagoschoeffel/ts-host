@@ -190,9 +190,9 @@ Usuários
 Congelados já usa a API autenticada para configurações, saldo, vencimentos,
 entrada de produção, lotes, movimentações, ajuste e descarte. Catálogo e
 Produzíveis também usam fontes autoritativas e preservam versões históricas;
-Entregadores usa cadastro e disponibilidade autoritativos. Usuários administra
-associações reais entre identidades OIDC já provisionadas e a Organização,
-incluindo papel e status; criação de credencial continua pertencendo ao provedor.
+Entregadores usa cadastro e disponibilidade autoritativos. Usuários convida por
+e-mail e administra associações reais entre identidades OIDC e a Organização,
+incluindo papel, status e versão; criação de credencial continua pertencendo ao provedor.
 
 Não criar um remote separado para Congelados sem necessidade concreta de autonomia de deploy/equipe.
 
@@ -953,9 +953,9 @@ O `GUIA UI.md` define a apresentação visual do conteúdo formatado.
 
 # 32. Autenticação e autorização
 
-Cadastro de Usuários não equivale a autenticação. A tela de Gestão administra a
-associação autoritativa e auditada de uma identidade já existente no provedor;
-ela não cria senha nem simula acesso no navegador.
+Cadastro de Usuários não equivale a autenticação. A tela de Gestão envia convite
+por e-mail e administra a associação autoritativa e auditada; o aceite exige a
+identidade OIDC do mesmo e-mail e a tela não cria senha nem simula acesso.
 
 Antes de dados reais:
 

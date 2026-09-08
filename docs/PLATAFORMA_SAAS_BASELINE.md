@@ -157,7 +157,7 @@ O banco temporário será removido ao fim da execução; o volume persistente lo
 | S00 | baseline, ADRs, contratos e matriz de testes | concluído em 08/09/2026 |
 | S01 | matriz de identidade/autorização global verde | implementação iniciada; homologação de MFA pendente |
 | S02 | registro global e migration compatível em PostgreSQL | implementação iniciada; migration sobre organização existente validada |
-| S03 | convite único e último proprietário protegido | não iniciado |
+| S03 | convite único e último proprietário protegido | implementado localmente; homologação do domínio Resend e PostgreSQL concorrente pendente |
 | S04 | retry/reinício sem duplicação | não iniciado |
 | S05 | quarto remote conectado, sem persistência simulada | fatia de empresas e auditoria implementada; onboarding aguarda S03/S04 |
 | S06 | direitos e suspensão aplicados no backend | não iniciado |

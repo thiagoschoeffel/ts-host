@@ -121,6 +121,9 @@ onBeforeUnmount(() => {
       <Button class="mt-5" @click="authentication.initialize">Tentar novamente</Button>
     </section>
   </main>
+  <main v-else-if="route.meta.identityFlow" class="min-h-dvh bg-slate-50 p-6">
+    <RouterView />
+  </main>
   <main v-else-if="!authentication.session.value?.activeOrganizationId && !hasPlatformAccess"
     class="flex h-dvh items-center justify-center bg-slate-50 p-6">
     <section class="w-full max-w-md rounded-lg border border-slate-200 bg-white p-6 text-center shadow-xs">
