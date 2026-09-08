@@ -6,6 +6,7 @@ defineProps<{
   currentDateLabel: string
   mobileSidebarOpen: boolean
   session: Session
+  platformArea: boolean
 }>()
 defineEmits<{
   toggleDesktopSidebar: []
@@ -41,7 +42,7 @@ defineEmits<{
     </span>
 
     <div class="ml-auto flex items-center gap-3 md:ml-0">
-      <div class="w-28 md:w-52">
+      <div v-if="!platformArea && session.organizations.length" class="w-28 md:w-52">
         <Select
           id="active-organization"
           :model-value="session.activeOrganizationId ?? undefined"
@@ -49,6 +50,7 @@ defineEmits<{
           aria-label="Organização ativa"
           @update:model-value="$emit('changeOrganization', $event)" />
       </div>
+      <span v-else-if="platformArea || !session.organizations.length" class="hidden text-sm font-medium text-slate-600 md:block">Administração da plataforma</span>
       <span class="hidden sm:block">
         <Avatar :fallback="session.displayName.slice(0, 2).toUpperCase()" :title="session.displayName" />
       </span>

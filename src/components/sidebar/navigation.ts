@@ -14,13 +14,16 @@ import {
   SnowflakeIcon,
   TruckIcon,
   UserRoundCogIcon,
-  UsersIcon
+  UsersIcon,
+  Building2Icon,
+  HistoryIcon
 } from '@thiagoschoeffel/ts-components'
 
 export interface NavigationItem {
   label: string
   icon: Component
   to?: string
+  capability?: string
 }
 
 export interface NavigationSection {
@@ -29,6 +32,13 @@ export interface NavigationSection {
 }
 
 export const navigationSections: NavigationSection[] = [
+  {
+    label: 'Plataforma',
+    items: [
+      { label: 'Empresas', icon: Building2Icon, to: '/plataforma/empresas', capability: 'platform.organizations.read' },
+      { label: 'Auditoria', icon: HistoryIcon, to: '/plataforma/auditoria', capability: 'platform.audit.read' }
+    ]
+  },
   {
     label: 'Operação',
     items: [

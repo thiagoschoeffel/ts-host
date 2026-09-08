@@ -1,7 +1,7 @@
 # TS Host
 
 Aplicação shell responsável por layout, autenticação, navegação e composição dos
-três módulos federados: Operação, Comercial e Gestão. As URLs dos remotes são
+quatro módulos federados: Operação, Comercial, Gestão e Plataforma. As URLs dos remotes são
 configuráveis por ambiente, com os fallbacks locais definidos em `vite.config.ts`.
 
 ## GitHub Packages authentication
@@ -35,10 +35,11 @@ Os remotes locais são carregados por padrão nestes endereços:
 Operação  http://localhost:4174/remoteEntry.js
 Comercial http://localhost:4175/remoteEntry.js
 Gestão    http://localhost:4176/remoteEntry.js
+Plataforma http://localhost:4177/remoteEntry.js
 ```
 
 Para outro ambiente, configure `VITE_OPERATION_REMOTE_URL`,
-`VITE_COMMERCIAL_REMOTE_URL` e `VITE_MANAGEMENT_REMOTE_URL`. Consulte
+`VITE_COMMERCIAL_REMOTE_URL`, `VITE_MANAGEMENT_REMOTE_URL` e `VITE_PLATFORM_REMOTE_URL`. Consulte
 `.env.example` para a configuração completa.
 
 ## Authentication

@@ -19,6 +19,8 @@ const currentDateLabel = ref(formatCurrentDateLabel())
 let dateTimer: ReturnType<typeof setInterval> | undefined
 const route = useRoute()
 const authentication = useAuthentication()
+const hasPlatformAccess = computed(() =>
+  authentication.session.value?.platform.capabilities.includes('platform.organizations.read') ?? false)
 async function changeOrganization(organizationId: string) {
   try {
     await authentication.changeOrganization(organizationId)
@@ -119,7 +121,7 @@ onBeforeUnmount(() => {
       <Button class="mt-5" @click="authentication.initialize">Tentar novamente</Button>
     </section>
   </main>
-  <main v-else-if="!authentication.session.value?.activeOrganizationId"
+  <main v-else-if="!authentication.session.value?.activeOrganizationId && !hasPlatformAccess"
     class="flex h-dvh items-center justify-center bg-slate-50 p-6">
     <section class="w-full max-w-md rounded-lg border border-slate-200 bg-white p-6 text-center shadow-xs">
       <h1 class="text-lg font-semibold text-slate-800">Nenhuma organização disponível</h1>
@@ -132,6 +134,7 @@ onBeforeUnmount(() => {
       :current-date-label="currentDateLabel"
       :mobile-sidebar-open="isMobileSidebarOpen"
       :session="authentication.session.value!"
+      :platform-area="route.path.startsWith('/plataforma')"
       @toggle-desktop-sidebar="isSidebarCollapsed = !isSidebarCollapsed"
       @toggle-mobile-sidebar="isMobileSidebarOpen = !isMobileSidebarOpen"
       @change-organization="changeOrganization"

@@ -1,4 +1,4 @@
-import { authenticatedFetch, hasAuthenticatedSession } from './auth'
+import { hasAuthenticatedSession, identityRequest } from './auth'
 
 interface PendingError { name: string, message: string, source: string, fingerprint: string }
 const queue: PendingError[] = []
@@ -22,7 +22,7 @@ async function processQueue() {
     while (queue.length && hasAuthenticatedSession()) {
       const item = queue.shift()!
       try {
-        await authenticatedFetch('/api/telemetry/client-errors', {
+        await identityRequest('/api/identity/telemetry/client-errors', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name: item.name, message: item.message, source: item.source }),

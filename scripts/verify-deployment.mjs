@@ -1,4 +1,4 @@
-const required = ['API_URL', 'HOST_URL', 'OPERATION_REMOTE_URL', 'COMMERCIAL_REMOTE_URL', 'MANAGEMENT_REMOTE_URL']
+const required = ['API_URL', 'HOST_URL', 'OPERATION_REMOTE_URL', 'COMMERCIAL_REMOTE_URL', 'MANAGEMENT_REMOTE_URL', 'PLATFORM_REMOTE_URL']
 const missing = required.filter(name => !process.env[name])
 if (missing.length) throw new Error(`Variáveis ausentes: ${missing.join(', ')}`)
 
@@ -18,6 +18,7 @@ for (const [label, baseUrl] of [
   ['Operação', process.env.OPERATION_REMOTE_URL],
   ['Comercial', process.env.COMMERCIAL_REMOTE_URL],
   ['Gestão', process.env.MANAGEMENT_REMOTE_URL],
+  ['Plataforma', process.env.PLATFORM_REMOTE_URL],
 ]) {
   const response = await expectOk(`remoteEntry ${label}`, `${baseUrl}/remoteEntry.js`)
   const cacheControl = response.headers.get('cache-control') ?? ''

@@ -1,6 +1,6 @@
 import { shallowRef } from 'vue'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
-import { authenticatedFetch, hasAuthenticatedSession, initializeAuthentication, takePostAuthenticationPath } from '../auth'
+import { authenticatedFetch, getCurrentSession, hasAuthenticatedSession, initializeAuthentication, platformRequest, takePostAuthenticationPath } from '../auth'
 import { reportClientError } from '../telemetry'
 
 export const remoteLoadError = shallowRef<Error>()
@@ -8,6 +8,16 @@ export const remoteLoadError = shallowRef<Error>()
 const OperationPage = () => import('moduleOperation/OperationPage')
 const CommercialPage = () => import('moduleCommercial/CommercialPage')
 const ManagementPage = () => import('moduleManagement/ManagementPage')
+const PlatformPage = () => import('modulePlatform/PlatformPage')
+
+function platformProps(section: 'organizations' | 'onboardings' | 'audit', extra: Record<string, unknown> = {}) {
+  return {
+    section,
+    platformRequest,
+    capabilities: getCurrentSession()?.platform.capabilities ?? [],
+    ...extra,
+  }
+}
 
 const operationRoutes: RouteRecordRaw[] = [
   { path: 'hoje', component: OperationPage, props: { section: 'hoje', apiRequest: authenticatedFetch }, meta: { label: 'Hoje' } },
@@ -72,6 +82,27 @@ export const router = createRouter({
       meta: { label: 'Autenticando' }
     },
     { path: '/', redirect: '/operacoes/hoje' },
+    { path: '/plataforma', redirect: '/plataforma/empresas' },
+    {
+      path: '/plataforma/empresas', component: PlatformPage,
+      props: () => platformProps('organizations'),
+      meta: { sectionLabel: 'Administração da plataforma', label: 'Empresas', platformCapability: 'platform.organizations.read' }
+    },
+    {
+      path: '/plataforma/empresas/:id', component: PlatformPage,
+      props: route => platformProps('organizations', { organizationId: String(route.params.id) }),
+      meta: { sectionLabel: 'Administração da plataforma', label: 'Empresa', parentLabel: 'Empresas', parentHref: '/plataforma/empresas', platformCapability: 'platform.organizations.read' }
+    },
+    {
+      path: '/plataforma/onboardings', component: PlatformPage,
+      props: () => platformProps('onboardings'),
+      meta: { sectionLabel: 'Administração da plataforma', label: 'Onboardings', platformCapability: 'platform.onboarding.manage' }
+    },
+    {
+      path: '/plataforma/auditoria', component: PlatformPage,
+      props: () => platformProps('audit'),
+      meta: { sectionLabel: 'Administração da plataforma', label: 'Auditoria', platformCapability: 'platform.audit.read' }
+    },
     {
       path: '/operacoes',
       redirect: '/operacoes/hoje',
@@ -324,6 +355,13 @@ router.beforeEach(async (to) => {
   await initializeAuthentication()
   if (!hasAuthenticatedSession())
     return false
+  const currentSession = getCurrentSession()
+  const requiredCapability = typeof to.meta.platformCapability === 'string' ? to.meta.platformCapability : undefined
+  if (requiredCapability && !currentSession?.platform.capabilities.includes(requiredCapability))
+    return currentSession?.activeOrganizationId ? '/operacoes/hoje' : false
+  if (!requiredCapability && !currentSession?.activeOrganizationId
+    && currentSession?.platform.capabilities.includes('platform.organizations.read'))
+    return '/plataforma/empresas'
   const postAuthenticationPath = takePostAuthenticationPath()
   return to.path === '/auth/callback' && postAuthenticationPath
     ? postAuthenticationPath

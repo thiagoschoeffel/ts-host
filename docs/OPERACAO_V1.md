@@ -17,7 +17,7 @@ O coletor de logs deve indexar `CorrelationId`, `TraceId`, `ErrorId`, status e r
 1. Exigir CI verde em cada repositório e guardar os artefatos imutáveis pelo SHA do commit.
 2. Fazer backup do PostgreSQL e aplicar migrations uma única vez, antes das novas réplicas, com `ConnectionStrings__Database=... ./scripts/apply-migrations.sh` no `ts-api`.
 3. Publicar a API e aguardar `/health/live` e `/health/ready` verdes.
-4. Publicar os três remotes em diretórios imutáveis versionados pelo SHA.
+4. Publicar os quatro remotes em diretórios imutáveis versionados pelo SHA.
 5. Apontar as URLs `VITE_*_REMOTE_URL` do host para esses diretórios e publicar o host por último.
 6. Executar `npm run verify:deployment` com as cinco URLs do ambiente.
 

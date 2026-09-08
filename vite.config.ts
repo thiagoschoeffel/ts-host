@@ -50,6 +50,12 @@ export default defineConfig(({ mode }) => {
           name: 'moduleManagement',
           entry: configuredRemote(env.VITE_MANAGEMENT_REMOTE_URL, 'http://localhost:4176/remoteEntry.js', 'VITE_MANAGEMENT_REMOTE_URL', mode),
           shareScope: 'default'
+        },
+        modulePlatform: {
+          type: 'module',
+          name: 'modulePlatform',
+          entry: configuredRemote(env.VITE_PLATFORM_REMOTE_URL, 'http://localhost:4177/remoteEntry.js', 'VITE_PLATFORM_REMOTE_URL', mode),
+          shareScope: 'default'
         }
       },
       // The host already declares the remote module in src/env.d.ts.

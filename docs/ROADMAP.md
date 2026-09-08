@@ -48,6 +48,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 - [x] **E13 — Integrar Entregadores e Entregas**
 - [ ] **E14 — Integrar Atendimento e WhatsApp oficial**
 - [x] **E15 — Consolidar observabilidade, qualidade e deploy da V1**
+- [ ] **E16 — Administrar a plataforma SaaS e o onboarding de empresas**
 
 ## Épicos
 
@@ -200,6 +201,18 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 **Inclui:** logs estruturados e correlação ponta a ponta; métricas e captura central de erros; health checks reais; testes unitários, integração, contrato, componente e E2E dos fluxos críticos; CI independente por repositório; contratos federados tipados; estratégia de versões host/remotes; cache e rollback de `remoteEntry.js`; orçamento e divisão de bundles; migrations como etapa de deploy; matriz desktop/mobile e regressão de ordem de CSS.
 
 **Aceite:** pipelines bloqueiam regressões; uma requisição crítica é rastreável do frontend ao banco; deploy e rollback estão documentados e ensaiados; incompatibilidade host/remote é detectável; nenhum chunk crítico excede o orçamento acordado sem justificativa; suíte V1, builds, documentação, commits e push verdes.
+
+### E16 — Administrar a plataforma SaaS e o onboarding de empresas
+
+**Estado:** em execução desde 8 de setembro de 2026; S00 em andamento e S01–S08 não homologadas.
+
+**Objetivo:** admitir uma segunda empresa por onboarding assistido, com operador global autorizado, convite seguro do primeiro proprietário, provisionamento recuperável e isolamento integral da organização existente.
+
+**Inclui:** baseline e ADRs; identidade sem tenant obrigatório e grants globais; evolução do registro de organizações; convites e membros; operação durável; remote `ts-module-platform`; plano SaaS e habilitações; suspensão/reativação; integrações externas por empresa; auditoria, runbooks e homologação A/B.
+
+**Ordem interna:** S00 → S01 → S02 → S03 → S04 → S05 → S06 → S07 → S08. Cada fase depende dos gates descritos em `PLATAFORMA_SAAS_BASELINE.md`; uma tela conectada não antecede seu contrato autoritativo.
+
+**Aceite:** um operador autorizado cadastra a empresa B; o proprietário aceita convite e conclui o acesso; B é ativada e configurada sem SQL manual; A permanece intacta; falhas intermediárias são retomadas sem duplicação; testes PostgreSQL e A/B, builds federados, documentação, commits, push, PRs e retorno seguro à `main` ficam verdes.
 
 ## Fora do escopo deste roadmap V1
 
