@@ -204,7 +204,7 @@ Mudanças locais preexistentes e alheias ao épico nunca devem ser incluídas no
 
 ### E16 — Administrar a plataforma SaaS e o onboarding de empresas
 
-**Estado:** em execução desde 8 de setembro de 2026; S00, S04 e S05 concluídas, S01–S03 em homologação, S06–S08 não iniciadas.
+**Estado:** em execução desde 8 de setembro de 2026; S00, S04–S06 concluídas, S01–S03 em homologação, S07–S08 não iniciadas.
 
 **Objetivo:** admitir uma segunda empresa por onboarding assistido, com operador global autorizado, convite seguro do primeiro proprietário, provisionamento recuperável e isolamento integral da organização existente.
 
