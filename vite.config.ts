@@ -5,7 +5,7 @@ import { defineConfig, loadEnv } from 'vite'
 
 const sharedDependencies = {
   vue: { singleton: true, requiredVersion: '^3.5.42', strictVersion: true },
-  '@thiagoschoeffel/ts-components': { singleton: true, requiredVersion: '^0.7.9', strictVersion: true },
+  '@thiagoschoeffel/ts-components': { version: '0.7.10', singleton: true, requiredVersion: '^0.7.10', strictVersion: true },
 }
 
 function remoteEntry(value: string | undefined, fallback: string, name: string) {
