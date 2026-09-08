@@ -96,8 +96,18 @@ export const router = createRouter({
     },
     {
       path: '/plataforma/onboardings', component: PlatformPage,
-      props: () => platformProps('onboardings'),
+      props: () => platformProps('onboardings', { onboardingPage: 'list' }),
       meta: { sectionLabel: 'Administração da plataforma', label: 'Onboardings', platformCapability: 'platform.onboarding.manage' }
+    },
+    {
+      path: '/plataforma/onboardings/novo', component: PlatformPage,
+      props: () => platformProps('onboardings', { onboardingPage: 'new' }),
+      meta: { sectionLabel: 'Administração da plataforma', label: 'Novo onboarding', parentLabel: 'Onboardings', parentHref: '/plataforma/onboardings', platformCapability: 'platform.onboarding.manage' }
+    },
+    {
+      path: '/plataforma/onboardings/:id', component: PlatformPage,
+      props: route => platformProps('onboardings', { onboardingPage: 'detail', onboardingId: String(route.params.id) }),
+      meta: { sectionLabel: 'Administração da plataforma', label: 'Onboarding', parentLabel: 'Onboardings', parentHref: '/plataforma/onboardings', platformCapability: 'platform.onboarding.manage' }
     },
     {
       path: '/plataforma/auditoria', component: PlatformPage,
