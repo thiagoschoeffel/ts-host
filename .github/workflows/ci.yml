@@ -32,6 +32,7 @@ jobs:
           VITE_OPERATION_REMOTE_URL: https://operation.example.test/remoteEntry.js
           VITE_COMMERCIAL_REMOTE_URL: https://commercial.example.test/remoteEntry.js
           VITE_MANAGEMENT_REMOTE_URL: https://management.example.test/remoteEntry.js
+          VITE_PLATFORM_REMOTE_URL: https://platform.example.test/remoteEntry.js
       - uses: actions/upload-artifact@v6
         with:
           name: ts-host-${{ github.sha }}

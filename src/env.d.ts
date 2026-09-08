@@ -10,6 +10,7 @@ interface ImportMetaEnv {
   readonly VITE_OPERATION_REMOTE_URL?: string
   readonly VITE_COMMERCIAL_REMOTE_URL?: string
   readonly VITE_MANAGEMENT_REMOTE_URL?: string
+  readonly VITE_PLATFORM_REMOTE_URL?: string
   readonly VITE_LABEL_PRINT_MODE?: 'auto' | 'browser' | 'zebra'
   readonly VITE_ZEBRA_BROWSER_PRINT_SCRIPT?: string
   readonly VITE_ZEBRA_DPI?: '203' | '300'
@@ -77,6 +78,19 @@ declare module 'moduleManagement/ManagementPage' {
     deliveryDriverId?: string
     userPage?: 'list' | 'new' | 'edit'
     userId?: string
+  }>
+  export default component
+}
+
+declare module 'modulePlatform/PlatformPage' {
+  import type { DefineComponent } from 'vue'
+  const component: DefineComponent<{
+    section: 'organizations' | 'onboardings' | 'audit'
+    organizationId?: string
+    onboardingId?: string
+    onboardingPage?: 'list' | 'new' | 'detail'
+    platformRequest: (path: string, init?: RequestInit) => Promise<Response>
+    capabilities: readonly string[]
   }>
   export default component
 }

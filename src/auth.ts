@@ -14,6 +14,10 @@ export interface Session {
   displayName: string
   activeOrganizationId: string | null
   organizations: SessionOrganization[]
+  platform: {
+    profiles: Array<'PlatformAdministrator' | 'PlatformOnboardingOperator' | 'PlatformSupportReader'>
+    capabilities: string[]
+  }
 }
 
 function requiredProductionSetting(name: string, value: string | undefined, developmentFallback: string) {
@@ -47,7 +51,7 @@ async function loadSession(organizationId?: string) {
   if (!oidcUser.value || oidcUser.value.expired)
     throw new Error('A sessão expirou.')
 
-  const response = await fetch(`${apiUrl}/api/session`, {
+  const response = await fetch(`${apiUrl}/api/identity/session`, {
     headers: {
       Authorization: `Bearer ${oidcUser.value.access_token}`,
       ...(organizationId ? { 'X-Organization-Id': organizationId } : {}),
@@ -140,6 +144,10 @@ export function hasAuthenticatedSession() {
   return Boolean(oidcUser.value && !oidcUser.value.expired && session.value)
 }
 
+export function getCurrentSession() {
+  return session.value
+}
+
 export function takePostAuthenticationPath() {
   const path = postAuthenticationPath
   postAuthenticationPath = null
@@ -160,4 +168,27 @@ export async function authenticatedFetch(path: string, init: RequestInit = {}) {
   headers.set('X-Organization-Id', activeSession.activeOrganizationId)
   headers.set('X-Correlation-Id', correlationId)
   return fetch(`${apiUrl}${path}`, { ...init, headers })
+}
+
+async function authenticatedContextFetch(path: string, expectedPrefix: string, init: RequestInit = {}) {
+  const user = oidcUser.value
+  if (!user || user.expired || !session.value)
+    throw new Error('A sessão autenticada não está disponível.')
+  if (!path.startsWith(expectedPrefix))
+    throw new Error(`O transporte só aceita rotas sob ${expectedPrefix}.`)
+
+  const headers = new Headers(init.headers)
+  const correlationId = globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`
+  headers.set('Authorization', `Bearer ${user.access_token}`)
+  headers.set('X-Correlation-Id', correlationId)
+  headers.delete('X-Organization-Id')
+  return fetch(`${apiUrl}${path}`, { ...init, headers })
+}
+
+export function identityRequest(path: string, init: RequestInit = {}) {
+  return authenticatedContextFetch(path, '/api/identity/', init)
+}
+
+export function platformRequest(path: string, init: RequestInit = {}) {
+  return authenticatedContextFetch(path, '/api/platform/', init)
 }

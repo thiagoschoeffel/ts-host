@@ -240,6 +240,7 @@ ts-host                :4173
 ts-module-operation    :4174
 ts-module-commercial   :4175
 ts-module-management   :4176
+ts-module-platform     :4177
 ts-components Storybook :6006
 ```
 
@@ -306,6 +307,7 @@ O host usa variáveis de ambiente:
 VITE_OPERATION_REMOTE_URL
 VITE_COMMERCIAL_REMOTE_URL
 VITE_MANAGEMENT_REMOTE_URL
+VITE_PLATFORM_REMOTE_URL
 ```
 
 Com fallback de desenvolvimento:
@@ -314,6 +316,7 @@ Com fallback de desenvolvimento:
 http://localhost:4174/remoteEntry.js
 http://localhost:4175/remoteEntry.js
 http://localhost:4176/remoteEntry.js
+http://localhost:4177/remoteEntry.js
 ```
 
 Fora de desenvolvimento, as três URLs são obrigatórias e a inicialização falha
@@ -1285,7 +1288,7 @@ Não registrar dados pessoais desnecessários.
 Deploy precisa considerar:
 
 - host independente;
-- três remotes independentes;
+- quatro remotes independentes;
 - URLs por ambiente;
 - CORS;
 - cache de `remoteEntry.js`;
@@ -1560,7 +1563,7 @@ Convergir para um contrato SPA único.
 
 ## 55.2. Tipos federados
 
-Os três remotes geram declarações federadas a partir de interfaces de props
+Os quatro remotes geram declarações federadas a partir de interfaces de props
 exportadas. O host conserva declarações locais para build independente; revisão
 de contrato deve comparar essas declarações com `@mf-types.zip` do artefato.
 
@@ -1591,7 +1594,7 @@ Não registrar como dívida itens já resolvidos:
 ✅ foco visível existe no shell
 ✅ Commercial e Management são remotes reais
 ✅ ts-components está alinhado em 0.7.8 nos consumidores consultados
-✅ tipos federados são gerados pelos três remotes
+✅ tipos federados são gerados pelos quatro remotes
 ✅ versões compartilhadas incompatíveis falham no runtime
 ✅ CI e budgets de bundle são independentes por repositório
 ✅ correlação, logs JSON, captura de erros, métricas e health checks estão ativos
