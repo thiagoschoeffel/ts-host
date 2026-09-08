@@ -63,6 +63,10 @@ const breadcrumbs = computed(() => {
     && /^\/planos(?:\?.*)?$/.test(route.query.retorno)
     ? route.query.retorno
     : undefined
+  const returnToOrganizations = typeof route.query.retorno === 'string'
+    && /^\/plataforma\/empresas(?:\?.*)?$/.test(route.query.retorno)
+    ? route.query.retorno
+    : undefined
 
   if (typeof parentLabel === 'string') {
     items.push({
@@ -77,11 +81,13 @@ const breadcrumbs = computed(() => {
               ? returnToCatalog
               : parentHref === '/entregadores' && returnToDeliveryDrivers
                 ? returnToDeliveryDrivers
-                : parentHref === '/usuarios' && returnToUsers
-                  ? returnToUsers
-                  : parentHref === '/planos' && returnToPlans
-                    ? returnToPlans
-          : typeof parentHref === 'string' ? parentHref : undefined
+            : parentHref === '/usuarios' && returnToUsers
+              ? returnToUsers
+              : parentHref === '/planos' && returnToPlans
+                ? returnToPlans
+                : parentHref === '/plataforma/empresas' && returnToOrganizations
+                  ? returnToOrganizations
+                  : typeof parentHref === 'string' ? parentHref : undefined
     })
   }
 
