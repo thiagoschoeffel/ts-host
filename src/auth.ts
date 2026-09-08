@@ -46,6 +46,11 @@ const loading = ref(true)
 const error = ref<string | null>(null)
 const organizationError = ref<string | null>(null)
 let postAuthenticationPath: string | null = null
+let authenticationInitialization: Promise<void> | null = null
+
+function isMissingSigninState(reason: unknown) {
+  return reason instanceof Error && reason.message.includes('No matching state found in storage')
+}
 
 async function loadSession(organizationId?: string) {
   if (!oidcUser.value || oidcUser.value.expired)
@@ -64,7 +69,7 @@ async function loadSession(organizationId?: string) {
   session.value = await response.json() as Session
 }
 
-export async function initializeAuthentication() {
+async function runAuthenticationInitialization() {
   error.value = null
   organizationError.value = null
   if (oidcUser.value && !oidcUser.value.expired && session.value) {
@@ -77,14 +82,28 @@ export async function initializeAuthentication() {
     const isCallback = window.location.pathname === '/auth/callback'
       && new URLSearchParams(window.location.search).has('code')
     if (isCallback) {
-      const authenticated = await manager.signinRedirectCallback()
-      const returnUrl = typeof authenticated.state === 'string' && /^\/(?!\/)/.test(authenticated.state)
-        ? authenticated.state
-        : '/'
-      postAuthenticationPath = returnUrl
+      try {
+        const authenticated = await manager.signinRedirectCallback()
+        const returnUrl = typeof authenticated.state === 'string' && /^\/(?!\/)/.test(authenticated.state)
+          ? authenticated.state
+          : '/'
+        postAuthenticationPath = returnUrl
+      }
+      catch (reason) {
+        if (!isMissingSigninState(reason)) throw reason
+
+        const authenticated = await manager.getUser()
+        window.history.replaceState(null, document.title, '/')
+        if (!authenticated || authenticated.expired) {
+          await manager.signinRedirect({ state: '/' })
+          return
+        }
+        oidcUser.value = authenticated
+        postAuthenticationPath = '/'
+      }
     }
 
-    oidcUser.value = await manager.getUser()
+    oidcUser.value ??= await manager.getUser()
     if (!oidcUser.value || oidcUser.value.expired) {
       await manager.signinRedirect({ state: `${window.location.pathname}${window.location.search}` })
       return
@@ -97,6 +116,13 @@ export async function initializeAuthentication() {
   finally {
     loading.value = false
   }
+}
+
+export function initializeAuthentication() {
+  if (authenticationInitialization) return authenticationInitialization
+  authenticationInitialization = runAuthenticationInitialization()
+    .finally(() => { authenticationInitialization = null })
+  return authenticationInitialization
 }
 
 export async function changeOrganization(organizationId: string) {

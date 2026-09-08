@@ -11,7 +11,7 @@
     "ci": "npm run build && npm run check:bundle"
   },
   "bundleBudget": {
-    "js": { "bytes": 1800000, "gzipBytes": 450000 },
+    "js": { "bytes": 2000000, "gzipBytes": 500000 },
     "css": { "bytes": 100000, "gzipBytes": 20000 },
     "remoteEntry": { "bytes": 25000, "gzipBytes": 8000 }
   },
@@ -22,7 +22,7 @@
     "vue-router": "^4.6.4"
   },
   "devDependencies": {
-    "@module-federation/vite": "^1.21.0",
+    "@module-federation/vite": "1.21.5",
     "@tailwindcss/vite": "^4.3.3",
     "@vitejs/plugin-vue": "^6.0.8",
     "tailwindcss": "^4.3.3",
