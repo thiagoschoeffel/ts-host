@@ -160,6 +160,6 @@ O banco temporário será removido ao fim da execução; o volume persistente lo
 | S03 | convite único e último proprietário protegido | integrado em 08/09/2026; homologação do domínio Resend pendente |
 | S04 | retry/reinício sem duplicação | concluído em 08/09/2026; migration e retomada validadas em PostgreSQL descartável |
 | S05 | quarto remote conectado, sem persistência simulada | concluído em 08/09/2026; empresas, auditoria e onboarding usam contratos autoritativos |
-| S06 | direitos e suspensão aplicados no backend | não iniciado |
+| S06 | direitos e suspensão aplicados no backend | concluído em 08/09/2026; plano versionado, habilitações, ativação e suspensão validados em API e PostgreSQL |
 | S07 | conexões A/B isoladas e legado migrável | não iniciado |
 | S08 | aceite completo A/B, runbooks e rollback | não iniciado |
