@@ -1,6 +1,6 @@
 import { shallowRef } from 'vue'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
-import { authenticatedFetch, getCurrentSession, hasAuthenticatedSession, initializeAuthentication, platformRequest, takePostAuthenticationPath } from '../auth'
+import { authenticatedFetch, getCurrentSession, hasAuthenticatedIdentity, hasAuthenticatedSession, initializeAuthentication, platformRequest, takePostAuthenticationPath } from '../auth'
 import { reportClientError } from '../telemetry'
 
 export const remoteLoadError = shallowRef<Error>()
@@ -81,6 +81,7 @@ export const router = createRouter({
       component: { render: () => null },
       meta: { label: 'Autenticando' }
     },
+    { path: '/convites/aceitar', component: () => import('../views/InvitationAcceptancePage.vue'), meta: { label: 'Aceitar convite', identityFlow: true } },
     { path: '/', redirect: '/operacoes/hoje' },
     { path: '/plataforma', redirect: '/plataforma/empresas' },
     {
@@ -353,6 +354,12 @@ export const router = createRouter({
 router.beforeEach(async (to) => {
   remoteLoadError.value = undefined
   await initializeAuthentication()
+  const postAuthenticationPath = takePostAuthenticationPath()
+  if (postAuthenticationPath?.startsWith('/convites/aceitar') && hasAuthenticatedIdentity())
+    return postAuthenticationPath
+  if (to.meta.identityFlow && hasAuthenticatedIdentity()) {
+    return true
+  }
   if (!hasAuthenticatedSession())
     return false
   const currentSession = getCurrentSession()
@@ -362,7 +369,6 @@ router.beforeEach(async (to) => {
   if (!requiredCapability && !currentSession?.activeOrganizationId
     && currentSession?.platform.capabilities.includes('platform.organizations.read'))
     return '/plataforma/empresas'
-  const postAuthenticationPath = takePostAuthenticationPath()
   return to.path === '/auth/callback' && postAuthenticationPath
     ? postAuthenticationPath
     : true

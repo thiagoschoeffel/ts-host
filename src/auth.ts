@@ -108,7 +108,8 @@ async function runAuthenticationInitialization() {
       await manager.signinRedirect({ state: `${window.location.pathname}${window.location.search}` })
       return
     }
-    await loadSession()
+    const identityOnlyPath = postAuthenticationPath ?? window.location.pathname
+    if (!identityOnlyPath.startsWith('/convites/aceitar')) await loadSession()
   }
   catch (reason) {
     error.value = reason instanceof Error ? reason.message : 'Falha ao iniciar a sessão.'
@@ -159,7 +160,7 @@ export function useAuthentication() {
     loading,
     error,
     organizationError,
-    isAuthenticated: computed(() => Boolean(oidcUser.value && session.value)),
+    isAuthenticated: computed(() => Boolean(oidcUser.value && !oidcUser.value.expired)),
     initialize: initializeAuthentication,
     changeOrganization,
     signOut,
@@ -168,6 +169,21 @@ export function useAuthentication() {
 
 export function hasAuthenticatedSession() {
   return Boolean(oidcUser.value && !oidcUser.value.expired && session.value)
+}
+
+export function hasAuthenticatedIdentity() {
+  return Boolean(oidcUser.value && !oidcUser.value.expired)
+}
+
+export async function acceptInvitation(token: string) {
+  const response = await identityRequest('/api/identity/invitations/accept', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token })
+  })
+  if (!response.ok) {
+    const problem = await response.json().catch(() => ({})) as { detail?: string, title?: string }
+    throw new Error(problem.detail ?? problem.title ?? 'Não foi possível aceitar o convite.')
+  }
+  await loadSession()
 }
 
 export function getCurrentSession() {
@@ -198,7 +214,7 @@ export async function authenticatedFetch(path: string, init: RequestInit = {}) {
 
 async function authenticatedContextFetch(path: string, expectedPrefix: string, init: RequestInit = {}) {
   const user = oidcUser.value
-  if (!user || user.expired || !session.value)
+  if (!user || user.expired)
     throw new Error('A sessão autenticada não está disponível.')
   if (!path.startsWith(expectedPrefix))
     throw new Error(`O transporte só aceita rotas sob ${expectedPrefix}.`)
