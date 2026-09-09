@@ -26,7 +26,7 @@ function requiredProductionSetting(name: string, value: string | undefined, deve
   return developmentFallback
 }
 
-const authority = requiredProductionSetting('VITE_OIDC_AUTHORITY', import.meta.env.VITE_OIDC_AUTHORITY, 'http://localhost:8081/realms/sabor-sante')
+const authority = requiredProductionSetting('VITE_OIDC_AUTHORITY', import.meta.env.VITE_OIDC_AUTHORITY, 'http://localhost:8081/realms/ts')
 const apiUrl = requiredProductionSetting('VITE_API_URL', import.meta.env.VITE_API_URL, 'http://localhost:8080').replace(/\/$/, '')
 const redirectUri = `${window.location.origin}/auth/callback`
 const manager = new UserManager({

@@ -48,7 +48,7 @@ The shell authenticates with an OpenID Connect provider using Authorization Code
 
 ```dotenv
 VITE_API_URL=http://localhost:8080
-VITE_OIDC_AUTHORITY=http://localhost:8081/realms/sabor-sante
+VITE_OIDC_AUTHORITY=http://localhost:8081/realms/ts
 VITE_OIDC_CLIENT_ID=ts-host
 ```
 
