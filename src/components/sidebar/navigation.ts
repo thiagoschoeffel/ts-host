@@ -36,6 +36,7 @@ export const navigationSections: NavigationSection[] = [
     label: 'Plataforma',
     items: [
       { label: 'Empresas', icon: Building2Icon, to: '/plataforma/empresas', capability: 'platform.organizations.read' },
+      { label: 'Onboardings', icon: ClipboardListIcon, to: '/plataforma/onboardings', capability: 'platform.onboarding.manage' },
       { label: 'Auditoria', icon: HistoryIcon, to: '/plataforma/auditoria', capability: 'platform.audit.read' }
     ]
   },
