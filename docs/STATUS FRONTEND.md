@@ -46,7 +46,7 @@ ts-host
 | Rotas e breadcrumbs | Implementado | O host é o único proprietário do Vue Router e das URLs públicas |
 | Navegação SPA | Parcial | Ações programáticas dos remotes usam a bridge do host, com fallback quando executadas isoladamente; links internos semânticos ainda dependem da interceptação global |
 | Contratos federados | Parcial | Fachadas pequenas e declarações manuais no host; geração de tipos permanece desabilitada (`dts: false`) |
-| Design system | Implementado | `ts-components` 0.7.8 está alinhado nos quatro consumidores e possui componentes, ícones e Storybook |
+| Design system | Implementado | `ts-components` 0.7.11 está alinhado nos cinco consumidores e possui componentes, ícones e Storybook |
 | Padrões do Guia UI | Parcial | Páginas recentes seguem os padrões principais; cenários determinísticos e estados completos ainda não são uniformes em toda tela antiga |
 | API de negócio | Parcial | A API possui PostgreSQL, fundação SaaS multi-tenant, ciclo transacional do Pedido até cancelamento/reagendamento e identidade/autorização reais; Gestão de Congelados e Operação de Pedidos/capacidade já estão integradas |
 | Autenticação e autorização | Implementado | Keycloak/OIDC com PKCE no shell, JWT na API, sessão validada, associação e papel por Organização, seleção revalidada no servidor e autoria derivada da identidade |

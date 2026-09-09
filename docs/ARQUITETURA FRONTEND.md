@@ -214,13 +214,13 @@ vue-tsc              3.1.x
 Os consumidores usam:
 
 ```text
-@thiagoschoeffel/ts-components ^0.7.8
+@thiagoschoeffel/ts-components ^0.7.11
 ```
 
 `ts-components` publica versão:
 
 ```text
-0.7.8
+0.7.11
 ```
 
 O host também utiliza:
@@ -1593,7 +1593,7 @@ Não registrar como dívida itens já resolvidos:
 ✅ há fallback visual para falha de remote
 ✅ foco visível existe no shell
 ✅ Commercial e Management são remotes reais
-✅ ts-components está alinhado em 0.7.8 nos consumidores consultados
+✅ ts-components está alinhado em 0.7.11 nos consumidores consultados
 ✅ tipos federados são gerados pelos quatro remotes
 ✅ versões compartilhadas incompatíveis falham no runtime
 ✅ CI e budgets de bundle são independentes por repositório
