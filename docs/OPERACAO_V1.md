@@ -21,6 +21,32 @@ O coletor de logs deve indexar `CorrelationId`, `TraceId`, `ErrorId`, status e r
 5. Apontar as URLs `VITE_*_REMOTE_URL` do host para esses diretórios e publicar o host por último.
 6. Executar `npm run verify:deployment` com as cinco URLs do ambiente.
 
+## Build dos frontends no Dokploy
+
+O host e os quatro remotes usam o `Dockerfile` de cada repositório e publicam o Nginx na
+porta `80`. A dependência privada `@thiagoschoeffel/ts-components` deve ser autenticada pelo
+**Build-time Secret** `npm_token`; nunca coloque o token em Environment Variables ou Build
+Arguments. O segredo existe somente durante o `npm ci` e não é copiado para a imagem final.
+
+O host recebe como Build Arguments as configurações públicas incorporadas pelo Vite:
+
+```text
+VITE_OPERATION_REMOTE_URL
+VITE_COMMERCIAL_REMOTE_URL
+VITE_MANAGEMENT_REMOTE_URL
+VITE_PLATFORM_REMOTE_URL
+VITE_LABEL_PRINT_MODE
+VITE_ZEBRA_BROWSER_PRINT_SCRIPT
+VITE_ZEBRA_DPI
+VITE_API_URL
+VITE_OIDC_AUTHORITY
+VITE_OIDC_CLIENT_ID
+```
+
+Os remotes não recebem esses argumentos. Todos usam o mesmo `nginx.conf`, que habilita CORS
+para os artefatos federados, impede cache de `remoteEntry.js` e mantém assets com hash como
+imutáveis.
+
 `remoteEntry.js` deve usar `Cache-Control: no-store, max-age=0, must-revalidate`. Assets com hash em `/assets/` devem usar `Cache-Control: public, max-age=31536000, immutable`. `index.html` do host deve usar `no-cache`. O CDN precisa invalidar apenas `index.html` e `remoteEntry.js`; assets imutáveis antigos permanecem disponíveis para rollback.
 
 ## Compatibilidade federada
