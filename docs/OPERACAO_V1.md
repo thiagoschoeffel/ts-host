@@ -54,7 +54,9 @@ Antes de promover produção, validar desktop e mobile nos fluxos: Catálogo →
 
 ### Pré-condições do ambiente
 
-- exigir MFA no provedor OIDC para os operadores globais e confirmar o desafio com uma conta real;
+- exigir MFA no provedor OIDC para os operadores globais, emitir a evidência configurada em
+  `Authentication:PlatformMfaClaimType`/`PlatformMfaClaimValue` somente após o segundo fator e
+  confirmar com uma conta real que tokens sem essa evidência recebem `403`;
 - configurar remetente Resend verificado, URL pública de convite e chave durável de derivação dos tokens;
 - manter `IntegrationSecrets__EncryptionKey` como chave Base64 de 32 bytes fora do repositório;
 - guardar SHAs da API, host e quatro remotes, URLs imutáveis atuais e backup do PostgreSQL;
